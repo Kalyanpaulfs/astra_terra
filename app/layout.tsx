@@ -16,6 +16,7 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <link rel="icon" type="image/x-icon" href="/img/fav.png" />
+        <script src="https://unpkg.com/phosphor-icons"></script>
       </head>
       <body>
         <Layout>{children}</Layout>

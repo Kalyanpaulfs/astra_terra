@@ -1,6 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
 @import url('https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css');
-@import url('https://unpkg.com/phosphor-icons');
 @import './styles/style.css';
 @import './styles/jeff-dev-style.css';
 
@@ -28,7 +27,7 @@
   background: white;
   border: 1px solid #ccc;
   border-radius: 6px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   display: none;
   flex-direction: column;
   z-index: 999;
@@ -86,4 +85,3 @@
 .mobile-nav-frame.hidden {
   display: none !important;
 }
-
