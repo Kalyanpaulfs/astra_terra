@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-const PIXXI_API_URL = 'https://dataapi.pixxicrm.ae/pixxiapi/v1/properties/Astra Terra Properties L.L.C';
+// Try both endpoint formats - with and without company name
+const PIXXI_API_URL = process.env.PIXXI_API_URL || 'https://dataapi.pixxicrm.ae/pixxiapi/v1/properties/Astra Terra Properties L.L.C';
 const CACHE_DURATION = 3600; // 1 hour in seconds
 
 // Simple in-memory cache (in production, use Redis or similar)
@@ -24,6 +25,16 @@ export async function GET(request: NextRequest) {
     const searchParams = request.nextUrl.searchParams;
     const action = searchParams.get('action') || 'list';
     
+    // Check if token is configured
+    const token = process.env.PIXXI_TOKEN;
+    if (!token) {
+      console.error('PIXXI_TOKEN is not configured');
+      return NextResponse.json(
+        { error: 'API token not configured' },
+        { status: 500 }
+      );
+    }
+    
     if (action === 'meta') {
       // Get metadata (cities, regions, property types)
       const cacheKey = 'pixxi.meta';
@@ -35,17 +46,26 @@ export async function GET(request: NextRequest) {
       const response = await fetch(PIXXI_API_URL, {
         method: 'POST',
         headers: {
-          'X-PIXXI-TOKEN': process.env.PIXXI_TOKEN || '',
+          'X-PIXXI-TOKEN': token,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ size: 1000, status: 'ACTIVE' }),
       });
 
       if (!response.ok) {
-        throw new Error('Pixxi API error');
+        const errorText = await response.text();
+        console.error('Pixxi API error:', response.status, errorText);
+        return NextResponse.json(
+          { error: 'Failed to fetch metadata', details: errorText },
+          { status: response.status }
+        );
       }
 
       const data = await response.json();
+      console.log('Pixxi API response structure:', JSON.stringify(data).substring(0, 200));
+      
+      // PHP uses: $response->json('data.list')
+      // This means response structure is: { data: { list: [...] } }
       const listings = data?.data?.list || [];
 
       // Extract cities
@@ -123,20 +143,26 @@ export async function GET(request: NextRequest) {
     const response = await fetch(PIXXI_API_URL, {
       method: 'POST',
       headers: {
-        'X-PIXXI-TOKEN': process.env.PIXXI_TOKEN || '',
+        'X-PIXXI-TOKEN': token,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(payload),
     });
 
     if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Pixxi API error:', response.status, errorText);
       return NextResponse.json(
-        { error: 'Failed to fetch properties' },
+        { error: 'Failed to fetch properties', details: errorText },
         { status: response.status }
       );
     }
 
     const data = await response.json();
+    console.log('Pixxi API response structure:', JSON.stringify(data).substring(0, 200));
+    
+    // PHP uses: $response->json('data.list')
+    // This means response structure is: { data: { list: [...] } }
     const listings = data?.data?.list || [];
 
     return NextResponse.json({ listings });

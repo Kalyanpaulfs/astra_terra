@@ -60,10 +60,19 @@ export async function POST(request: NextRequest) {
     const fullName = `${firstName} ${lastName}`;
 
     // Send to Pixxi webhook
+    const webhookToken = process.env.PIXXI_WEBHOOK_TOKEN || process.env.PIXXI_TOKEN;
+    if (!webhookToken) {
+      console.error('PIXXI_WEBHOOK_TOKEN or PIXXI_TOKEN is not configured');
+      return NextResponse.json(
+        { error: 'Webhook token not configured' },
+        { status: 500 }
+      );
+    }
+
     const pixxiResponse = await fetch('https://dataapi.pixxicrm.ae/pixxiapi/webhook/v1/form', {
       method: 'POST',
       headers: {
-        'X-PIXXI-TOKEN': process.env.PIXXI_WEBHOOK_TOKEN || '',
+        'X-PIXXI-TOKEN': webhookToken,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
@@ -78,6 +87,12 @@ export async function POST(request: NextRequest) {
         },
       }),
     });
+
+    if (!pixxiResponse.ok) {
+      const errorText = await pixxiResponse.text();
+      console.error('Pixxi webhook error:', pixxiResponse.status, errorText);
+      // Don't fail the request if webhook fails, but log it
+    }
 
     // Send email (using Resend or similar service)
     // For now, we'll just log it. You can integrate Resend here:

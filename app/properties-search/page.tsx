@@ -22,6 +22,11 @@ function PropertiesSearchContent() {
       try {
         // Fetch metadata
         const metaResponse = await fetch('/api/properties?action=meta');
+        if (!metaResponse.ok) {
+          const errorData = await metaResponse.json();
+          console.error('Error fetching metadata:', errorData);
+          throw new Error(errorData.error || 'Failed to fetch metadata');
+        }
         const metaData = await metaResponse.json();
         setMeta(metaData);
 
@@ -44,10 +49,18 @@ function PropertiesSearchContent() {
 
         // Fetch properties
         const listingsResponse = await fetch(`/api/properties?${params.toString()}`);
+        if (!listingsResponse.ok) {
+          const errorData = await listingsResponse.json();
+          console.error('Error fetching listings:', errorData);
+          throw new Error(errorData.error || 'Failed to fetch listings');
+        }
         const listingsData = await listingsResponse.json();
         setListings(listingsData.listings || []);
       } catch (error) {
         console.error('Error fetching data:', error);
+        // Set empty arrays on error so UI doesn't break
+        setMeta({ cities: {}, regions: {}, propertyTypes: [] });
+        setListings([]);
       } finally {
         setLoading(false);
       }
