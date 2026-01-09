@@ -42,8 +42,9 @@ export default function HeroSection({ cities, propertyTypes }: HeroSectionProps)
                     <div className="hsub-container">
                         <div className="hero-subtitle">Dubai's Premier Real Estate Partner</div>
                     </div>
-                    <div className="hero-title">
-                        Luxury Living in <span className="gradient-txt">Dubai</span>
+                    <div className="hero-title" style={{ textAlign: 'center' }}>
+                        Luxury Living in <br />
+                        <span className="gradient-txt">Dubai</span>
                     </div>
                     <div className="hero-subtxt-width">
                         <div className="hero-subtxt">

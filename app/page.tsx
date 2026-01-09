@@ -1,62 +1,18 @@
-'use client';
-
-import { useEffect, useState } from 'react';
 import DeveloperMarquee from './components/DeveloperMarquee';
 import HeroSection from './components/HeroSection';
 import FeaturedSection from './components/FeaturedSection';
 import TrustSection from './components/TrustSection';
 import ServicesSection from './components/ServicesSection';
 import ContactSection from './components/ContactSection';
+import { getMetadata, getListings } from './lib/api';
 
-interface PropertyMeta {
-  cities: Record<number, string>;
-  regions: Record<number, string>;
-  propertyTypes: string[];
-}
+export const revalidate = 3600; // Revalidate at least every hour
 
-export default function HomePage() {
-  const [listings, setListings] = useState<any[]>([]);
-  const [meta, setMeta] = useState<PropertyMeta | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // Fetch metadata
-        const metaResponse = await fetch('/api/properties?action=meta');
-        if (!metaResponse.ok) {
-          const errorData = await metaResponse.json();
-          console.error('Error fetching metadata:', errorData);
-          throw new Error(errorData.error || 'Failed to fetch metadata');
-        }
-        const metaData = await metaResponse.json();
-        setMeta(metaData);
-
-        // Fetch featured properties
-        const listingsResponse = await fetch('/api/properties?size=12');
-        if (!listingsResponse.ok) {
-          const errorData = await listingsResponse.json();
-          console.error('Error fetching listings:', errorData);
-          throw new Error(errorData.error || 'Failed to fetch listings');
-        }
-        const listingsData = await listingsResponse.json();
-        setListings(listingsData.listings || []);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-        // Set empty arrays on error so UI doesn't break
-        setMeta({ cities: {}, regions: {}, propertyTypes: [] });
-        setListings([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  if (loading || !meta) {
-    return <div>Loading...</div>;
-  }
+export default async function HomePage() {
+  const [meta, listings] = await Promise.all([
+    getMetadata(),
+    getListings({ size: 12 }),
+  ]);
 
   return (
     <>

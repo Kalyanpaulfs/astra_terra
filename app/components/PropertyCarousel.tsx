@@ -9,18 +9,19 @@ interface PropertyCarouselProps {
 
 export default function PropertyCarousel({ listings }: PropertyCarouselProps) {
   const stripRef = useRef<HTMLDivElement>(null);
-  const cardWidth = 260;
-  const gap = 16;
-  const step = cardWidth + gap;
-
   const scrollLeft = () => {
     if (stripRef.current) {
+      const card = stripRef.current.firstElementChild as HTMLElement;
+      // 20px gap from CSS, default to 300 if no card found
+      const step = card ? card.offsetWidth + 20 : 300;
       stripRef.current.scrollBy({ left: -step, behavior: 'smooth' });
     }
   };
 
   const scrollRight = () => {
     if (stripRef.current) {
+      const card = stripRef.current.firstElementChild as HTMLElement;
+      const step = card ? card.offsetWidth + 20 : 300;
       stripRef.current.scrollBy({ left: step, behavior: 'smooth' });
     }
   };

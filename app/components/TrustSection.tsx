@@ -12,32 +12,32 @@ export default function TrustSection() {
                     <div className="atsvh-hl"></div>
                 </div>
                 <p>
-                    For over 15 years, Astra Terra Properties has been the trusted partner for discerning clients seeking exceptional real estate opportunities in Dubai's dynamic luxury market.
+                    With over 3 years of dedicated excellence, Astra Terra Properties has established itself as a premier partner for those seeking exceptional real estate opportunities in Dubai.
                 </p>
                 <br />
                 <p>
-                    From iconic Downtown penthouses to exclusive Palm Jumeirah villas, we specialize in Dubai's most prestigious properties and provide unmatched expertise to international investors.
+                    From iconic Downtown penthouses to exclusive Palm Jumeirah villas, we specialize in prestigious properties, offering personalized guidance and unmatched expertise to our global clientele.
                 </p>
                 <br />
                 <p>
-                    Our deep understanding of Dubai's unique market dynamics, combined with our extensive network and white-glove service, ensures every client finds their perfect property investment.
+                    Our deep market insight, combined with a commitment to integrity and tailored service, ensures that every client's journey involves finding not just a property, but a true investment in their future.
                 </p>
                 <br />
 
                 <div className="dxb-most-trusted-stats-grid">
                     <div className="dxb-most-trusted-stat">
                         <div className="dxb-most-trusted-icon gradient-txt"><i className="ph-medal"></i></div>
-                        <div className="dxb-most-trusted-number">15+</div>
-                        <div className="dxb-most-trusted-label">Years in Dubai</div>
+                        <div className="dxb-most-trusted-number">3+</div>
+                        <div className="dxb-most-trusted-label">Years Experience</div>
                     </div>
                     <div className="dxb-most-trusted-stat">
                         <div className="dxb-most-trusted-icon gradient-txt"><i className="ph-users"></i></div>
-                        <div className="dxb-most-trusted-number">1,200+</div>
+                        <div className="dxb-most-trusted-number">200+</div>
                         <div className="dxb-most-trusted-label">International Clients</div>
                     </div>
                     <div className="dxb-most-trusted-stat">
                         <div className="dxb-most-trusted-icon gradient-txt"><i className="ph-buildings"></i></div>
-                        <div className="dxb-most-trusted-number">2,800+</div>
+                        <div className="dxb-most-trusted-number">1,000+</div>
                         <div className="dxb-most-trusted-label">Luxury Properties</div>
                     </div>
                     <div className="dxb-most-trusted-stat">

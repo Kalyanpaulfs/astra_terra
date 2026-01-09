@@ -12,11 +12,6 @@ export default function Navbar() {
     <>
       <MobileNav isOpen={mobileNavOpen} onClose={() => setMobileNavOpen(false)} />
       <div className="custom-navbar">
-        <div className="custom-topbar">
-          <div className="ct-right">
-            {/* Top bar content if needed */}
-          </div>
-        </div>
         <div className="custom-navbar-nav">
           <Link href="/">
             <Image
@@ -154,9 +149,7 @@ export default function Navbar() {
             />
           </span>
         </div>
-        <div className="at-shim"></div>
       </div>
     </>
   );
 }
-
