@@ -49,6 +49,13 @@ export default function PriceRangeDropdown({
     }).format(value);
   };
 
+  const formatPriceLabel = (value: number) => {
+    const formatted = new Intl.NumberFormat('en-AE', {
+      maximumFractionDigits: 0,
+    }).format(value);
+    return formatted;
+  };
+
   const handleMinChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = Math.floor(parseInt(e.target.value) / 100000) * 100000;
     setLocalMin(value);
@@ -76,36 +83,34 @@ export default function PriceRangeDropdown({
     : `${formatPrice(minPrice)} - ${formatPrice(maxPrice)}`;
 
   return (
-    <div className="at-field">
-      <div className="atf-label">
+    <div className="at-field premium-field">
+      <div className="atf-label premium-label">
         <i className="ph ph-currency-dollar"></i>
         <span>Price Range (AED)</span>
       </div>
-      <div className="dropdown" ref={dropdownRef} id="minmax-dd-frame-new">
+      <div className="premium-price-dropdown" ref={dropdownRef}>
         <button
           type="button"
-          id="minmax-dd-trig-new"
-          className={`button is-normal ${isOpen ? 'is-active' : ''}`}
-          style={{ width: '180px' }}
+          className={`premium-price-trigger ${isOpen ? 'is-open' : ''} ${(minPrice > 100000 || maxPrice < 50000000) ? 'has-value' : ''}`}
           onClick={() => setIsOpen(!isOpen)}
         >
-          {displayText}
+          <span className="premium-price-text">{displayText}</span>
+          <i className={`ph ph-caret-${isOpen ? 'up' : 'down'}`}></i>
         </button>
         {isOpen && (
-          <div className="dropdown-menu" role="menu" style={{ zIndex: 20 }}>
-            <div className="dropdown-content">
-              <div className="dropdown-item">
-                <div className="ats-fprice">
-                  <div className="ats-fpc">
-                    <span>Min.</span>
-                    <label className="ats-fp-title" htmlFor="priceRange">
-                      <span id="priceValue">{formatPrice(localMin)}</span>
+          <div className="premium-price-menu" role="menu">
+            <div className="premium-price-content">
+              <div className="premium-price-item">
+                <div className="ats-fprice premium-price-slider-group">
+                  <div className="ats-fpc premium-price-header">
+                    <label className="ats-fp-title premium-price-value" htmlFor="priceRange">
+                      MIN.AED {formatPriceLabel(localMin)}
                     </label>
                   </div>
-                  <div className="at-slider-container">
+                  <div className="at-slider-container premium-slider-container">
                     <input
                       type="range"
-                      className="at-pr"
+                      className="at-pr premium-slider"
                       id="priceRange"
                       min="100000"
                       max="10000000"
@@ -116,19 +121,18 @@ export default function PriceRangeDropdown({
                   </div>
                 </div>
               </div>
-              <hr className="dropdown-divider" />
-              <div className="dropdown-item">
-                <div className="ats-fprice">
-                  <div className="ats-fpc">
-                    <span>Max.</span>
-                    <label className="ats-fp-title" htmlFor="priceRange2">
-                      <span id="priceValue2">{formatPrice(localMax)}</span>
+              <hr className="premium-divider" />
+              <div className="premium-price-item">
+                <div className="ats-fprice premium-price-slider-group">
+                  <div className="ats-fpc premium-price-header">
+                    <label className="ats-fp-title premium-price-value" htmlFor="priceRange2">
+                      MAX.AED {formatPriceLabel(localMax)}
                     </label>
                   </div>
-                  <div className="at-slider-container">
+                  <div className="at-slider-container premium-slider-container">
                     <input
                       type="range"
-                      className="at-pr"
+                      className="at-pr premium-slider"
                       id="priceRange2"
                       min="200000"
                       max="50000000"
@@ -139,13 +143,12 @@ export default function PriceRangeDropdown({
                   </div>
                 </div>
               </div>
-              <hr className="dropdown-divider" />
-              <div className="dropdown-item">
-                <button type="button" className="button is-small" onClick={handleCancel}>
+              <hr className="premium-divider" />
+              <div className="premium-price-actions">
+                <button type="button" className="premium-price-action-btn premium-cancel-btn" onClick={handleCancel}>
                   Cancel
                 </button>
-                &nbsp;
-                <button type="button" className="button is-small is-focused" onClick={handleSave}>
+                <button type="button" className="premium-price-action-btn premium-save-btn" onClick={handleSave}>
                   Save
                 </button>
               </div>

@@ -83,7 +83,7 @@ export default function ContactForm() {
           {submitStatus.message}
         </div>
       )}
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit)} method="POST" action="/api/contact">
         <div className="contact-us-form-row">
           <div className="contact-us-form-group">
             <label htmlFor="first-name">First Name</label>

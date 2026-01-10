@@ -1,5 +1,3 @@
-'use client';
-
 import PropertyCarousel from './PropertyCarousel';
 
 interface FeaturedSectionProps {
