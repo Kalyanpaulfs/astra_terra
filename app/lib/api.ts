@@ -47,7 +47,7 @@ export async function getMetadata(): Promise<PropertyMeta> {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({ size: 1000, status: 'ACTIVE' }),
-            next: { revalidate: 3600 } // Next.js cache revalidation
+            cache: 'no-store' // Disable Next.js cache - response exceeds 2MB limit, using in-memory cache instead
         });
 
         if (!response.ok) {
@@ -118,7 +118,7 @@ export async function getListings(filter: ListingsFilter = { size: 12 }) {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(payload),
-            next: { revalidate: 60 } // Revalidate every minute
+            cache: 'no-store' // Disable Next.js cache - response exceeds 2MB limit
         });
 
         if (!response.ok) {
