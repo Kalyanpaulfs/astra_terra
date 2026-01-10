@@ -69,28 +69,34 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const pixxiPayload = {
+      formId,
+      propertyReference: '',
+      name: fullName,
+      email,
+      nationality: '',
+      phone: phone || '',
+      extraData: {
+        message,
+      },
+    };
+
+    console.log('Sending to Pixxi CRM:', JSON.stringify(pixxiPayload, null, 2));
+
     const pixxiResponse = await fetch('https://dataapi.pixxicrm.ae/pixxiapi/webhook/v1/form', {
       method: 'POST',
       headers: {
         'X-PIXXI-TOKEN': webhookToken,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        formId,
-        propertyReference: '',
-        name: fullName,
-        email,
-        nationality: '',
-        phone: phone || '',
-        extraData: {
-          message,
-        },
-      }),
+      body: JSON.stringify(pixxiPayload),
     });
 
+    const pixxiResult = await pixxiResponse.text();
+    console.log('Pixxi CRM response:', pixxiResponse.status, pixxiResult);
+
     if (!pixxiResponse.ok) {
-      const errorText = await pixxiResponse.text();
-      console.error('Pixxi webhook error:', pixxiResponse.status, errorText);
+      console.error('Pixxi webhook error:', pixxiResponse.status, pixxiResult);
       // Don't fail the request if webhook fails, but log it
     }
 
