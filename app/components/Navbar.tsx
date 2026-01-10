@@ -18,8 +18,8 @@ export default function Navbar() {
               className="custom-navbar-brand"
               src="/img/brand.png"
               alt="astra terrah logo"
-              width={150}
-              height={40}
+              width={120}
+              height={32}
               draggable={false}
             />
           </Link>

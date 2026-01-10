@@ -1,6 +1,4 @@
-'use client';
-
-import { useEffect } from 'react';
+import HeroParallax from './HeroParallax';
 import SearchBar from './SearchBar';
 
 interface HeroSectionProps {
@@ -8,23 +6,10 @@ interface HeroSectionProps {
     propertyTypes: string[];
 }
 
-export default function HeroSection({ cities, propertyTypes }: HeroSectionProps) {
-    useEffect(() => {
-        // Parallax effect for video background
-        const handleScroll = () => {
-            const video = document.querySelector('.video-bg') as HTMLVideoElement;
-            if (video) {
-                const scrolled = window.scrollY;
-                video.style.transform = `translateY(${scrolled * 0.3}px)`;
-            }
-        };
-
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
-
+export default function HeroSectionServer({ cities, propertyTypes }: HeroSectionProps) {
     return (
         <div className="at-hero">
+            <HeroParallax />
             <video
                 autoPlay
                 muted
@@ -58,3 +43,4 @@ export default function HeroSection({ cities, propertyTypes }: HeroSectionProps)
         </div>
     );
 }
+

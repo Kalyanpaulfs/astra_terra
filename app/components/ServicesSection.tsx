@@ -1,5 +1,3 @@
-'use client';
-
 export default function ServicesSection() {
     return (
         <section className="services-container" id="services-anchor">

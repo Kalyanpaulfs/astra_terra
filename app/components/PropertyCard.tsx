@@ -1,7 +1,6 @@
 'use client';
 
 import Image from 'next/image';
-import { useMemo } from 'react';
 
 interface PropertyCardProps {
   listing: {
@@ -26,13 +25,12 @@ interface PropertyCardProps {
 }
 
 export default function PropertyCard({ listing, variant = 'featured' }: PropertyCardProps) {
-  const tags = useMemo(() => {
-    const tagList = listing.amenities?.slice(0, 2) || [];
-    if (listing.propertyType?.[0]) {
-      tagList.push(listing.propertyType[0]);
-    }
-    return tagList.filter(Boolean);
-  }, [listing.amenities, listing.propertyType]);
+  // Simple computation - no need for useMemo for this lightweight operation
+  const tagList = listing.amenities?.slice(0, 2) || [];
+  if (listing.propertyType?.[0]) {
+    tagList.push(listing.propertyType[0]);
+  }
+  const tags = tagList.filter(Boolean);
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('en-AE').format(price);

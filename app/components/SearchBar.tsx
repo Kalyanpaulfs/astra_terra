@@ -1,7 +1,8 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import CustomDropdown from './CustomDropdown';
 import PriceRangeDropdown from './PriceRangeDropdown';
 
 interface SearchBarProps {
@@ -24,6 +25,16 @@ export default function SearchBar({ cities, propertyTypes }: SearchBarProps) {
       .join(' ');
   };
 
+  const cityOptions = Object.entries(cities).map(([id, name]) => ({
+    value: id,
+    label: name,
+  }));
+
+  const propertyTypeOptions = propertyTypes.map((pt) => ({
+    value: pt,
+    label: formatText(pt),
+  }));
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const params = new URLSearchParams();
@@ -35,56 +46,36 @@ export default function SearchBar({ cities, propertyTypes }: SearchBarProps) {
   };
 
   return (
-    <form action="/properties-search" className="ats-container" method="GET" onSubmit={handleSubmit}>
+    <form action="/properties-search" className="ats-container premium-search-form" method="GET" onSubmit={handleSubmit}>
       <div className="ats-nf-container">
         <div className="ats-nfc-col">
-          <div className="at-field">
-            <div className="atf-label">
+          <div className="at-field premium-field">
+            <div className="atf-label premium-label">
               <i className="ph ph-map-pin"></i>
               <span>Emirates &amp; Areas</span>
             </div>
-            <div className="control" style={{ width: '180px' }}>
-              <div className="select is-normal" style={{ width: '100%' }}>
-                <select
-                  name="city"
-                  style={{ width: '100%' }}
-                  value={city}
-                  onChange={(e) => setCity(e.target.value)}
-                >
-                  <option value="" disabled>Select Area</option>
-                  {Object.entries(cities).map(([id, name]) => (
-                    <option key={id} value={id}>
-                      {name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
+            <CustomDropdown
+              name="city"
+              options={cityOptions}
+              value={city}
+              onChange={setCity}
+              placeholder="Select Area"
+            />
           </div>
         </div>
         <div className="ats-nfc-col">
-          <div className="at-field">
-            <div className="atf-label">
+          <div className="at-field premium-field">
+            <div className="atf-label premium-label">
               <i className="ph ph-buildings"></i>
               <span>Property Type</span>
             </div>
-            <div className="control" style={{ width: '180px' }}>
-              <div className="select is-normal" style={{ width: '100%' }}>
-                <select
-                  name="type"
-                  style={{ width: '100%' }}
-                  value={type}
-                  onChange={(e) => setType(e.target.value)}
-                >
-                  <option value="" disabled>Select Type</option>
-                  {propertyTypes.map((pt) => (
-                    <option key={pt} value={pt}>
-                      {formatText(pt)}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
+            <CustomDropdown
+              name="type"
+              options={propertyTypeOptions}
+              value={type}
+              onChange={setType}
+              placeholder="Select Type"
+            />
           </div>
         </div>
         <div className="ats-nfc-col">
@@ -96,7 +87,7 @@ export default function SearchBar({ cities, propertyTypes }: SearchBarProps) {
           />
         </div>
         <div className="ats-nfc-col">
-          <button type="submit" className="ats-nfc-btn">
+          <button type="submit" className="ats-nfc-btn premium-search-btn">
             <i className="ph ph-magnifying-glass"></i>
             <span>Find Properties</span>
           </button>

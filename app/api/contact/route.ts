@@ -51,11 +51,10 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Determine form ID based on inquiry type
-    let formId = '03d831e8-842f-463b-bff5-9a5b9a490e7b'; // BUY
-    if (inquiry_type === 'RENT') {
-      formId = '20348d4b-d85a-4989-8e43-87e63408bc09';
-    }
+    // Determine form ID based on inquiry type (configurable via env vars)
+    const buyFormId = process.env.PIXXI_BUY_FORM_ID || '03d831e8-842f-463b-bff5-9a5b9a490e7b';
+    const rentFormId = process.env.PIXXI_RENT_FORM_ID || '20348d4b-d85a-4989-8e43-87e63408bc09';
+    const formId = inquiry_type === 'RENT' ? rentFormId : buyFormId;
 
     const fullName = `${firstName} ${lastName}`;
 
@@ -69,12 +68,12 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const pixxiPayload = {
+    // Build payload - only include optional fields if they have values
+    // Note: Empty propertyReference causes PIXXI_FORMS_TOKEN_ERROR
+    const pixxiPayload: Record<string, any> = {
       formId,
-      propertyReference: '',
       name: fullName,
       email,
-      nationality: '',
       phone: phone || '',
       extraData: {
         message,

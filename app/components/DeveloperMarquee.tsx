@@ -1,5 +1,3 @@
-'use client';
-
 import Image from 'next/image';
 
 const developerLogos = Array.from({ length: 15 }, (_, i) => i + 1);
