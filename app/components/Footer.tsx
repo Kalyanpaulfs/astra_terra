@@ -36,7 +36,7 @@ export default function Footer() {
           <div className="atf-info-section">
             <div className="atf-ib-title">GET IN TOUCH</div>
             <ul className="atf-contact-list">
-              <li><i className="ph ph-phone"></i> +971 58 613 1006</li>
+              <li><i className="ph ph-phone"></i> +971 58 558 0053</li>
               <li><i className="ph ph-envelope-simple"></i> info@astraterra.ae</li>
             </ul>
           </div>
@@ -143,6 +143,11 @@ export default function Footer() {
               <a href="https://wa.me/971585580053" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 256 256">
                   <path d="M187.58,144.84l-32-16a8,8,0,0,0-8,0l-14.4,14.4a108.32,108.32,0,0,1-40.18-40.18l14.4-14.4a8,8,0,0,0,0-8l-16-32a8,8,0,0,0-11-4l-24,12a10.87,10.87,0,0,0-4.32,4c-32,32-6.52,86,30.31,122.84,27,27,65.81,42.54,89.5,30.69a10.87,10.87,0,0,0,4-4.32l12-24A8,8,0,0,0,187.58,144.84Zm-14,40.12L162.77,207c-17.79,8.9-50-5.75-72.77-28.52S62.67,123.49,71.57,105.71l22-11L107,121.2,95.73,132.5a8,8,0,0,0-1.84,8.83,124.28,124.28,0,0,0,40.78,40.78,8,8,0,0,0,8.83-1.84l11.3-11.3,26.49,13.25ZM128,24A104,104,0,0,0,36.18,176.88L24.83,210.93a16,16,0,0,0,20.24,20.24l34.05-11.35A104,104,0,1,0,128,24Zm0,192a87.87,87.87,0,0,1-44.06-11.81,8,8,0,0,0-6.54-.67L40,216,52.47,178.6a8,8,0,0,0-.67-6.54A88,88,0,1,1,128,216Z"></path>
+                </svg>
+              </a>
+              <a href="https://www.youtube.com/@ASTRATERRAPROPERTIESLLC" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 256 256">
+                  <path d="M229.44,71.42a25.64,25.64,0,0,0-18-18.1C184.34,46.5,128,46.5,128,46.5s-56.34,0-83.44,6.82a25.64,25.64,0,0,0-18,18.1C19.68,98.5,19.68,128,19.68,128s0,29.5,6.88,56.58a25.64,25.64,0,0,0,18,18.1C71.66,209.5,128,209.5,128,209.5s56.34,0,83.44-6.82a25.64,25.64,0,0,0,18-18.1C236.32,157.5,236.32,128,236.32,128S236.32,98.5,229.44,71.42ZM104,156V100l52,28Z"></path>
                 </svg>
               </a>
             </div>

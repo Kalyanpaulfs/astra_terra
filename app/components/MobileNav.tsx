@@ -28,7 +28,11 @@ export default function MobileNav({ isOpen, onClose }: MobileNavProps) {
   return (
     <div className="mobile-nav-frame" onClick={onClose}>
       <div className="mobile-nav-menu" onClick={(e) => e.stopPropagation()}>
-        <span className="mnm-close" onClick={onClose}>Close</span>
+        <div className="mnm-header">
+          <span className="mnm-close" onClick={onClose}>
+            <i className="ph ph-x"></i>
+          </span>
+        </div>
         <Image
           className="mnm-logo"
           src="/img/brand.png"
@@ -40,7 +44,9 @@ export default function MobileNav({ isOpen, onClose }: MobileNavProps) {
         <ul className="mnm2-links">
           <li className={openSubmenu === 'buy' ? 'has-sub open' : 'has-sub'}>
             <a href="#" onClick={(e) => { e.preventDefault(); setOpenSubmenu(openSubmenu === 'buy' ? null : 'buy'); }}>
-              Buy
+              <i className="ph ph-house-line"></i>
+              <span>Buy</span>
+              <i className="ph ph-caret-down arrow"></i>
             </a>
             <ul className="sub-links">
               <li><Link href="/properties-search?city=41&type=APARTMENT&listtype=SELL" onClick={onClose}>Apartment</Link></li>
@@ -55,7 +61,9 @@ export default function MobileNav({ isOpen, onClose }: MobileNavProps) {
           </li>
           <li className={openSubmenu === 'rent' ? 'has-sub open' : 'has-sub'}>
             <a href="#" onClick={(e) => { e.preventDefault(); setOpenSubmenu(openSubmenu === 'rent' ? null : 'rent'); }}>
-              Rent
+              <i className="ph ph-key"></i>
+              <span>Rent</span>
+              <i className="ph ph-caret-down arrow"></i>
             </a>
             <ul className="sub-links">
               <li><Link href="/properties-search?city=41&type=APARTMENT&listtype=RENT" onClick={onClose}>Apartment</Link></li>
@@ -68,11 +76,23 @@ export default function MobileNav({ isOpen, onClose }: MobileNavProps) {
               <li><Link href="/properties-search?city=41&listtype=RENT" onClick={onClose}>See All</Link></li>
             </ul>
           </li>
-          <li><a href="#listings-anchor" className="mnm2-close" onClick={onClose}>New Projects</a></li>
-          <li><a href="#developers-anchor" className="mnm2-close" onClick={onClose}>Developers</a></li>
+          <li>
+            <a href="#listings-anchor" className="mnm2-close" onClick={onClose}>
+              <i className="ph ph-buildings"></i>
+              <span>New Projects</span>
+            </a>
+          </li>
+          <li>
+            <a href="#developers-anchor" className="mnm2-close" onClick={onClose}>
+              <i className="ph ph-users-three"></i>
+              <span>Developers</span>
+            </a>
+          </li>
           <li className={openSubmenu === 'locations' ? 'has-sub open' : 'has-sub'}>
             <a href="#" onClick={(e) => { e.preventDefault(); setOpenSubmenu(openSubmenu === 'locations' ? null : 'locations'); }}>
-              Locations
+              <i className="ph ph-map-pin"></i>
+              <span>Locations</span>
+              <i className="ph ph-caret-down arrow"></i>
             </a>
             <ul className="sub-links">
               <li><Link href="/properties-search?regionId=47" onClick={onClose}>Downtown Dubai</Link></li>
@@ -84,17 +104,30 @@ export default function MobileNav({ isOpen, onClose }: MobileNavProps) {
               <li><Link href="/properties-search?regionId=117" onClick={onClose}>Dubai Hills Estate</Link></li>
             </ul>
           </li>
-          <li><a href="#services-anchor" className="mnm2-close" onClick={onClose}>Services</a></li>
+          <li>
+            <a href="#services-anchor" className="mnm2-close" onClick={onClose}>
+              <i className="ph ph-briefcase"></i>
+              <span>Services</span>
+            </a>
+          </li>
           <li className={openSubmenu === 'more' ? 'has-sub open' : 'has-sub'}>
             <a href="#" onClick={(e) => { e.preventDefault(); setOpenSubmenu(openSubmenu === 'more' ? null : 'more'); }}>
-              More
+              <i className="ph ph-dots-three-circle"></i>
+              <span>More</span>
+              <i className="ph ph-caret-down arrow"></i>
             </a>
             <ul className="sub-links">
-              <li><a href="#about-us-anchor" className="mnm2-close" onClick={onClose}>About</a></li>
-              <li><a href="#contact-us-anchor" className="mnm2-close" onClick={onClose}>Get In Touch</a></li>
+              <li><a href="#about-us-anchor" className="mnm2-close" onClick={onClose}>About Us</a></li>
+              <li><a href="#contact-us-anchor" className="mnm2-close" onClick={onClose}>Contact Us</a></li>
             </ul>
           </li>
         </ul>
+
+        <div className="mnm-footer">
+          <a href="#contact-us-anchor" className="mnm-cta-btn" onClick={onClose}>
+            Get in Touch
+          </a>
+        </div>
       </div>
     </div>
   );

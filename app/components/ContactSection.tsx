@@ -31,7 +31,6 @@ export default function ContactSection() {
                             <div className="contact-us-icon"><i className="ph-phone-call"></i></div>
                             <div className="contact-us-card-title">Phone</div>
                             <div className="contact-us-card-text">
-                                +971 58 613 1006<br />
                                 +971 58 558 0053
                             </div>
                         </div>

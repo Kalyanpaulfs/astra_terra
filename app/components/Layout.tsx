@@ -5,11 +5,7 @@ import dynamic from 'next/dynamic';
 import Navbar from './Navbar';
 import Footer from './Footer';
 
-// Lazy load ChatWidget - not critical for initial render
-const ChatWidget = dynamic(() => import('./ChatWidget'), {
-  ssr: false,
-  loading: () => null
-});
+import ChatWidget from './ChatWidget';
 
 interface LayoutProps {
   children: ReactNode;
