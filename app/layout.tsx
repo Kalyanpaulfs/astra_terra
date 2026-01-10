@@ -21,8 +21,8 @@ export default function RootLayout({
       <body>
         <Layout>{children}</Layout>
         {/* Load Phosphor Icons asynchronously - non-blocking */}
-        <Script 
-          src="https://unpkg.com/phosphor-icons" 
+        <Script
+          src="https://unpkg.com/phosphor-icons"
           strategy="lazyOnload"
         />
       </body>

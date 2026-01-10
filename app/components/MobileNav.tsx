@@ -110,6 +110,12 @@ export default function MobileNav({ isOpen, onClose }: MobileNavProps) {
               <span>Services</span>
             </a>
           </li>
+          <li>
+            <a href="#why-choose-us" className="mnm2-close" onClick={onClose}>
+              <i className="ph ph-star"></i>
+              <span>Why Us</span>
+            </a>
+          </li>
           <li className={openSubmenu === 'more' ? 'has-sub open' : 'has-sub'}>
             <a href="#" onClick={(e) => { e.preventDefault(); setOpenSubmenu(openSubmenu === 'more' ? null : 'more'); }}>
               <i className="ph ph-dots-three-circle"></i>

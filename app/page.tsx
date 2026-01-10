@@ -7,6 +7,8 @@ import ServicesSection from './components/ServicesSection';
 import ContactSection from './components/ContactSection';
 import { HeroSkeleton, FeaturedSkeleton } from './components/Skeletons';
 
+import WhyChooseUs from './components/WhyChooseUs';
+
 export const revalidate = 3600; // Revalidate at least every hour
 
 export default function HomePage() {
@@ -32,6 +34,8 @@ export default function HomePage() {
         </div>
         <ServicesSection />
       </div>
+
+      <WhyChooseUs />
 
       <ContactSection />
     </>
