@@ -68,21 +68,36 @@
 
 .dxb-most-trusted-overlay {
     position: absolute;
-    bottom: 15px;
-    left: 15px;
-    background: white;
-    padding: 20px;
-    border-radius: 15px;
-    max-width: 90%;
+    bottom: 20px;
+    left: 20px;
+    background: rgba(13, 22, 37, 0.85);
+    /* Premium Dark Glass */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: 24px;
+    border-radius: 16px;
+    max-width: 400px;
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    /* Gold border */
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
 .dxb-most-trusted-overlay-header {
     display: flex;
     align-items: center;
-    gap: 10px;
-    font-weight: bold;
-    font-size: 20px;
-    color: #333;
+    gap: 12px;
+    font-weight: 700;
+    font-size: 18px;
+    color: #ffffff;
+    margin-bottom: 8px;
+    font-family: 'Playfair Display', serif;
+    letter-spacing: 0.5px;
+}
+
+.dxb-most-trusted-overlay-header i {
+    color: #DEC993;
+    /* Gold Icon */
+    font-size: 24px;
 }
 
 /* Responsive Adjustments */
@@ -780,42 +795,45 @@
 
 .testimonials-track {
     display: flex;
-    gap: 30px;
-    width: max-content;
-    animation: scrollContinuous 40s linear infinite;
+    width: 100%;
+    /* Transition handled in inline style for dynamics, or here provided class is toggled */
+    transition: transform 0.8s ease-in-out;
+    will-change: transform;
 }
 
-.testimonials-track:hover {
-    animation-play-state: paused;
-}
-
-@keyframes scrollContinuous {
-    from {
-        transform: translateX(0);
-    }
-
-    to {
-        transform: translateX(calc(-50% - 15px));
-    }
-}
+/* Keyframes removed */
 
 .testimonial-card {
-    width: 400px;
+    flex: 0 0 33.3333%;
+    max-width: 33.3333%;
+    padding: 0 15px;
+    /* Spacing */
+    box-sizing: border-box;
+    flex-shrink: 0;
+}
+
+.testimonial-content {
+    height: 100%;
+    /* Equal height */
     background: #262e3b;
     padding: 30px;
     border-radius: 12px;
     border: 1px solid rgba(255, 255, 255, 0.05);
     border-top: 3px solid #DEC993;
-    /* Added gold top border */
-    box-shadow: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     transition: transform 0.3s ease, border-color 0.3s ease;
-    flex-shrink: 0;
 }
 
-.testimonial-card:hover {
+.testimonial-content:hover {
     transform: translateY(-5px);
     border-color: #DEC993;
 }
+
+/* Removed original .testimonial-card styles that conflict */
+
+/* Old hover moved to .testimonial-content */
 
 .testimonial-rating {
     display: flex;
@@ -847,15 +865,14 @@
 /* MOBILE ADJUSTMENTS FOR WHY US */
 @media screen and (max-width: 768px) {
     .testimonial-card {
-        width: 300px;
-        padding: 20px;
+        flex: 0 0 100%;
+        max-width: 100%;
+        padding: 0 20px;
     }
 
     .why-us-section {
         padding: 60px 0;
     }
 
-    .testimonials-track {
-        animation-duration: 25s;
-    }
+    /* Animation duration removal */
 }

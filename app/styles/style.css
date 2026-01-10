@@ -2085,7 +2085,8 @@ pre {
 	left: -4px;
 	right: -4px;
 	bottom: -4px;
-	border: 4px solid red;
+	border: 2px solid #DEC993;
+	/* Changed to gold border instead of red */
 	border-radius: 24px;
 	pointer-events: none;
 	z-index: -1;
@@ -2096,6 +2097,15 @@ pre {
 	font-weight: 600;
 	color: #0D1625;
 	font-family: "Playfair Display", serif;
+}
+
+.atp-arrow--left {
+	left: 10px;
+	/* Inside container for visibility */
+}
+
+.atp-arrow--right {
+	right: 10px;
 }
 
 .atfh-hl {
@@ -2183,76 +2193,151 @@ pre {
 
 .at-property-card {
 	width: 100%;
-	height: 480px;
-	/* Slight height increase for elegance */
-	border: none;
-	border-radius: 12px;
-	display: flex;
-	flex-direction: column;
-	gap: 0px;
-	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-	/* Deep base shadow */
+	height: 100%;
+	min-height: 520px;
+	background: #ffffff;
+	border: 1px solid rgba(0, 0, 0, 0.05);
+	border-radius: 16px;
 	overflow: hidden;
 	transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-	z-index: 1;
-	background: white;
+	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+	display: flex;
+	flex-direction: column;
+	position: relative;
 }
 
 .at-property-card:hover {
-	transform: translateY(-10px);
-	box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+	transform: translateY(-8px);
+	box-shadow: 0 20px 40px rgba(148, 119, 75, 0.15);
+	border-color: rgba(148, 119, 75, 0.3);
 }
 
-/* Card Body */
-.at-pc-body {
-	padding: 20px;
+.at-property-card .at-pc-head {
+	height: 260px;
+	width: 100%;
+	position: relative;
+	overflow: hidden;
+	display: block;
+}
+
+.at-property-card .at-pc-head .at-pch-img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	transition: transform 0.6s ease;
+}
+
+.at-property-card:hover .at-pc-head .at-pch-img {
+	transform: scale(1.1);
+}
+
+.at-property-card .at-pc-head .at-pch-highlight {
+	position: absolute;
+	top: 20px;
+	left: 20px;
+	background: linear-gradient(135deg, #DEC993 0%, #94774B 100%);
+	color: white;
+	padding: 6px 16px;
+	border-radius: 30px;
+	font-size: 11px;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+	font-weight: 700;
+	z-index: 2;
+	box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.at-property-card .at-pc-head .at-pch-info {
+	position: absolute;
+	bottom: 20px;
+	left: 20px;
+	display: flex;
+	gap: 8px;
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	z-index: 2;
+}
+
+.at-property-card .at-pc-head .at-pch-info li {
+	background: rgba(13, 22, 37, 0.8);
+	backdrop-filter: blur(4px);
+	color: white;
+	padding: 5px 12px;
+	border-radius: 20px;
+	font-size: 10px;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+	font-weight: 600;
+	border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Gradient Overlay on Image Bottom for readability */
+.at-property-card .at-pc-head::after {
+	content: '';
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	height: 50%;
+	background: linear-gradient(to top, rgba(0, 0, 0, 0.5), transparent);
+	pointer-events: none;
+	z-index: 1;
+}
+
+.at-property-card .at-pc-body {
+	padding: 24px;
 	flex: 1;
 	display: flex;
 	flex-direction: column;
-	justify-content: space-between;
-}
-
-/* Premium Typography */
-.at-pcbi-title {
-	font-family: 'Playfair Display', serif;
-	font-size: 18px;
-	font-weight: 700;
-	color: #1a1a1a;
-	margin-bottom: 8px;
-	display: block;
-	text-decoration: none;
-	line-height: 1.4;
+	gap: 16px;
 }
 
 .at-pcbi-price {
-	font-size: 18px;
-	font-weight: 800;
-	background: linear-gradient(45deg, #b88a44, #e5c585, #b88a44);
-	background-size: 200% auto;
-	-webkit-background-clip: text;
-	background-clip: text;
-	-webkit-text-fill-color: transparent;
+	font-family: 'Montserrat', sans-serif;
+	font-size: 24px;
+	font-weight: 700;
+	color: #94774B;
+	text-decoration: none;
 	display: block;
-	margin-bottom: 8px;
-	animation: shimmer 3s infinite linear;
+}
+
+.at-pcbi-title {
+	font-family: 'Playfair Display', serif;
+	font-size: 18px;
+	font-weight: 600;
+	color: #0D1625;
+	line-height: 1.4;
+	text-decoration: none;
+	display: block;
+	margin-bottom: 4px;
+	transition: color 0.3s;
+}
+
+.at-property-card:hover .at-pcbi-title {
+	color: #94774B;
 }
 
 .at-pcbi-loc {
-	color: #666;
-	font-size: 14px;
 	display: flex;
 	align-items: center;
-	gap: 4px;
+	gap: 6px;
+	color: #666;
+	font-size: 13px;
 	text-decoration: none;
 }
 
-/* Specifications Grid */
+.at-pcbi-loc i {
+	color: #94774B;
+	font-size: 16px;
+}
+
 .at-pcb-specs {
 	display: flex;
 	justify-content: space-between;
-	padding: 15px 0 0 0;
-	border-top: 1px solid #f5f5f5;
+	padding-top: 20px;
 	margin-top: auto;
+	border-top: 1px solid rgba(0, 0, 0, 0.05);
 	list-style: none;
 }
 
@@ -2260,36 +2345,32 @@ pre {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	font-size: 11px;
-	font-family: 'Montserrat', sans-serif;
-	font-weight: 500;
-	text-transform: uppercase;
-	letter-spacing: 0.5px;
-	color: #888;
 	gap: 6px;
+	color: #444;
+	font-size: 12px;
+	font-weight: 500;
 }
 
 .at-pcb-specs li i {
-	font-size: 18px;
-	color: #b88a44;
+	font-size: 20px;
+	color: #94774B;
+	/* Gold Icon */
+	margin-bottom: 2px;
 }
 
-/* Clean Luxury Footer */
-.at-pc-footer {
-	background-color: white;
-	padding: 20px;
+.at-property-card .at-pc-footer {
+	padding: 0 24px 24px 24px;
 	display: flex;
 	gap: 12px;
-	border-top: 1px solid rgba(0, 0, 0, 0.03);
 }
 
 .at-pcf-btn {
 	flex: 1;
+	height: 44px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	gap: 8px;
-	padding: 12px;
 	border-radius: 8px;
 	font-size: 13px;
 	font-weight: 600;
@@ -2297,306 +2378,29 @@ pre {
 	letter-spacing: 0.5px;
 	text-decoration: none;
 	transition: all 0.3s ease;
-	font-family: 'Montserrat', sans-serif;
+	cursor: pointer;
 }
 
 .at-pcf-btn1 {
-	/* Call - Secondary Outline */
-	background: transparent;
-	color: #1a1a1a;
-	border: 1px solid #e0e0e0;
+	background: #f5f5f5;
+	color: #333;
+	border: 1px solid transparent;
 }
 
 .at-pcf-btn1:hover {
-	border-color: #1a1a1a;
-	background: #1a1a1a;
-	color: white;
+	background: #e0e0e0;
+	color: #000;
 }
 
 .at-pcf-btn2 {
-	/* WhatsApp - Primary Gradient */
-	background: linear-gradient(45deg, #b88a44, #e5c585);
+	background: linear-gradient(135deg, #DEC993 0%, #94774B 100%);
 	color: white;
-	border: none;
-	box-shadow: 0 4px 15px rgba(184, 138, 68, 0.2);
+	box-shadow: 0 4px 12px rgba(148, 119, 75, 0.3);
 }
 
 .at-pcf-btn2:hover {
 	transform: translateY(-2px);
-	box-shadow: 0 6px 20px rgba(184, 138, 68, 0.3);
-}
-
-/* Ensure arrows are visible */
-.atp-arrow {
-	position: absolute;
-	top: 50%;
-	transform: translateY(-50%);
-	z-index: 10;
-	width: 48px;
-	height: 48px;
-	border-radius: 50%;
-	background-color: white;
-	border: 1px solid rgba(0, 0, 0, 0.05);
-	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	cursor: pointer;
-	font-size: 24px;
-	color: #333;
-	transition: all 0.3s ease;
-}
-
-.atp-arrow:hover {
-	background-color: #1a1a1a;
-	color: #DEC993;
-	box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
-	transform: translateY(-50%) scale(1.1);
-}
-
-.atp-arrow--left {
-	left: -24px;
-	/* Slightly more visible overlap */
-}
-
-.atp-arrow--right {
-	right: -24px;
-}
-
-/* Responsive adjust for arrows */
-@media (max-width: 1280px) {
-	.atp-arrow--left {
-		left: 10px;
-	}
-
-	.atp-arrow--right {
-		right: 10px;
-	}
-}
-
-/*
-.at-property-card::before {
-	content: "";
-	position: absolute;
-	top: 0;
-	left: -150%;
-	width: 50%;
-	height: 100%;
-	background: linear-gradient(
-		90deg,
-		rgba(255, 255, 255, 0) 0%,
-		rgba(255, 255, 255, 0.3) 50%,
-		rgba(255, 255, 255, 0) 100%
-	);
-	transform: skewX(-20deg);
-	transition: left 0.4s ease-in-out;
-	z-index: 100;
-	opacity: 0.5;
-}
-
-.at-property-card:hover::before {
-	left: 150%;
-}*/
-
-/*
-.at-property-card::before {
-	content: "";
-	position: absolute;
-	top: -8px;
-	left: -8px;
-	right: -8px;
-	bottom: -8px;
-	border: 2px solid #DEC993;
-	border-radius: 24px;
-	pointer-events: none;
-	z-index: 44;
-}*/
-
-.at-property-card:hover {
-	transform: translateY(-8px);
-	/* move up by 10px */
-	box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-	/* optional: add soft shadow */
-	border: 1px solid #DEC993;
-}
-
-.at-property-card .at-pc-head {
-	height: 220px;
-	position: relative;
-	overflow: hidden;
-	display: block;
-	text-decoration: none;
-	background-color: grey;
-}
-
-.at-property-card .at-pc-head .at-pch-img {
-	/*margin: 0 auto;
-	height: 100%;
-	width: auto;*/
-	height: 100%;
-	width: 100%;
-	object-fit: cover;
-	transition: transform 0.5s ease;
-	z-index: 22;
-	display: block;
-}
-
-.at-property-card:hover .at-pc-head .at-pch-img {
-	transform: scale(1.08);
-	/* zoom in */
-}
-
-.at-property-card .at-pc-head .at-pch-highlight {
-	padding: 6px 16px;
-	border-radius: 24px;
-	font-size: 12px;
-	letter-spacing: 1px;
-
-	color: white;
-
-	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
-
-	background: linear-gradient(90deg,
-			#73582f 0%,
-			#94774B 25%,
-			#DEC993 50%,
-			#94774B 75%,
-			#73582f 100%);
-	background-size: 300% 100%;
-	background-position: 100% 0;
-	animation: shimmer 4s infinite linear;
-
-	display: inline-block;
-	position: absolute;
-	top: 16px;
-	left: 16px;
-
-	z-index: 33;
-}
-
-.at-property-card .at-pc-head .at-pch-info {
-	margin: 0;
-	padding: 0;
-	list-style: none;
-	position: absolute;
-	bottom: 16px;
-	left: 16px;
-	z-index: 33;
-	display: flex;
-	flex-direction: row;
-	gap: 5px;
-	justify-content: flex-start;
-	align-items: center;
-}
-
-.at-property-card .at-pc-head .at-pch-info>li {
-	margin: 0;
-	padding: 4px 12px;
-	border-radius: 16px;
-	font-size: 10px;
-	background-color: rgba(0, 0, 0, 0.6);
-	color: white;
-}
-
-.at-property-card .at-pc-body {
-	padding: 10px 16px;
-	display: flex;
-	flex-direction: column;
-	gap: 32px;
-}
-
-.at-property-card .at-pc-body .at-pcb-info {
-	display: flex;
-	flex-direction: column;
-	gap: 0px;
-}
-
-.at-property-card .at-pc-body .at-pcb-info a {
-	display: block;
-	text-decoration: none;
-}
-
-.at-property-card .at-pc-body .at-pcb-info .at-pcbi-title {
-	font-size: 12px;
-	color: rgba(0, 0, 0, 1);
-}
-
-.at-property-card .at-pc-body .at-pcb-info .at-pcbi-price {
-	font-size: 32px;
-	font-weight: 600;
-	color: #0D1625;
-}
-
-.at-property-card .at-pc-body .at-pcb-info .at-pcbi-loc {
-	font-size: 12px;
-	color: rgba(0, 0, 0, 1);
-}
-
-.at-property-card .at-pc-body .at-pcb-specs {
-	padding-bottom: 8px;
-	border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-	display: flex;
-	flex-direction: row;
-	gap: 16px;
-	justify-content: flex-start;
-	align-items: center;
-}
-
-.at-property-card .at-pc-body .at-pcb-specs li {
-	display: flex;
-	flex-direction: row;
-	gap: 5px;
-	justify-content: flex-start;
-	align-items: center;
-}
-
-.at-property-card .at-pc-body .at-pcb-specs li>i {
-	font-size: 16px;
-	color: black;
-}
-
-.at-property-card .at-pc-body .at-pcb-specs li>span {
-	font-size: 14px;
-	/*font-weight: 500;*/
-	color: black;
-}
-
-.at-property-card .at-pc-footer {
-	padding: 10px 16px 16px 16px;
-	display: flex;
-	flex-direction: row;
-	gap: 10px;
-}
-
-.at-property-card .at-pc-footer .at-pcf-btn {
-	padding: 10px;
-	border-radius: 4px;
-	font-size: 15px;
-	flex-basis: 50%;
-	flex-grow: 1;
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	justify-content: center;
-	gap: 5px;
-}
-
-.at-property-card .at-pc-footer .at-pcf-btn1 {
-	font-weight: 300;
-	background-color: #0D1625;
-	color: white;
-	transition: 0.2s ease;
-}
-
-.at-property-card .at-pc-footer .at-pcf-btn1:hover {
-	background-color: #121c2e;
-}
-
-.at-property-card .at-pc-footer .at-pcf-btn2 {
-	font-weight: 600;
-	background-color: rgba(0, 0, 0, 0.1);
-	color: #0D1625;
-	transition: 0.2s ease;
+	box-shadow: 0 6px 16px rgba(148, 119, 75, 0.4);
 }
 
 .at-property-card .at-pc-footer .at-pcf-btn2:hover {
@@ -2604,7 +2408,51 @@ pre {
 }
 
 .at-property-card .at-pc-footer .at-pcf-btn2>i {
-	color: #25D366;
+	color: #ffffff;
+}
+
+/* Carousel Navigation Arrows */
+.atp-arrow {
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	z-index: 20;
+	width: 48px;
+	height: 48px;
+	border-radius: 50%;
+	background-color: rgba(255, 255, 255, 0.85);
+	/* Glass-like/Semi-transparent */
+	backdrop-filter: blur(4px);
+	border: 1px solid rgba(212, 175, 55, 0.3);
+	/* Subtle gold border */
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	font-size: 20px;
+	color: #0D1625;
+	transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.atp-arrow:hover {
+	background-color: #0D1625;
+	color: #DEC993;
+	border-color: #0D1625;
+	box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+	transform: translateY(-50%) scale(1.1);
+}
+
+.atp-arrow:active {
+	transform: translateY(-50%) scale(0.95);
+}
+
+.atp-arrow--left {
+	left: 20px;
+}
+
+.atp-arrow--right {
+	right: 20px;
 }
 
 /* Services - Home Page */

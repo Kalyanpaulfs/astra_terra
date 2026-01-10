@@ -37,9 +37,62 @@ const reviews = [
 const infiniteReviews = [...reviews, ...reviews];
 
 export default function WhyChooseUs() {
+    const [currentIndex, setCurrentIndex] = React.useState(0);
+    const [itemsToShow, setItemsToShow] = React.useState(3);
+    const [isTransitioning, setIsTransitioning] = React.useState(true);
+
+    // Duplicate arrays to facilitate seamless infinite loop
+    const extendedReviews = [...reviews, ...reviews, ...reviews];
+    const totalOriginal = reviews.length;
+
+    // Responsive items count
+    React.useEffect(() => {
+        const handleResize = () => {
+            if (window.innerWidth < 768) {
+                setItemsToShow(1);
+            } else {
+                setItemsToShow(3);
+            }
+        };
+
+        // Initial call
+        handleResize();
+
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    const nextSlide = React.useCallback(() => {
+        // Move forward by the number of visible items
+        setCurrentIndex(prev => prev + itemsToShow);
+        setIsTransitioning(true);
+    }, [itemsToShow]);
+
+    // Auto-rotation
+    React.useEffect(() => {
+        const interval = setInterval(nextSlide, 4000); // 4 seconds
+        return () => clearInterval(interval);
+    }, [nextSlide]);
+
+    // Handle the infinite loop reset
+    const handleTransitionEnd = () => {
+        // If we have scrolled past the second set (safe buffer point), reset instantly to first set
+        // The effective index range for the "middle" set is [totalOriginal, 2*totalOriginal)
+        // If current index is high enough, we shift back by totalOriginal len to keep in sync
+        if (currentIndex >= totalOriginal * 2) {
+            setIsTransitioning(false);
+            setCurrentIndex(prev => prev - totalOriginal);
+            // React will process this state update. 
+            // We need to ensure transition is re-enabled in next frame if we want to continue animating later
+            // But since next move happens on timer, just setting state is enough?
+            // No, if we don't re-enable transitioning, next slide will jump.
+            // We can let the next slide re-enable it (it sets setIsTransitioning(true)).
+        }
+    };
+
     return (
         <section className="why-us-section" id="why-choose-us">
-            <div className="services-container">
+            <div className="services-container" style={{ overflow: 'hidden' }}>
                 <div className="atsv-header">
                     <h2 className="atsvh-title">Why Choose Us</h2>
                     <div className="atsvh-hl"></div>
@@ -49,8 +102,15 @@ export default function WhyChooseUs() {
                 </div>
 
                 <div className="testimonials-wrapper">
-                    <div className="testimonials-track">
-                        {infiniteReviews.map((review, index) => (
+                    <div
+                        className="testimonials-track"
+                        style={{
+                            transform: `translateX(-${currentIndex * (100 / itemsToShow)}%)`,
+                            transition: isTransitioning ? 'transform 1.5s ease-in-out' : 'none', // Increased duration for smoothness
+                        }}
+                        onTransitionEnd={handleTransitionEnd}
+                    >
+                        {extendedReviews.map((review, index) => (
                             <div key={index} className="testimonial-card">
                                 <div className="testimonial-content">
                                     <div className="testimonial-rating">

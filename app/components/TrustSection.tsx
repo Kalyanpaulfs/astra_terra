@@ -1,4 +1,74 @@
+'use client';
+
+import { useEffect, useState, useRef } from 'react';
 import Image from 'next/image';
+
+interface AnimatedNumberProps {
+    end: number;
+    duration?: number;
+    suffix?: string;
+    prefix?: string;
+}
+
+const AnimatedNumber = ({ end, duration = 4000, suffix = '', prefix = '' }: AnimatedNumberProps) => {
+    const [count, setCount] = useState(0);
+    const elementRef = useRef<HTMLDivElement>(null);
+    const observerRef = useRef<IntersectionObserver | null>(null);
+
+    useEffect(() => {
+        const element = elementRef.current;
+        if (!element) return;
+
+        // Cleanup previous observer
+        if (observerRef.current) {
+            observerRef.current.disconnect();
+        }
+
+        observerRef.current = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        // Reset and start animation
+                        let startTime: number | null = null;
+                        const animate = (timestamp: number) => {
+                            if (!startTime) startTime = timestamp;
+                            const progress = Math.min((timestamp - startTime) / duration, 1);
+
+                            // Easing function for smooth effect (easeOutExpo)
+                            // 1 - Math.pow(2, -10 * progress)
+                            const easeProgress = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+
+                            setCount(Math.floor(easeProgress * end));
+
+                            if (progress < 1) {
+                                requestAnimationFrame(animate);
+                            }
+                        };
+                        requestAnimationFrame(animate);
+                    } else {
+                        // Reset when out of view so it animates again
+                        setCount(0);
+                    }
+                });
+            },
+            { threshold: 0.1 } // Trigger when 10% visible
+        );
+
+        observerRef.current.observe(element);
+
+        return () => {
+            if (observerRef.current) {
+                observerRef.current.disconnect();
+            }
+        };
+    }, [end, duration]);
+
+    return (
+        <div ref={elementRef} className="dxb-most-trusted-number">
+            {prefix}{count.toLocaleString()}{suffix}
+        </div>
+    );
+};
 
 export default function TrustSection() {
     return (
@@ -25,22 +95,22 @@ export default function TrustSection() {
                 <div className="dxb-most-trusted-stats-grid">
                     <div className="dxb-most-trusted-stat">
                         <div className="dxb-most-trusted-icon gradient-txt"><i className="ph-medal"></i></div>
-                        <div className="dxb-most-trusted-number">3+</div>
+                        <AnimatedNumber end={3} suffix="+" />
                         <div className="dxb-most-trusted-label">Years Experience</div>
                     </div>
                     <div className="dxb-most-trusted-stat">
                         <div className="dxb-most-trusted-icon gradient-txt"><i className="ph-users"></i></div>
-                        <div className="dxb-most-trusted-number">200+</div>
+                        <AnimatedNumber end={200} suffix="+" />
                         <div className="dxb-most-trusted-label">International Clients</div>
                     </div>
                     <div className="dxb-most-trusted-stat">
                         <div className="dxb-most-trusted-icon gradient-txt"><i className="ph-buildings"></i></div>
-                        <div className="dxb-most-trusted-number">1,000+</div>
+                        <AnimatedNumber end={1000} suffix="+" />
                         <div className="dxb-most-trusted-label">Luxury Properties</div>
                     </div>
                     <div className="dxb-most-trusted-stat">
                         <div className="dxb-most-trusted-icon gradient-txt"><i className="ph-star"></i></div>
-                        <div className="dxb-most-trusted-number">99%</div>
+                        <AnimatedNumber end={99} suffix="%" />
                         <div className="dxb-most-trusted-label">Client Satisfaction</div>
                     </div>
                 </div>
@@ -49,8 +119,8 @@ export default function TrustSection() {
             <div className="dxb-most-trusted-right">
                 <div className="dxb-most-trusted-image-wrapper">
                     <Image
-                        src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-                        alt="Beautiful Landscape"
+                        src="/img/dubai-trust.png"
+                        alt="Astra Terra - Luxury Dubai Real Estate with Burj Khalifa View"
                         width={800}
                         height={600}
                     />
@@ -59,7 +129,7 @@ export default function TrustSection() {
                             <div className="gradient-txt"><i className="ph-globe"></i></div>
                             <div>Dubai Market Expertise</div>
                         </div>
-                        <p style={{ color: 'black' }}>
+                        <p>
                             Specialized knowledge in Dubai's luxury developments, investment zones, and golden visa opportunities for international clients seeking premium real estate.
                         </p>
                     </div>

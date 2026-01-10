@@ -127,29 +127,29 @@ export default function PropertyCard({ listing, variant = 'featured' }: Property
             className="at-pch-img"
             src={listing.photos?.[0] || '/img/prop/default-thumb.jpg'}
             alt={listing.title}
-            width={400}
-            height={300}
+            width={600}
+            height={400}
             style={{ objectFit: 'cover' }}
           />
         </a>
         <div className="at-pc-body">
           <div className="at-pcb-info">
-            <a href="#" className="at-pcbi-title">
-              {listing.title.length > 45 ? `${listing.title.substring(0, 45)}...` : listing.title}
-            </a>
             <a href="#" className="at-pcbi-price">
               AED {formatPrice(listing.price)}
             </a>
+            <a href="#" className="at-pcbi-title">
+              {listing.title.length > 50 ? `${listing.title.substring(0, 50)}...` : listing.title}
+            </a>
             <a href="#" className="at-pcbi-loc">
-              <i className="ph ph-map-pin"></i>
+              <i className="ph-fill ph-map-pin"></i>
               {listing.community || listing.region}
             </a>
           </div>
           <ul className="at-pcb-specs">
-            <li><i className="ph ph-bed"></i> <span>{listing.bedRooms || '—'}</span></li>
-            <li><i className="ph ph-shower"></i> <span>{listing.rentParam?.bathrooms || '—'}</span></li>
-            <li><i className="ph ph-arrows-out"></i> <span>{listing.size || '—'} sq ft</span></li>
-            <li><i className="ph ph-car"></i> <span>{listing.rentParam?.parking || '—'}</span></li>
+            <li><i className="ph ph-bed"></i> <span>{listing.bedRooms || '—'} Beds</span></li>
+            <li><i className="ph ph-shower"></i> <span>{listing.rentParam?.bathrooms || '—'} Baths</span></li>
+            <li><i className="ph ph-arrows-out"></i> <span>{listing.size || '—'} sqft</span></li>
+            <li><i className="ph ph-car"></i> <span>{listing.rentParam?.parking || '—'} Prk</span></li>
           </ul>
         </div>
         <div className="at-pc-footer">
