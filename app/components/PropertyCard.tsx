@@ -1,9 +1,13 @@
 'use client';
 
+import Link from 'next/link';
 import Image from 'next/image';
 
 interface PropertyCardProps {
   listing: {
+    id?: string;
+    referenceNumber?: string;
+    listingType?: string; // SALE or RENT
     title: string;
     price: number;
     photos?: string[];
@@ -45,12 +49,21 @@ export default function PropertyCard({ listing, variant = 'featured' }: Property
 
   const phone = listing.agent?.phone?.replace(/\D/g, '') || '';
 
+  // Determine link URL
+  const type = listing.listingType === 'SALE' ? 'buy' : 'rent';
+  // Fallback to 'property' category if type missing, sanitize for URL
+  const category = (listing.propertyType?.[0] || 'property').toLowerCase().replace(/\s+/g, '-');
+  // Use referenceNumber as ID if available, else fallback provided ID? Listing usually has ID. 
+  // API uses 'id' but we might filter by reference. Let's assume listing.id is safe for now or referenceNumber.
+  // Ideally use listing.id for the route param.
+  const linkUrl = `/${type}/${category}/${listing.referenceNumber || listing.id}`;
+
   if (variant === 'horizontal') {
     return (
       <div className="at-property-card-horizontal box mb-5" style={{ width: '100%' }}>
         <div className="columns is-mobile is-variable is-3">
           <div className="column is-3">
-            <a href="#" className="image">
+            <Link href={linkUrl} className="image">
               <Image
                 className="at-pch-img"
                 src={listing.photos?.[0] || '/img/prop/default-thumb.jpg'}
@@ -59,7 +72,7 @@ export default function PropertyCard({ listing, variant = 'featured' }: Property
                 height={140}
                 style={{ objectFit: 'cover', width: '100%', borderRadius: '8px' }}
               />
-            </a>
+            </Link>
           </div>
           <div className="column is-8 is-flex is-flex-direction-column is-justify-content-space-between">
             <div>
@@ -72,7 +85,9 @@ export default function PropertyCard({ listing, variant = 'featured' }: Property
                 ))}
               </div>
               <h3 className="title is-6 mb-1">
-                {listing.title.length > 70 ? `${listing.title.substring(0, 70)}...` : listing.title}
+                <Link href={linkUrl} className="has-text-grey-darker">
+                  {listing.title.length > 70 ? `${listing.title.substring(0, 70)}...` : listing.title}
+                </Link>
               </h3>
               <p className="has-text-weight-semibold is-size-6 has-text-success">
                 AED {formatPrice(listing.price)}
@@ -116,7 +131,7 @@ export default function PropertyCard({ listing, variant = 'featured' }: Property
   return (
     <div className="at-pc-wrap">
       <div className="at-property-card">
-        <a href="#" className="at-pc-head">
+        <Link href={linkUrl} className="at-pc-head">
           <span className="at-pch-highlight">Featured</span>
           <ul className="at-pch-info">
             {tags.map((tag, idx) => (
@@ -131,19 +146,19 @@ export default function PropertyCard({ listing, variant = 'featured' }: Property
             height={400}
             style={{ objectFit: 'cover' }}
           />
-        </a>
+        </Link>
         <div className="at-pc-body">
           <div className="at-pcb-info">
-            <a href="#" className="at-pcbi-price">
+            <div className="at-pcbi-price">
               AED {formatPrice(listing.price)}
-            </a>
-            <a href="#" className="at-pcbi-title">
+            </div>
+            <Link href={linkUrl} className="at-pcbi-title">
               {listing.title.length > 50 ? `${listing.title.substring(0, 50)}...` : listing.title}
-            </a>
-            <a href="#" className="at-pcbi-loc">
+            </Link>
+            <div className="at-pcbi-loc">
               <i className="ph-fill ph-map-pin"></i>
               {listing.community || listing.region}
-            </a>
+            </div>
           </div>
           <ul className="at-pcb-specs">
             <li><i className="ph ph-bed"></i> <span>{listing.bedRooms || '—'} Beds</span></li>

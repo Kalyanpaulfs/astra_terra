@@ -132,3 +132,94 @@ export async function getListings(filter: ListingsFilter = { size: 12 }) {
         return [];
     }
 }
+
+export async function getProperty(id: string) {
+    const token = process.env.PIXXI_TOKEN;
+    console.log(`[API] getProperty called for ID: ${id}. Token present: ${!!token}`);
+    if (!token) {
+        throw new Error('PIXXI_TOKEN is not configured');
+    }
+
+    try {
+        console.log(`[API] Fetching property with ID: ${id}`);
+
+        // Strategy 1: Attempt to filter by referenceNumber (common if alphanumeric)
+        // If ID is numeric, this might fail or return nothing if it expects strings.
+        let payload: any = {
+            size: 1,
+            status: 'ACTIVE',
+            referenceNumber: id
+        };
+
+        let response = await fetch(PIXXI_API_URL, {
+            method: 'POST',
+            headers: {
+                'X-PIXXI-TOKEN': token,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(payload),
+            cache: 'no-store'
+        });
+
+        if (!response.ok) throw new Error("Failed to fetch property by refNo");
+
+        let data = await response.json();
+        let list = data?.data?.list || [];
+
+        if (list.length > 0) {
+            // Confirm it matches exactly just in case partial match
+            // Often APIs return partial matches for strings
+            const exactMatch = list.find((p: any) => p.referenceNumber === id || String(p.id) === id);
+            if (exactMatch) return exactMatch;
+            // If strict match failed but list has items, maybe return first? 
+            // Let's be safe and try Strategy 2.
+        }
+
+        // Strategy 2: Fetch a larger batch and search by ID locally
+        // This is necessary if the API doesn't support 'id' filter directly or 'referenceNumber' didn't work.
+        // We fetch 100 recent active properties. 
+        console.log(`[API] Strategy 1 failed or ambiguous. Falling back to batch fetch.`);
+
+        payload = {
+            size: 100, // Fetch top 100 listings
+            status: 'ACTIVE'
+        };
+
+        response = await fetch(PIXXI_API_URL, {
+            method: 'POST',
+            headers: {
+                'X-PIXXI-TOKEN': token,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(payload),
+            cache: 'no-store'
+        });
+
+        if (!response.ok) throw new Error("Failed to fetch batch");
+
+        data = await response.json();
+        list = data?.data?.list || [];
+
+        // Find by ID match
+        const found = list.find((item: any) => String(item.id) === id || item.referenceNumber === id);
+
+        if (found) {
+            console.log(`[API] Found property in batch: ${found.title}`);
+            return found;
+        }
+
+        console.warn(`[API] Property ${id} not found in top 100 active listings.`);
+
+        // DEBUG: Log the first item to see structure
+        if (list.length > 0) {
+            console.log("[API DEBUG] First item keys:", Object.keys(list[0]));
+            console.log("[API DEBUG] First item sample:", JSON.stringify(list[0], null, 2));
+        }
+
+        return null;
+
+    } catch (error) {
+        console.error("Error fetching property:", error);
+        return null;
+    }
+}

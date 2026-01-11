@@ -2,6 +2,7 @@
 @import url('https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css');
 @import './styles/style.css';
 @import './styles/jeff-dev-style.css';
+@import './styles/blog-admin.css';
 
 /* Floating Chat Styles */
 #chat-toggle {
@@ -92,15 +93,28 @@
 }
 
 @keyframes skeleton-pulse {
-  0% { opacity: 0.6; }
-  50% { opacity: 0.3; }
-  100% { opacity: 0.6; }
+  0% {
+    opacity: 0.6;
+  }
+
+  50% {
+    opacity: 0.3;
+  }
+
+  100% {
+    opacity: 0.6;
+  }
 }
 
 /* Improve perceived performance with smooth fade-in */
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 .fade-in {

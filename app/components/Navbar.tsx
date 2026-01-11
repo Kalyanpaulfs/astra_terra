@@ -125,6 +125,7 @@ export default function Navbar() {
               </div>
             </li>
             <li><a href="#services-anchor">Services</a></li>
+            <li><Link href="/blogs">Blogs</Link></li>
             <li><a href="#why-choose-us">Why Us</a></li>
             <li>
               <a href="#">More</a>

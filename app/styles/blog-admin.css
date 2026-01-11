@@ -1,0 +1,343 @@
+/* Dark Theme Variables */
+:root {
+    --bg-dark: #0D1625;
+    --bg-card: #262e3b;
+    --text-white: #ffffff;
+    --text-gray: #b0b0b0;
+    --accent-gold: #DEC993;
+    --accent-gold-hover: #bda36b;
+    --border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Common Layout */
+.ba-container {
+    background-color: var(--bg-dark);
+    color: var(--text-white);
+    min-height: 100vh;
+    padding: 80px 20px 40px;
+    /* Top padding for fixed navbar */
+}
+
+.ba-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Typography */
+.ba-title {
+    font-family: 'Playfair Display', serif;
+    color: var(--accent-gold);
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.ba-subtitle {
+    color: var(--text-gray);
+    margin-bottom: 2rem;
+}
+
+/* Cards */
+.ba-card {
+    background-color: var(--bg-card);
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--border-color);
+    margin-bottom: 20px;
+}
+
+/* Forms */
+.ba-form-group {
+    margin-bottom: 1.5rem;
+}
+
+.ba-label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--text-gray);
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+}
+
+.ba-input,
+.ba-textarea {
+    width: 100%;
+    padding: 12px;
+    background-color: rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    color: var(--text-white);
+    font-size: 1rem;
+}
+
+.ba-input:focus,
+.ba-textarea:focus {
+    outline: none;
+    border-color: var(--accent-gold);
+}
+
+.ba-file-input {
+    color: var(--text-gray);
+}
+
+/* Buttons */
+.ba-btn {
+    background: linear-gradient(135deg, var(--accent-gold) 0%, #94774B 100%);
+    color: #000;
+    font-weight: 700;
+    padding: 12px 24px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+}
+
+.ba-btn:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.1);
+}
+
+.ba-btn-outline {
+    background: transparent;
+    border: 1px solid var(--accent-gold);
+    color: var(--accent-gold);
+}
+
+.ba-btn-delete {
+    background: transparent;
+    color: #ff6b6b;
+    border: 1px solid #ff6b6b;
+    font-size: 0.8rem;
+    padding: 5px 10px;
+}
+
+/* Admin Dashboard Specifics */
+.ba-section-card {
+    background-color: rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--border-color);
+    padding: 1rem;
+    margin-bottom: 1rem;
+    position: relative;
+    border-radius: 8px;
+}
+
+/* Blog List Grid */
+.ba-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.ba-blog-card {
+    background-color: var(--bg-card);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.3s;
+    border: 1px solid var(--border-color);
+    display: block;
+    text-decoration: none;
+}
+
+.ba-blog-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--accent-gold);
+}
+
+.ba-blog-img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.ba-blog-content {
+    padding: 1.5rem;
+}
+
+.ba-blog-date {
+    color: var(--accent-gold);
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+}
+
+.ba-blog-title {
+    color: var(--text-white);
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+/* Blog Details */
+.ba-article {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.ba-article-img {
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
+    margin-bottom: 2rem;
+}
+
+.ba-article-section {
+    margin-bottom: 3rem;
+}
+
+.ba-article-heading {
+    color: var(--accent-gold);
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    font-family: 'Playfair Display', serif;
+}
+
+.ba-article-text {
+    color: #ddd;
+    line-height: 1.8;
+    font-size: 1.1rem;
+    white-space: pre-wrap;
+}
+
+.ba-loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50vh;
+}
+
+.ba-spinner {
+    width: 50px;
+    height: 50px;
+    border: 3px solid rgba(222, 201, 147, 0.3);
+    border-radius: 50%;
+    border-top-color: var(--accent-gold);
+    animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.ba-no-image {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #1a222f, #262e3b);
+    display: flex;
+    align-items: center;
+    color: var(--text-gray);
+}
+
+/* Responsive Dashboard Logic */
+.ba-dashboard-grid {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+}
+
+@media (max-width: 900px) {
+    .ba-dashboard-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    .ba-container {
+        padding: 80px 15px 40px;
+    }
+}
+
+/* Ensure buttons are clickable on touch devices */
+button,
+.ba-btn,
+.ba-btn-delete {
+    touch-action: manipulation;
+}
+
+/* --------------------------
+   Premium Login Page Styles
+   -------------------------- */
+.ba-login-container {
+    background-color: var(--bg-dark);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background: radial-gradient(circle at 50% 10%, #1a222f 0%, #0D1625 100%);
+}
+
+.ba-glass-card {
+    background: rgba(38, 46, 59, 0.4);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+    border-radius: 16px;
+    padding: 3rem;
+    width: 100%;
+    max-width: 450px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Subtle gold glow line at top */
+.ba-glass-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, transparent, var(--accent-gold), transparent);
+}
+
+.ba-login-title {
+    font-family: 'Playfair Display', serif;
+    color: var(--accent-gold);
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 2rem;
+    letter-spacing: 1px;
+}
+
+.ba-login-input {
+    width: 100%;
+    padding: 15px;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: var(--text-white);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.ba-login-input:focus {
+    outline: none;
+    border-color: var(--accent-gold);
+    background: rgba(0, 0, 0, 0.4);
+    box-shadow: 0 0 15px rgba(222, 201, 147, 0.1);
+}
+
+.ba-login-label {
+    display: block;
+    color: var(--text-gray);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 8px;
+    margin-left: 4px;
+}
+
+.ba-error-msg {
+    background: rgba(255, 99, 71, 0.1);
+    border: 1px solid rgba(255, 99, 71, 0.3);
+    color: #ff6b6b;
+    padding: 10px;
+    border-radius: 6px;
+    text-align: center;
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+}
