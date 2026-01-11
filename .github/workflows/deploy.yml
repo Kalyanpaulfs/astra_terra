@@ -1,5 +1,19 @@
 name: Deploy to Vercel
 
+# IMPORTANT: VERCEL_TOKEN Secret Configuration
+# The VERCEL_TOKEN secret in GitHub must be set to a Personal Access Token, NOT a Project ID
+# 
+# WRONG (using a Project ID or malformed string):
+#   VERCEL_TOKEN = prj_xyz-123.abc
+#
+# RIGHT (using a Personal Access Token):
+#   VERCEL_TOKEN = 6PtXxxxxxxxxxxxxxxxxxxxx
+#
+# To create a Personal Access Token:
+#   1. Go to Vercel Dashboard > Settings > Tokens
+#   2. Create a new token with appropriate scopes
+#   3. Add it as VERCEL_TOKEN secret in GitHub repository settings
+
 on:
   push:
     branches:
@@ -30,12 +44,17 @@ jobs:
         run: npm install -g vercel@latest
 
       - name: Pull Vercel Environment Information
+        # IMPORTANT: VERCEL_TOKEN must be a Personal Access Token, NOT a Project ID
+        # WRONG: --token=prj_xyz-123.abc (Project ID)
+        # RIGHT: --token=6PtXxxxxxxxxxxxxxxxxxxxx (Personal Access Token)
         run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
 
       - name: Build Project Artifacts
+        # VERCEL_TOKEN must be a Personal Access Token (not Project ID)
         run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
 
       - name: Deploy to Vercel (Production)
+        # VERCEL_TOKEN must be a Personal Access Token (not Project ID)
         run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
 
   deploy-preview:
@@ -55,13 +74,18 @@ jobs:
         run: npm install -g vercel@latest
 
       - name: Pull Vercel Environment Information
+        # IMPORTANT: VERCEL_TOKEN must be a Personal Access Token, NOT a Project ID
+        # WRONG: --token=prj_xyz-123.abc (Project ID)
+        # RIGHT: --token=6PtXxxxxxxxxxxxxxxxxxxxx (Personal Access Token)
         run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
 
       - name: Build Project Artifacts
+        # VERCEL_TOKEN must be a Personal Access Token (not Project ID)
         run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
 
       - name: Deploy to Vercel (Preview)
         id: deploy
+        # VERCEL_TOKEN must be a Personal Access Token (not Project ID)
         run: |
           url=$(vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }})
           echo "preview_url=$url" >> $GITHUB_OUTPUT
