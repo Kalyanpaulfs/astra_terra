@@ -106,7 +106,7 @@ export default function WhyChooseUs() {
                         className="testimonials-track"
                         style={{
                             transform: `translateX(-${currentIndex * (100 / itemsToShow)}%)`,
-                            transition: isTransitioning ? 'transform 1.5s ease-in-out' : 'none', // Increased duration for smoothness
+                            transition: isTransitioning ? 'transform 2s cubic-bezier(0.25, 0.1, 0.25, 1)' : 'none',
                         }}
                         onTransitionEnd={handleTransitionEnd}
                     >
@@ -114,11 +114,11 @@ export default function WhyChooseUs() {
                             <div key={index} className="testimonial-card">
                                 <div className="testimonial-content">
                                     <div className="testimonial-rating">
-                                        <i className="ph-star-fill"></i>
-                                        <i className="ph-star-fill"></i>
-                                        <i className="ph-star-fill"></i>
-                                        <i className="ph-star-fill"></i>
-                                        <i className="ph-star-fill"></i>
+                                        <i className="ph-fill ph-star"></i>
+                                        <i className="ph-fill ph-star"></i>
+                                        <i className="ph-fill ph-star"></i>
+                                        <i className="ph-fill ph-star"></i>
+                                        <i className="ph-fill ph-star"></i>
                                     </div>
                                     <p className="testimonial-text">{review.text}</p>
                                     <div className="testimonial-author">

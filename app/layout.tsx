@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
-import Script from 'next/script';
 import './globals.css';
+import '@phosphor-icons/web/regular';
+import '@phosphor-icons/web/bold';
+import '@phosphor-icons/web/fill';
 import Layout from './components/Layout';
 
 export const metadata: Metadata = {
@@ -20,11 +22,6 @@ export default function RootLayout({
       </head>
       <body>
         <Layout>{children}</Layout>
-        {/* Load Phosphor Icons asynchronously - non-blocking */}
-        <Script
-          src="https://unpkg.com/phosphor-icons"
-          strategy="lazyOnload"
-        />
       </body>
     </html>
   );

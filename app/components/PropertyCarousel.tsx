@@ -33,7 +33,7 @@ export default function PropertyCarousel({ listings }: PropertyCarouselProps) {
         aria-label="Prev"
         onClick={scrollLeft}
       >
-        <i className="ph ph-caret-left"></i>
+        <i className="ph ph-bold ph-caret-left"></i>
       </button>
       <div className="atp-container" ref={stripRef}>
         {listings.length > 0 ? (
@@ -49,7 +49,7 @@ export default function PropertyCarousel({ listings }: PropertyCarouselProps) {
         aria-label="Next"
         onClick={scrollRight}
       >
-        <i className="ph ph-caret-right"></i>
+        <i className="ph ph-bold ph-caret-right"></i>
       </button>
     </div>
   );

@@ -162,29 +162,15 @@ export default function PropertyCard({ listing, variant = 'featured' }: Property
           </div>
           <ul className="at-pcb-specs">
             <li><i className="ph ph-bed"></i> <span>{listing.bedRooms || '—'} Beds</span></li>
-            <li><i className="ph ph-shower"></i> <span>{listing.rentParam?.bathrooms || '—'} Baths</span></li>
-            <li><i className="ph ph-arrows-out"></i> <span>{listing.size || '—'} sqft</span></li>
+            <li><i className="ph ph-bathtub"></i> <span>{listing.rentParam?.bathrooms || '—'} Baths</span></li>
+            <li><i className="ph ph-square"></i> <span>{listing.size || '—'} sqft</span></li>
             <li><i className="ph ph-car"></i> <span>{listing.rentParam?.parking || '—'} Prk</span></li>
           </ul>
         </div>
         <div className="at-pc-footer">
-          {phone ? (
-            <>
-              <a href={`tel:${phone}`} className="at-pcf-btn at-pcf-btn1">
-                <i className="ph-fill ph-phone"></i>
-                <span>Call</span>
-              </a>
-              <a href={`https://wa.me/${phone}`} target="_blank" rel="noopener noreferrer" className="at-pcf-btn at-pcf-btn2">
-                <i className="ph-fill ph-whatsapp-logo"></i>
-                <span>WhatsApp</span>
-              </a>
-            </>
-          ) : (
-            <button className="at-pcf-btn at-pcf-btn1" disabled>
-              <i className="ph-fill ph-phone"></i>
-              <span>Unavailable</span>
-            </button>
-          )}
+          <Link href={linkUrl} className="at-pcf-btn at-pcf-btn-details">
+            <span>View Property Details</span>
+          </Link>
         </div>
       </div>
     </div>

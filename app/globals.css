@@ -1,4 +1,20 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+
+:root {
+  --background: #FFFFFF;
+  --foreground: #020817;
+  /* Dark Navy/Black for text */
+  --primary: #0D1625;
+  /* Dark Navy */
+  --accent: #F5E6B8;
+  /* Champagne Gold */
+  --accent-hover: #DEC993;
+  /* Darker Gold */
+  --muted: #F3F4F6;
+  /* Light Gray */
+  --border: #E5E7EB;
+}
+
 @import url('https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css');
 @import './styles/style.css';
 @import './styles/jeff-dev-style.css';
