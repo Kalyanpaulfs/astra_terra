@@ -34,10 +34,13 @@ export default function Navbar() {
     const menuItems = document.querySelectorAll('.custom-nav-menu > li');
     menuItems.forEach((li) => {
       const link = li.querySelector('a[href="#"]');
-      if (link && (dropdownName === 'buy' && link.textContent === 'Buy') ||
-          (dropdownName === 'rent' && link.textContent === 'Rent') ||
-          (dropdownName === 'locations' && link.textContent === 'Locations') ||
-          (dropdownName === 'more' && link.textContent === 'More')) {
+      const linkText = link?.textContent?.trim();
+      if (link && linkText && (
+          (dropdownName === 'buy' && linkText === 'Buy') ||
+          (dropdownName === 'rent' && linkText === 'Rent') ||
+          (dropdownName === 'locations' && linkText === 'Locations') ||
+          (dropdownName === 'more' && linkText === 'More')
+        )) {
         li.classList.add('dropdown-closed-by-click');
         // Force hide dropdown immediately via inline style
         const dropdown = li.querySelector('.cnm-mega, .cnm-mega-dd');
