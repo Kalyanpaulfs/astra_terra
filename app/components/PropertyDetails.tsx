@@ -46,7 +46,7 @@ export default function PropertyDetails() {
     }, [id]);
 
     if (loading) return (
-        <div style={{ minHeight: '80vh', display: 'flex', justifyContent: 'center', alignItems: 'center', background: '#0D1625', color: '#DEC993' }}>
+        <div style={{ minHeight: '80vh', display: 'flex', justifyContent: 'center', alignItems: 'center', background: '#0D1625', color: '#DEC993', paddingLeft: '2rem', paddingRight: '2rem' }}>
             <div className="ba-spinner"></div>
         </div>
     );
@@ -68,8 +68,8 @@ export default function PropertyDetails() {
                     padding-top: 120px;
                     max-width: 1200px;
                     margin: 0 auto;
-                    padding-left: 20px;
-                    padding-right: 20px;
+                    padding-left: 2rem;
+                    padding-right: 2rem;
                 }
                 .pd-header {
                     margin-bottom: 2rem;

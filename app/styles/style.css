@@ -19,6 +19,19 @@ body {
 	color: var(--foreground);
 }
 
+/* Add left/right padding for non-homepage pages */
+.section:not(.home-section) {
+	padding-left: 2rem;
+	padding-right: 2rem;
+}
+
+@media only screen and (max-width: 768px) {
+	.section:not(.home-section) {
+		padding-left: 1rem;
+		padding-right: 1rem;
+	}
+}
+
 pre {
 	white-space: pre-wrap;
 	white-space: -moz-pre-wrap;
@@ -212,6 +225,17 @@ pre {
 	display: block;
 }
 
+/* Navbar color consistency - homepage vs other pages */
+.custom-navbar.navbar-home {
+	background-color: rgba(13, 22, 37, 0.85);
+	/* Semi-transparent for hero section contrast */
+}
+
+.custom-navbar.navbar-other {
+	background-color: rgba(13, 22, 37, 0.95);
+	/* More opaque for better visibility on light backgrounds */
+}
+
 .custom-navbar .custom-navbar-nav {
 	margin: 0;
 	padding: 0px 32px 0px 32px;
@@ -302,10 +326,20 @@ pre {
 	right: 0;
 }
 
-.custom-nav-menu li:hover .cnm-mega {
+.custom-nav-menu li:hover .cnm-mega,
+.custom-nav-menu li .cnm-mega.is-active {
 	opacity: 1;
 	visibility: visible;
 	transform: translateY(0);
+}
+
+/* Prevent dropdown from showing on hover if it was closed by click - higher specificity */
+.custom-nav-menu li.dropdown-closed-by-click:hover .cnm-mega,
+.custom-nav-menu li.dropdown-closed-by-click .cnm-mega {
+	opacity: 0 !important;
+	visibility: hidden !important;
+	transform: translateY(10px) !important;
+	pointer-events: none;
 }
 
 .custom-nav-menu li .cnm-mega::before {
@@ -427,10 +461,20 @@ pre {
 	transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
-.custom-nav-menu li:hover .cnm-mega-dd {
+.custom-nav-menu li:hover .cnm-mega-dd,
+.custom-nav-menu li .cnm-mega-dd.is-active {
 	opacity: 1;
 	visibility: visible;
 	transform: translateY(0);
+}
+
+/* Prevent dropdown from showing on hover if it was closed by click - higher specificity */
+.custom-nav-menu li.dropdown-closed-by-click:hover .cnm-mega-dd,
+.custom-nav-menu li.dropdown-closed-by-click .cnm-mega-dd {
+	opacity: 0 !important;
+	visibility: hidden !important;
+	transform: translateY(10px) !important;
+	pointer-events: none;
 }
 
 .custom-nav-menu li .cnm-mega-dd::before {

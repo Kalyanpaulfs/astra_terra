@@ -202,3 +202,111 @@ export function ServicesSkeleton() {
     );
 }
 
+export function PropertiesSearchSkeleton() {
+    return (
+        <div className="at-properties-grid">
+            {Array.from({ length: 6 }).map((_, idx) => (
+                <div 
+                    key={idx} 
+                    className="at-property-card skeleton-pulse"
+                    style={{ 
+                        height: '100%',
+                        minHeight: '480px',
+                        backgroundColor: '#fff',
+                        borderRadius: '8px',
+                        overflow: 'hidden',
+                        boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
+                    }}
+                >
+                    {/* Image skeleton */}
+                    <div 
+                        className="skeleton-pulse"
+                        style={{
+                            width: '100%',
+                            height: '280px',
+                            backgroundColor: '#e8e8e8',
+                            borderRadius: '8px 8px 0 0'
+                        }}
+                    />
+                    
+                    {/* Body skeleton */}
+                    <div style={{ padding: '24px' }}>
+                        {/* Price skeleton */}
+                        <div 
+                            className="skeleton-pulse"
+                            style={{
+                                height: '28px',
+                                width: '60%',
+                                backgroundColor: '#e0e0e0',
+                                borderRadius: '4px',
+                                marginBottom: '12px'
+                            }}
+                        />
+                        
+                        {/* Title skeleton */}
+                        <div 
+                            className="skeleton-pulse"
+                            style={{
+                                height: '20px',
+                                width: '90%',
+                                backgroundColor: '#e8e8e8',
+                                borderRadius: '4px',
+                                marginBottom: '8px'
+                            }}
+                        />
+                        <div 
+                            className="skeleton-pulse"
+                            style={{
+                                height: '20px',
+                                width: '75%',
+                                backgroundColor: '#e8e8e8',
+                                borderRadius: '4px',
+                                marginBottom: '16px'
+                            }}
+                        />
+                        
+                        {/* Location skeleton */}
+                        <div 
+                            className="skeleton-pulse"
+                            style={{
+                                height: '16px',
+                                width: '70%',
+                                backgroundColor: '#f0f0f0',
+                                borderRadius: '4px',
+                                marginBottom: '20px'
+                            }}
+                        />
+                        
+                        {/* Specs skeleton */}
+                        <div style={{ display: 'flex', gap: '12px', marginBottom: '20px' }}>
+                            {[1, 2, 3, 4].map((i) => (
+                                <div 
+                                    key={i}
+                                    className="skeleton-pulse"
+                                    style={{
+                                        height: '16px',
+                                        width: '50px',
+                                        backgroundColor: '#f0f0f0',
+                                        borderRadius: '4px'
+                                    }}
+                                />
+                            ))}
+                        </div>
+                        
+                        {/* Button skeleton */}
+                        <div 
+                            className="skeleton-pulse"
+                            style={{
+                                height: '40px',
+                                width: '100%',
+                                backgroundColor: '#e8e8e8',
+                                borderRadius: '4px'
+                            }}
+                        />
+                    </div>
+                </div>
+            ))}
+        </div>
+    );
+}
+
