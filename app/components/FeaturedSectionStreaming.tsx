@@ -6,3 +6,4 @@ export default async function FeaturedSectionStreaming() {
     return <FeaturedSection listings={listings} />;
 }
 
+

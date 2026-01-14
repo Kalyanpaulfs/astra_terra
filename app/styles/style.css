@@ -335,11 +335,13 @@ pre {
 
 /* Prevent dropdown from showing on hover if it was closed by click - higher specificity */
 .custom-nav-menu li.dropdown-closed-by-click:hover .cnm-mega,
-.custom-nav-menu li.dropdown-closed-by-click .cnm-mega {
+.custom-nav-menu li.dropdown-closed-by-click .cnm-mega,
+.custom-nav-menu li.dropdown-closed-by-click:hover .cnm-mega.is-active {
 	opacity: 0 !important;
 	visibility: hidden !important;
 	transform: translateY(10px) !important;
-	pointer-events: none;
+	pointer-events: none !important;
+	display: none !important;
 }
 
 .custom-nav-menu li .cnm-mega::before {
@@ -470,11 +472,13 @@ pre {
 
 /* Prevent dropdown from showing on hover if it was closed by click - higher specificity */
 .custom-nav-menu li.dropdown-closed-by-click:hover .cnm-mega-dd,
-.custom-nav-menu li.dropdown-closed-by-click .cnm-mega-dd {
+.custom-nav-menu li.dropdown-closed-by-click .cnm-mega-dd,
+.custom-nav-menu li.dropdown-closed-by-click:hover .cnm-mega-dd.is-active {
 	opacity: 0 !important;
 	visibility: hidden !important;
 	transform: translateY(10px) !important;
-	pointer-events: none;
+	pointer-events: none !important;
+	display: none !important;
 }
 
 .custom-nav-menu li .cnm-mega-dd::before {

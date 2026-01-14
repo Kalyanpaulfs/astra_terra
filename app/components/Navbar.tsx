@@ -13,6 +13,7 @@ export default function Navbar() {
   const [propertyTypes, setPropertyTypes] = useState<string[]>([]);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [closedByClick, setClosedByClick] = useState<Set<string>>(new Set());
+  const [justClicked, setJustClicked] = useState<string | null>(null);
 
   // Close dropdown when route changes
   useEffect(() => {
@@ -29,6 +30,9 @@ export default function Navbar() {
     if (e) {
       e.stopPropagation();
     }
+    
+    // Set flag to prevent immediate hover reopening
+    setJustClicked(dropdownName);
     
     // Immediately add class to parent li to force hide via CSS (instant)
     const menuItems = document.querySelectorAll('.custom-nav-menu > li');
@@ -48,6 +52,7 @@ export default function Navbar() {
           (dropdown as HTMLElement).style.opacity = '0';
           (dropdown as HTMLElement).style.visibility = 'hidden';
           (dropdown as HTMLElement).style.pointerEvents = 'none';
+          (dropdown as HTMLElement).style.display = 'none';
         }
       }
     });
@@ -61,6 +66,11 @@ export default function Navbar() {
       newSet.add(dropdownName);
       return newSet;
     });
+    
+    // Clear the justClicked flag after a short delay to allow navigation
+    setTimeout(() => {
+      setJustClicked(null);
+    }, 300);
   };
 
   // Also close dropdown when clicking anywhere inside the dropdown
@@ -71,8 +81,30 @@ export default function Navbar() {
 
   // Handler for mouse enter - only open if not closed by click
   const handleMouseEnter = (dropdownName: string) => {
-    // Don't open if it was closed by clicking a link
-    if (!closedByClick.has(dropdownName)) {
+    // Don't open if it was just clicked or closed by clicking a link
+    if (justClicked === dropdownName || closedByClick.has(dropdownName)) {
+      return;
+    }
+    
+    // Also check if the CSS class is present (double check)
+    const menuItems = document.querySelectorAll('.custom-nav-menu > li');
+    let shouldOpen = true;
+    menuItems.forEach((li) => {
+      const link = li.querySelector('a[href="#"]');
+      const linkText = link?.textContent?.trim();
+      if (link && linkText && (
+          (dropdownName === 'buy' && linkText === 'Buy') ||
+          (dropdownName === 'rent' && linkText === 'Rent') ||
+          (dropdownName === 'locations' && linkText === 'Locations') ||
+          (dropdownName === 'more' && linkText === 'More')
+        )) {
+        if (li.classList.contains('dropdown-closed-by-click')) {
+          shouldOpen = false;
+        }
+      }
+    });
+    
+    if (shouldOpen) {
       setActiveDropdown(dropdownName);
     }
   };
@@ -85,6 +117,29 @@ export default function Navbar() {
       const newSet = new Set(prev);
       newSet.delete(dropdownName);
       return newSet;
+    });
+    
+    // Also remove the CSS class and reset inline styles when mouse leaves
+    const menuItems = document.querySelectorAll('.custom-nav-menu > li');
+    menuItems.forEach((li) => {
+      const link = li.querySelector('a[href="#"]');
+      const linkText = link?.textContent?.trim();
+      if (link && linkText && (
+          (dropdownName === 'buy' && linkText === 'Buy') ||
+          (dropdownName === 'rent' && linkText === 'Rent') ||
+          (dropdownName === 'locations' && linkText === 'Locations') ||
+          (dropdownName === 'more' && linkText === 'More')
+        )) {
+        li.classList.remove('dropdown-closed-by-click');
+        // Reset inline styles so dropdown can show again
+        const dropdown = li.querySelector('.cnm-mega, .cnm-mega-dd');
+        if (dropdown) {
+          (dropdown as HTMLElement).style.opacity = '';
+          (dropdown as HTMLElement).style.visibility = '';
+          (dropdown as HTMLElement).style.pointerEvents = '';
+          (dropdown as HTMLElement).style.display = '';
+        }
+      }
     });
   };
 
