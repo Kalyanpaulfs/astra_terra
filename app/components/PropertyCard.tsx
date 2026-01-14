@@ -25,7 +25,7 @@ interface PropertyCardProps {
       phone?: string;
     };
   };
-  variant?: 'featured' | 'horizontal';
+  variant?: 'featured' | 'horizontal' | 'grid';
 }
 
 export default function PropertyCard({ listing, variant = 'featured' }: PropertyCardProps) {
@@ -50,13 +50,12 @@ export default function PropertyCard({ listing, variant = 'featured' }: Property
   const phone = listing.agent?.phone?.replace(/\D/g, '') || '';
 
   // Determine link URL
-  const type = listing.listingType === 'SALE' ? 'buy' : 'rent';
+  const listType = listing.listingType?.toUpperCase();
+  const type = (listType === 'SALE' || listType === 'SELL') ? 'buy' : 'rent';
   // Fallback to 'property' category if type missing, sanitize for URL
   const category = (listing.propertyType?.[0] || 'property').toLowerCase().replace(/\s+/g, '-');
-  // Use referenceNumber as ID if available, else fallback provided ID? Listing usually has ID. 
-  // API uses 'id' but we might filter by reference. Let's assume listing.id is safe for now or referenceNumber.
-  // Ideally use listing.id for the route param.
-  const linkUrl = `/${type}/${category}/${listing.referenceNumber || listing.id}`;
+  // Use listing.id strictly for consistent lookup via API
+  const linkUrl = `/${type}/${category}/${listing.id}`;
 
   if (variant === 'horizontal') {
     return (
@@ -127,7 +126,56 @@ export default function PropertyCard({ listing, variant = 'featured' }: Property
     );
   }
 
-  // Featured card variant
+  // Grid variant: Strict grid layout logic
+  if (variant === 'grid') {
+    return (
+      <div className="at-property-card" style={{ height: '100%', minHeight: '480px' }}>
+        <Link href={linkUrl} className="at-pc-head">
+          <span className="at-pch-highlight">Featured</span>
+          <ul className="at-pch-info">
+            {tags.map((tag, idx) => (
+              <li key={idx}>{formatText(tag)}</li>
+            ))}
+          </ul>
+          <Image
+            className="at-pch-img"
+            src={listing.photos?.[0] || '/img/prop/default-thumb.jpg'}
+            alt={listing.title}
+            width={600}
+            height={400}
+            style={{ objectFit: 'cover' }}
+          />
+        </Link>
+        <div className="at-pc-body">
+          <div className="at-pcb-info">
+            <div className="at-pcbi-price">
+              AED {formatPrice(listing.price)}
+            </div>
+            <Link href={linkUrl} className="at-pcbi-title">
+              {listing.title.length > 50 ? `${listing.title.substring(0, 50)}...` : listing.title}
+            </Link>
+            <div className="at-pcbi-loc">
+              <i className="ph-fill ph-map-pin"></i>
+              {listing.community || listing.region}
+            </div>
+          </div>
+          <ul className="at-pcb-specs">
+            <li><i className="ph ph-bed"></i> <span>{listing.bedRooms || '—'} Beds</span></li>
+            <li><i className="ph ph-bathtub"></i> <span>{listing.rentParam?.bathrooms || '—'} Baths</span></li>
+            <li><i className="ph ph-square"></i> <span>{listing.size || '—'} sqft</span></li>
+            <li><i className="ph ph-car"></i> <span>{listing.rentParam?.parking || '—'} Prk</span></li>
+          </ul>
+        </div>
+        <div className="at-pc-footer">
+          <Link href={linkUrl} className="at-pcf-btn at-pcf-btn-details">
+            <span>View Property Details</span>
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  // Featured card variant (default / carousel)
   return (
     <div className="at-pc-wrap">
       <div className="at-property-card">

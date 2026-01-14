@@ -175,20 +175,13 @@ export default function PropertyDetails() {
                 {/* Header Section */}
                 <div className="pd-header">
                     <div className="pd-header-content">
+                        <div style={{ width: '100%', marginBottom: '10px' }}>
+                            <Link href="/properties-search" className="button is-small is-ghost pl-0" style={{ color: '#DEC993', textDecoration: 'none' }}>
+                                <i className="ph ph-arrow-left" style={{ marginRight: '5px' }}></i> Back to Search
+                            </Link>
+                        </div>
                         <div style={{ flex: 1 }}>
-                            <span style={{
-                                background: 'rgba(222, 201, 147, 0.2)',
-                                color: '#DEC993',
-                                padding: '5px 12px',
-                                borderRadius: '20px',
-                                fontSize: '0.8rem',
-                                textTransform: 'uppercase',
-                                letterSpacing: '1px',
-                                display: 'inline-block',
-                                marginBottom: '10px'
-                            }}>
-                                {property.listingType === 'SALE' ? 'For Sale' : 'For Rent'}
-                            </span>
+                            {/* Tag removed as requested */}
                             <h1 style={{ fontFamily: 'Playfair Display, serif', fontSize: '2.5rem', margin: '0 0 10px 0', lineHeight: 1.2 }}>
                                 {property.title}
                             </h1>

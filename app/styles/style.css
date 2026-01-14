@@ -2295,7 +2295,8 @@ pre {
 .at-pcb-specs {
 	display: flex;
 	justify-content: flex-start;
-	gap: 16px;
+	flex-wrap: wrap;
+	gap: 12px;
 	padding-top: 20px;
 	margin-top: auto;
 	border-top: 1px solid rgba(0, 0, 0, 0.05);
@@ -2872,5 +2873,25 @@ pre {
 
 	.at-pcbi-price {
 		font-size: 24px;
+	}
+}
+
+/* Responsive Grid for Properties Search */
+.at-properties-grid {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 24px;
+	padding-bottom: 40px;
+}
+
+@media only screen and (max-width: 1024px) {
+	.at-properties-grid {
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
+
+@media only screen and (max-width: 768px) {
+	.at-properties-grid {
+		grid-template-columns: 1fr;
 	}
 }

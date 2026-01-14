@@ -24,7 +24,7 @@ export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;
     const action = searchParams.get('action') || 'list';
-    
+
     // Check if token is configured
     const token = process.env.PIXXI_TOKEN;
     if (!token) {
@@ -34,7 +34,7 @@ export async function GET(request: NextRequest) {
         { status: 500 }
       );
     }
-    
+
     if (action === 'meta') {
       // Get metadata (cities, regions, property types)
       const cacheKey = 'pixxi.meta';
@@ -63,10 +63,13 @@ export async function GET(request: NextRequest) {
 
       const data = await response.json();
       console.log('Pixxi API response structure:', JSON.stringify(data).substring(0, 200));
-      
-      // PHP uses: $response->json('data.list')
-      // This means response structure is: { data: { list: [...] } }
+
       const listings = data?.data?.list || [];
+
+      if (listings.length > 0) {
+        console.log("FIRST LISTING KEYS:", Object.keys(listings[0]));
+        console.log("FIRST LISTING SAMPLE:", JSON.stringify(listings[0], null, 2));
+      }
 
       // Extract cities
       const cities: Record<number, string> = {};
@@ -160,7 +163,7 @@ export async function GET(request: NextRequest) {
 
     const data = await response.json();
     console.log('Pixxi API response structure:', JSON.stringify(data).substring(0, 200));
-    
+
     // PHP uses: $response->json('data.list')
     // This means response structure is: { data: { list: [...] } }
     const listings = data?.data?.list || [];

@@ -7,6 +7,30 @@ import MobileNav from './MobileNav';
 
 export default function Navbar() {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const [propertyTypes, setPropertyTypes] = useState<string[]>([]);
+
+  useEffect(() => {
+    const fetchMeta = async () => {
+      try {
+        const res = await fetch('/api/properties?action=meta');
+        if (res.ok) {
+          const data = await res.json();
+          // console.log("Navbar Metadata:", data); // Check for extra fields here
+          if (data.propertyTypes) {
+            setPropertyTypes(data.propertyTypes);
+          }
+        }
+      } catch (err) {
+        console.error("Failed to fetch navbar meta", err);
+      }
+    };
+    fetchMeta();
+  }, []);
+
+  // Split property types into two columns for the dropdown
+  const midPoint = Math.ceil(propertyTypes.length / 2);
+  const leftColumnTypes = propertyTypes.slice(0, midPoint);
+  const rightColumnTypes = propertyTypes.slice(midPoint);
 
   return (
     <>
@@ -36,17 +60,42 @@ export default function Navbar() {
                         <div className="columns">
                           <div className="column">
                             <ul className="cnm-mc-plist">
-                              <li><Link href="/properties-search?city=41&type=APARTMENT&listtype=SELL">Apartment</Link></li>
-                              <li><Link href="/properties-search?city=41&type=VILLA&listtype=SELL">Villa</Link></li>
-                              <li><Link href="/properties-search?city=41&type=TOWNHOUSE&listtype=SELL">Townhouse</Link></li>
-                              <li><Link href="/properties-search?city=41&type=PENTHOUSE&listtype=SELL">Penthouse</Link></li>
+                              {leftColumnTypes.length > 0 ? (
+                                leftColumnTypes.map((type) => (
+                                  <li key={type}>
+                                    <Link href={`/properties-search?city=41&type=${encodeURIComponent(type)}&listtype=SELL`}>
+                                      {type}
+                                    </Link>
+                                  </li>
+                                ))
+                              ) : (
+                                // Fallback loading/empty state or default items if fetch fails
+                                <>
+                                  <li><Link href="/properties-search?city=41&type=APARTMENT&listtype=SELL">Apartment</Link></li>
+                                  <li><Link href="/properties-search?city=41&type=VILLA&listtype=SELL">Villa</Link></li>
+                                  <li><Link href="/properties-search?city=41&type=TOWNHOUSE&listtype=SELL">Townhouse</Link></li>
+                                  <li><Link href="/properties-search?city=41&type=PENTHOUSE&listtype=SELL">Penthouse</Link></li>
+                                </>
+                              )}
                             </ul>
                           </div>
                           <div className="column">
                             <ul className="cnm-mc-plist">
-                              <li><Link href="/properties-search?city=41&type=HOTEL_APARTMENT&listtype=SELL">Studio</Link></li>
-                              <li><Link href="/properties-search?city=41&type=DUPLEX&listtype=SELL">Duplex</Link></li>
-                              <li><Link href="/properties-search?city=41&type=COMMERCIAL_BUILDING&listtype=SELL">Commercial</Link></li>
+                              {rightColumnTypes.length > 0 ? (
+                                rightColumnTypes.map((type) => (
+                                  <li key={type}>
+                                    <Link href={`/properties-search?city=41&type=${encodeURIComponent(type)}&listtype=SELL`}>
+                                      {type}
+                                    </Link>
+                                  </li>
+                                ))
+                              ) : (
+                                <>
+                                  <li><Link href="/properties-search?city=41&type=HOTEL_APARTMENT&listtype=SELL">Studio</Link></li>
+                                  <li><Link href="/properties-search?city=41&type=DUPLEX&listtype=SELL">Duplex</Link></li>
+                                  <li><Link href="/properties-search?city=41&type=COMMERCIAL_BUILDING&listtype=SELL">Commercial</Link></li>
+                                </>
+                              )}
                               <li><Link href="/properties-search?city=41&listtype=SELL">See All</Link></li>
                             </ul>
                           </div>
@@ -78,17 +127,41 @@ export default function Navbar() {
                         <div className="columns">
                           <div className="column">
                             <ul className="cnm-mc-plist">
-                              <li><Link href="/properties-search?city=41&type=APARTMENT&listtype=RENT">Apartment</Link></li>
-                              <li><Link href="/properties-search?city=41&type=VILLA&listtype=RENT">Villa</Link></li>
-                              <li><Link href="/properties-search?city=41&type=TOWNHOUSE&listtype=RENT">Townhouse</Link></li>
-                              <li><Link href="/properties-search?city=41&type=PENTHOUSE&listtype=RENT">Penthouse</Link></li>
+                              {leftColumnTypes.length > 0 ? (
+                                leftColumnTypes.map((type) => (
+                                  <li key={type}>
+                                    <Link href={`/properties-search?city=41&type=${encodeURIComponent(type)}&listtype=RENT`}>
+                                      {type}
+                                    </Link>
+                                  </li>
+                                ))
+                              ) : (
+                                <>
+                                  <li><Link href="/properties-search?city=41&type=APARTMENT&listtype=RENT">Apartment</Link></li>
+                                  <li><Link href="/properties-search?city=41&type=VILLA&listtype=RENT">Villa</Link></li>
+                                  <li><Link href="/properties-search?city=41&type=TOWNHOUSE&listtype=RENT">Townhouse</Link></li>
+                                  <li><Link href="/properties-search?city=41&type=PENTHOUSE&listtype=RENT">Penthouse</Link></li>
+                                </>
+                              )}
                             </ul>
                           </div>
                           <div className="column">
                             <ul className="cnm-mc-plist">
-                              <li><Link href="/properties-search?city=41&type=HOTEL_APARTMENT&listtype=RENT">Studio</Link></li>
-                              <li><Link href="/properties-search?city=41&type=DUPLEX&listtype=RENT">Duplex</Link></li>
-                              <li><Link href="/properties-search?city=41&type=COMMERCIAL_BUILDING&listtype=RENT">Commercial</Link></li>
+                              {rightColumnTypes.length > 0 ? (
+                                rightColumnTypes.map((type) => (
+                                  <li key={type}>
+                                    <Link href={`/properties-search?city=41&type=${encodeURIComponent(type)}&listtype=RENT`}>
+                                      {type}
+                                    </Link>
+                                  </li>
+                                ))
+                              ) : (
+                                <>
+                                  <li><Link href="/properties-search?city=41&type=HOTEL_APARTMENT&listtype=RENT">Studio</Link></li>
+                                  <li><Link href="/properties-search?city=41&type=DUPLEX&listtype=RENT">Duplex</Link></li>
+                                  <li><Link href="/properties-search?city=41&type=COMMERCIAL_BUILDING&listtype=RENT">Commercial</Link></li>
+                                </>
+                              )}
                               <li><Link href="/properties-search?city=41&listtype=RENT">See All</Link></li>
                             </ul>
                           </div>

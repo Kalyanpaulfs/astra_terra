@@ -143,13 +143,21 @@ export async function getProperty(id: string) {
     try {
         console.log(`[API] Fetching property with ID: ${id}`);
 
-        // Strategy 1: Attempt to filter by referenceNumber (common if alphanumeric)
-        // If ID is numeric, this might fail or return nothing if it expects strings.
+        // Strategy 1: Attempt to filter by ID or Reference Number
+        // We try to pass both if possible, or intelligently choose.
         let payload: any = {
             size: 1,
-            status: 'ACTIVE',
-            referenceNumber: id
+            status: 'ACTIVE'
         };
+
+        // If it looks like a numeric ID, pass it as 'id' (and 'referenceNumber' just in case)
+        // If it's a string ref, pass 'referenceNumber'
+        // We add 'id' parameter which many endpoints support.
+        if (!isNaN(Number(id))) {
+            payload.id = id;
+        } else {
+            payload.referenceNumber = id;
+        }
 
         let response = await fetch(PIXXI_API_URL, {
             method: 'POST',
@@ -161,44 +169,51 @@ export async function getProperty(id: string) {
             cache: 'no-store'
         });
 
-        if (!response.ok) throw new Error("Failed to fetch property by refNo");
+        if (!response.ok) throw new Error("Failed to fetch property by filter");
 
         let data = await response.json();
         let list = data?.data?.list || [];
 
         if (list.length > 0) {
-            // Confirm it matches exactly just in case partial match
-            // Often APIs return partial matches for strings
-            const exactMatch = list.find((p: any) => p.referenceNumber === id || String(p.id) === id);
+            const exactMatch = list.find((p: any) => String(p.id) === String(id) || p.referenceNumber === id);
             if (exactMatch) return exactMatch;
-            // If strict match failed but list has items, maybe return first? 
-            // Let's be safe and try Strategy 2.
+            // If API returned items but not exact match (weird), fall through to batch
         }
 
-        // Strategy 2: Fetch a larger batch and search by ID locally
-        // This is necessary if the API doesn't support 'id' filter directly or 'referenceNumber' didn't work.
-        // We fetch 100 recent active properties. 
-        console.log(`[API] Strategy 1 failed or ambiguous. Falling back to batch fetch.`);
+        // Strategy 2: Fetch a larger batch (1000) to find the item
+        console.log(`[API] Filtering failed. Fetching batch of 1000 with cache check.`);
 
-        payload = {
-            size: 100, // Fetch top 100 listings
-            status: 'ACTIVE'
-        };
+        const BATCH_CACHE_KEY = 'BATCH_1000_ACTIVE';
+        list = []; // Re-initialize list for this strategy
+        const cachedBatch = getCached(BATCH_CACHE_KEY);
 
-        response = await fetch(PIXXI_API_URL, {
-            method: 'POST',
-            headers: {
-                'X-PIXXI-TOKEN': token,
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(payload),
-            cache: 'no-store'
-        });
+        if (cachedBatch) {
+            console.log(`[API] Using cached batch.`);
+            list = cachedBatch;
+        } else {
+            payload = {
+                size: 1000,
+                status: 'ACTIVE'
+            };
 
-        if (!response.ok) throw new Error("Failed to fetch batch");
+            response = await fetch(PIXXI_API_URL, {
+                method: 'POST',
+                headers: {
+                    'X-PIXXI-TOKEN': token,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(payload),
+                cache: 'no-store'
+            });
 
-        data = await response.json();
-        list = data?.data?.list || [];
+            if (!response.ok) throw new Error("Failed to fetch batch");
+
+            data = await response.json();
+            list = data?.data?.list || [];
+
+            // Cache this heavy payload for 1 hour (reuse existing duration)
+            setCache(BATCH_CACHE_KEY, list);
+        }
 
         // Find by ID match
         const found = list.find((item: any) => String(item.id) === id || item.referenceNumber === id);
