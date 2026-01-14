@@ -8,6 +8,8 @@ import MobileNav from './MobileNav';
 export default function Navbar() {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [propertyTypes, setPropertyTypes] = useState<string[]>([]);
+  const [regions, setRegions] = useState<Record<string, string>>({});
+  const [locationsOpen, setLocationsOpen] = useState(false);
 
   useEffect(() => {
     const fetchMeta = async () => {
@@ -15,9 +17,11 @@ export default function Navbar() {
         const res = await fetch('/api/properties?action=meta');
         if (res.ok) {
           const data = await res.json();
-          // console.log("Navbar Metadata:", data); // Check for extra fields here
           if (data.propertyTypes) {
             setPropertyTypes(data.propertyTypes);
+          }
+          if (data.regions) {
+            setRegions(data.regions);
           }
         }
       } catch (err) {
@@ -34,7 +38,12 @@ export default function Navbar() {
 
   return (
     <>
-      <MobileNav isOpen={mobileNavOpen} onClose={() => setMobileNavOpen(false)} />
+      <MobileNav
+        isOpen={mobileNavOpen}
+        onClose={() => setMobileNavOpen(false)}
+        propertyTypes={propertyTypes}
+        regions={regions}
+      />
       <div className="custom-navbar">
         <div className="custom-navbar-nav">
           <Link href="/">
@@ -185,15 +194,39 @@ export default function Navbar() {
             <li><a href="#developers-anchor">Developers</a></li>
             <li>
               <a href="#">Locations</a>
-              <div className="cnm-mega-dd">
-                <ul className="dd">
-                  <li><Link href="/properties-search?regionId=47">Downtown Dubai</Link></li>
-                  <li><Link href="/properties-search?regionId=50">Dubai Marina</Link></li>
-                  <li><Link href="/properties-search?regionId=109">Palm Jumeirah</Link></li>
-                  <li><Link href="/properties-search?regionId=107">Jumeirah Lake Towers</Link></li>
-                  <li><Link href="/properties-search?regionId=48">Business Bay</Link></li>
-                  <li><Link href="/properties-search?regionId=108">Jumeirah Village Circle</Link></li>
-                  <li><Link href="/properties-search?regionId=117">Dubai Hills Estate</Link></li>
+              <div className="cnm-mega-dd" style={{ background: 'transparent', boxShadow: 'none', border: 'none', padding: 0 }}>
+                <ul className="dd" style={{
+                  maxHeight: '400px',
+                  overflowY: 'auto',
+                  backgroundColor: '#1A222F',
+                  width: '300px',
+                  padding: '10px 0',
+                  border: '1px solid rgba(197, 162, 101, 0.3)',
+                  boxShadow: '0 8px 30px rgba(0,0,0,0.6)'
+                }}>
+                  {Object.keys(regions).length > 0 ? (
+                    Object.entries(regions).map(([id, name]) => (
+                      <li key={id}>
+                        <Link
+                          href={`/properties-search?regionId=${id}`}
+                          style={{
+                            padding: '8px 20px',
+                            display: 'block',
+                            color: '#e0e0e0',
+                            borderBottom: '1px solid rgba(255,255,255,0.05)',
+                            fontSize: '0.95rem'
+                          }}
+                          className="hover:has-text-link"
+                        >{name}</Link>
+                      </li>
+                    ))
+                  ) : (
+                    // Fallback
+                    <>
+                      <li><Link href="/properties-search?regionId=47" style={{ padding: '8px 20px', display: 'block' }}>Downtown Dubai</Link></li>
+                      <li><Link href="/properties-search?regionId=50" style={{ padding: '8px 20px', display: 'block' }}>Dubai Marina</Link></li>
+                    </>
+                  )}
                 </ul>
               </div>
             </li>

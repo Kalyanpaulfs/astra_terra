@@ -7,10 +7,15 @@ import Image from 'next/image';
 interface MobileNavProps {
   isOpen: boolean;
   onClose: () => void;
+  propertyTypes?: string[];
+  regions?: Record<string, string>;
 }
 
-export default function MobileNav({ isOpen, onClose }: MobileNavProps) {
+export default function MobileNav({ isOpen, onClose, propertyTypes = [], regions = {} }: MobileNavProps) {
   const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
+
+  // Default Types if fetch fails
+  const types = propertyTypes.length > 0 ? propertyTypes : ['APARTMENT', 'VILLA', 'TOWNHOUSE', 'PENTHOUSE', 'HOTEL_APARTMENT', 'DUPLEX', 'COMMERCIAL_BUILDING'];
 
   useEffect(() => {
     if (isOpen) {
@@ -48,14 +53,10 @@ export default function MobileNav({ isOpen, onClose }: MobileNavProps) {
               <span>Buy</span>
               <i className="ph ph-caret-down arrow"></i>
             </a>
-            <ul className="sub-links">
-              <li><Link href="/properties-search?city=41&type=APARTMENT&listtype=SELL" onClick={onClose}>Apartment</Link></li>
-              <li><Link href="/properties-search?city=41&type=VILLA&listtype=SELL" onClick={onClose}>Villa</Link></li>
-              <li><Link href="/properties-search?city=41&type=TOWNHOUSE&listtype=SELL" onClick={onClose}>Townhouse</Link></li>
-              <li><Link href="/properties-search?city=41&type=PENTHOUSE&listtype=SELL" onClick={onClose}>Penthouse</Link></li>
-              <li><Link href="/properties-search?city=41&type=HOTEL_APARTMENT&listtype=SELL" onClick={onClose}>Studio</Link></li>
-              <li><Link href="/properties-search?city=41&type=DUPLEX&listtype=SELL" onClick={onClose}>Duplex</Link></li>
-              <li><Link href="/properties-search?city=41&type=COMMERCIAL_BUILDING&listtype=SELL" onClick={onClose}>Commercial</Link></li>
+            <ul className="sub-links" style={{ maxHeight: '300px', overflowY: 'auto' }}>
+              {types.map((type) => (
+                <li key={type}><Link href={`/properties-search?city=41&type=${encodeURIComponent(type)}&listtype=SELL`} onClick={onClose}>{type.replace(/_/g, ' ')}</Link></li>
+              ))}
               <li><Link href="/properties-search?city=41&listtype=SELL" onClick={onClose}>See All</Link></li>
             </ul>
           </li>
@@ -65,14 +66,10 @@ export default function MobileNav({ isOpen, onClose }: MobileNavProps) {
               <span>Rent</span>
               <i className="ph ph-caret-down arrow"></i>
             </a>
-            <ul className="sub-links">
-              <li><Link href="/properties-search?city=41&type=APARTMENT&listtype=RENT" onClick={onClose}>Apartment</Link></li>
-              <li><Link href="/properties-search?city=41&type=VILLA&listtype=RENT" onClick={onClose}>Villa</Link></li>
-              <li><Link href="/properties-search?city=41&type=TOWNHOUSE&listtype=RENT" onClick={onClose}>Townhouse</Link></li>
-              <li><Link href="/properties-search?city=41&type=PENTHOUSE&listtype=RENT" onClick={onClose}>Penthouse</Link></li>
-              <li><Link href="/properties-search?city=41&type=HOTEL_APARTMENT&listtype=RENT" onClick={onClose}>Studio</Link></li>
-              <li><Link href="/properties-search?city=41&type=DUPLEX&listtype=RENT" onClick={onClose}>Duplex</Link></li>
-              <li><Link href="/properties-search?city=41&type=COMMERCIAL_BUILDING&listtype=RENT" onClick={onClose}>Commercial</Link></li>
+            <ul className="sub-links" style={{ maxHeight: '300px', overflowY: 'auto' }}>
+              {types.map((type) => (
+                <li key={type}><Link href={`/properties-search?city=41&type=${encodeURIComponent(type)}&listtype=RENT`} onClick={onClose}>{type.replace(/_/g, ' ')}</Link></li>
+              ))}
               <li><Link href="/properties-search?city=41&listtype=RENT" onClick={onClose}>See All</Link></li>
             </ul>
           </li>
@@ -94,14 +91,17 @@ export default function MobileNav({ isOpen, onClose }: MobileNavProps) {
               <span>Locations</span>
               <i className="ph ph-caret-down arrow"></i>
             </a>
-            <ul className="sub-links">
-              <li><Link href="/properties-search?regionId=47" onClick={onClose}>Downtown Dubai</Link></li>
-              <li><Link href="/properties-search?regionId=50" onClick={onClose}>Dubai Marina</Link></li>
-              <li><Link href="/properties-search?regionId=109" onClick={onClose}>Palm Jumeirah</Link></li>
-              <li><Link href="/properties-search?regionId=107" onClick={onClose}>Jumeirah Lake Towers</Link></li>
-              <li><Link href="/properties-search?regionId=48" onClick={onClose}>Business Bay</Link></li>
-              <li><Link href="/properties-search?regionId=108" onClick={onClose}>Jumeirah Village Circle</Link></li>
-              <li><Link href="/properties-search?regionId=117" onClick={onClose}>Dubai Hills Estate</Link></li>
+            <ul className="sub-links" style={{ maxHeight: '300px', overflowY: 'auto' }}>
+              {Object.keys(regions).length > 0 ? (
+                Object.entries(regions).map(([id, name]) => (
+                  <li key={id}><Link href={`/properties-search?regionId=${id}`} onClick={onClose}>{name}</Link></li>
+                ))
+              ) : (
+                <>
+                  <li><Link href="/properties-search?regionId=47" onClick={onClose}>Downtown Dubai</Link></li>
+                  <li><Link href="/properties-search?regionId=50" onClick={onClose}>Dubai Marina</Link></li>
+                </>
+              )}
             </ul>
           </li>
           <li>
