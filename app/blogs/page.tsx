@@ -43,7 +43,7 @@ export default function BlogList() {
 
     return (
         <>
-            <div className="ba-container">
+            <div className="ba-container" style={{ paddingLeft: '2rem', paddingRight: '2rem' }}>
                 <div className="ba-wrapper">
                     <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
                         <h1 className="ba-title" style={{ fontSize: '3rem' }}>Latest Insights</h1>

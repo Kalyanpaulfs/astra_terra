@@ -1,15 +1,150 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import MobileNav from './MobileNav';
 
 export default function Navbar() {
+  const pathname = usePathname();
+  const router = useRouter();
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [propertyTypes, setPropertyTypes] = useState<string[]>([]);
   const [regions, setRegions] = useState<Record<string, string>>({});
-  const [locationsOpen, setLocationsOpen] = useState(false);
+
+  // Developer Branch State for Dropdown Logic
+  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const [closedByClick, setClosedByClick] = useState<Set<string>>(new Set());
+  const [justClicked, setJustClicked] = useState<string | null>(null);
+
+  // Close dropdown when route changes
+  useEffect(() => {
+    setActiveDropdown(null);
+    setClosedByClick(new Set());
+  }, [pathname]);
+
+  // Determine if we're on homepage
+  const isHomePage = pathname === '/';
+
+  // Handler to close dropdown when link is clicked - closes immediately
+  const handleLinkClick = (dropdownName: string, e?: React.MouseEvent) => {
+    // Stop event propagation to prevent any hover handlers from interfering
+    if (e) {
+      e.stopPropagation();
+    }
+
+    // Set flag to prevent immediate hover reopening
+    setJustClicked(dropdownName);
+
+    // Immediately add class to parent li to force hide via CSS (instant)
+    const menuItems = document.querySelectorAll('.custom-nav-menu > li');
+    menuItems.forEach((li) => {
+      const link = li.querySelector('a[href="#"]');
+      const linkText = link?.textContent?.trim();
+      if (link && linkText && (
+        (dropdownName === 'buy' && linkText === 'Buy') ||
+        (dropdownName === 'rent' && linkText === 'Rent') ||
+        (dropdownName === 'locations' && linkText === 'Locations') ||
+        (dropdownName === 'more' && linkText === 'More')
+      )) {
+        li.classList.add('dropdown-closed-by-click');
+        // Force hide dropdown immediately via inline style
+        const dropdown = li.querySelector('.cnm-mega, .cnm-mega-dd');
+        if (dropdown) {
+          (dropdown as HTMLElement).style.opacity = '0';
+          (dropdown as HTMLElement).style.visibility = 'hidden';
+          (dropdown as HTMLElement).style.pointerEvents = 'none';
+          (dropdown as HTMLElement).style.display = 'none';
+        }
+      }
+    });
+
+    // Close dropdown immediately - force synchronous update
+    setActiveDropdown(null);
+
+    // Mark as closed by click - this prevents reopening on hover
+    setClosedByClick(prev => {
+      const newSet = new Set(prev);
+      newSet.add(dropdownName);
+      return newSet;
+    });
+
+    // Clear the justClicked flag after a short delay to allow navigation
+    setTimeout(() => {
+      setJustClicked(null);
+    }, 300);
+  };
+
+  // Also close dropdown when clicking anywhere inside the dropdown
+  const handleDropdownClick = (dropdownName: string) => {
+    setActiveDropdown(null);
+    setClosedByClick(prev => new Set(prev).add(dropdownName));
+  };
+
+  // Handler for mouse enter - only open if not closed by click
+  const handleMouseEnter = (dropdownName: string) => {
+    // Don't open if it was just clicked or closed by clicking a link
+    if (justClicked === dropdownName || closedByClick.has(dropdownName)) {
+      return;
+    }
+
+    // Also check if the CSS class is present (double check)
+    const menuItems = document.querySelectorAll('.custom-nav-menu > li');
+    let shouldOpen = true;
+    menuItems.forEach((li) => {
+      const link = li.querySelector('a[href="#"]');
+      const linkText = link?.textContent?.trim();
+      if (link && linkText && (
+        (dropdownName === 'buy' && linkText === 'Buy') ||
+        (dropdownName === 'rent' && linkText === 'Rent') ||
+        (dropdownName === 'locations' && linkText === 'Locations') ||
+        (dropdownName === 'more' && linkText === 'More')
+      )) {
+        if (li.classList.contains('dropdown-closed-by-click')) {
+          shouldOpen = false;
+        }
+      }
+    });
+
+    if (shouldOpen) {
+      setActiveDropdown(dropdownName);
+    }
+  };
+
+  // Handler for mouse leave - close dropdown and reset closed by click flag
+  const handleMouseLeave = (dropdownName: string) => {
+    setActiveDropdown(null);
+    // Reset the closed-by-click flag when mouse leaves, so it can reopen next time
+    setClosedByClick(prev => {
+      const newSet = new Set(prev);
+      newSet.delete(dropdownName);
+      return newSet;
+    });
+
+    // Also remove the CSS class and reset inline styles when mouse leaves
+    const menuItems = document.querySelectorAll('.custom-nav-menu > li');
+    menuItems.forEach((li) => {
+      const link = li.querySelector('a[href="#"]');
+      const linkText = link?.textContent?.trim();
+      if (link && linkText && (
+        (dropdownName === 'buy' && linkText === 'Buy') ||
+        (dropdownName === 'rent' && linkText === 'Rent') ||
+        (dropdownName === 'locations' && linkText === 'Locations') ||
+        (dropdownName === 'more' && linkText === 'More')
+      )) {
+        li.classList.remove('dropdown-closed-by-click');
+        // Reset inline styles so dropdown can show again
+        const dropdown = li.querySelector('.cnm-mega, .cnm-mega-dd');
+        if (dropdown) {
+          (dropdown as HTMLElement).style.opacity = '';
+          (dropdown as HTMLElement).style.visibility = '';
+          (dropdown as HTMLElement).style.pointerEvents = '';
+          (dropdown as HTMLElement).style.display = '';
+        }
+      }
+    });
+  };
 
   useEffect(() => {
     const fetchMeta = async () => {
@@ -44,7 +179,7 @@ export default function Navbar() {
         propertyTypes={propertyTypes}
         regions={regions}
       />
-      <div className="custom-navbar">
+      <div className={`custom-navbar ${isHomePage ? 'navbar-home' : 'navbar-other'}`}>
         <div className="custom-navbar-nav">
           <Link href="/">
             <Image
@@ -57,9 +192,15 @@ export default function Navbar() {
             />
           </Link>
           <ul className="custom-nav-menu">
-            <li>
+            <li
+              onMouseEnter={() => handleMouseEnter('buy')}
+              onMouseLeave={() => handleMouseLeave('buy')}
+              className={closedByClick.has('buy') ? 'dropdown-closed-by-click' : ''}
+            >
               <a href="#">Buy</a>
-              <div className="cnm-mega cnm-mega-left">
+              <div
+                className={`cnm-mega cnm-mega-left ${activeDropdown === 'buy' ? 'is-active' : ''}`}
+              >
                 <div className="columns">
                   <div className="column">
                     <div className="cnm-mega-content">
@@ -72,7 +213,12 @@ export default function Navbar() {
                               {leftColumnTypes.length > 0 ? (
                                 leftColumnTypes.map((type) => (
                                   <li key={type}>
-                                    <Link href={`/properties-search?city=41&type=${encodeURIComponent(type)}&listtype=SELL`}>
+                                    <Link
+                                      href={`/properties-search?city=41&type=${encodeURIComponent(type)}&listtype=SELL`}
+                                      onClick={(e) => {
+                                        handleLinkClick('buy', e);
+                                      }}
+                                    >
                                       {type}
                                     </Link>
                                   </li>
@@ -80,10 +226,10 @@ export default function Navbar() {
                               ) : (
                                 // Fallback loading/empty state or default items if fetch fails
                                 <>
-                                  <li><Link href="/properties-search?city=41&type=APARTMENT&listtype=SELL">Apartment</Link></li>
-                                  <li><Link href="/properties-search?city=41&type=VILLA&listtype=SELL">Villa</Link></li>
-                                  <li><Link href="/properties-search?city=41&type=TOWNHOUSE&listtype=SELL">Townhouse</Link></li>
-                                  <li><Link href="/properties-search?city=41&type=PENTHOUSE&listtype=SELL">Penthouse</Link></li>
+                                  <li><Link href="/properties-search?city=41&type=APARTMENT&listtype=SELL" onClick={(e) => { handleLinkClick('buy', e); }}>Apartment</Link></li>
+                                  <li><Link href="/properties-search?city=41&type=VILLA&listtype=SELL" onClick={(e) => { handleLinkClick('buy', e); }}>Villa</Link></li>
+                                  <li><Link href="/properties-search?city=41&type=TOWNHOUSE&listtype=SELL" onClick={(e) => { handleLinkClick('buy', e); }}>Townhouse</Link></li>
+                                  <li><Link href="/properties-search?city=41&type=PENTHOUSE&listtype=SELL" onClick={(e) => { handleLinkClick('buy', e); }}>Penthouse</Link></li>
                                 </>
                               )}
                             </ul>
@@ -93,19 +239,24 @@ export default function Navbar() {
                               {rightColumnTypes.length > 0 ? (
                                 rightColumnTypes.map((type) => (
                                   <li key={type}>
-                                    <Link href={`/properties-search?city=41&type=${encodeURIComponent(type)}&listtype=SELL`}>
+                                    <Link
+                                      href={`/properties-search?city=41&type=${encodeURIComponent(type)}&listtype=SELL`}
+                                      onClick={(e) => {
+                                        handleLinkClick('buy', e);
+                                      }}
+                                    >
                                       {type}
                                     </Link>
                                   </li>
                                 ))
                               ) : (
                                 <>
-                                  <li><Link href="/properties-search?city=41&type=HOTEL_APARTMENT&listtype=SELL">Studio</Link></li>
-                                  <li><Link href="/properties-search?city=41&type=DUPLEX&listtype=SELL">Duplex</Link></li>
-                                  <li><Link href="/properties-search?city=41&type=COMMERCIAL_BUILDING&listtype=SELL">Commercial</Link></li>
+                                  <li><Link href="/properties-search?city=41&type=HOTEL_APARTMENT&listtype=SELL" onClick={(e) => { handleLinkClick('buy', e); }}>Studio</Link></li>
+                                  <li><Link href="/properties-search?city=41&type=DUPLEX&listtype=SELL" onClick={(e) => { handleLinkClick('buy', e); }}>Duplex</Link></li>
+                                  <li><Link href="/properties-search?city=41&type=COMMERCIAL_BUILDING&listtype=SELL" onClick={(e) => { handleLinkClick('buy', e); }}>Commercial</Link></li>
                                 </>
                               )}
-                              <li><Link href="/properties-search?city=41&listtype=SELL">See All</Link></li>
+                              <li><Link href="/properties-search?city=41&listtype=SELL" onClick={(e) => { handleLinkClick('buy', e); }}>See All</Link></li>
                             </ul>
                           </div>
                         </div>
@@ -124,9 +275,21 @@ export default function Navbar() {
                 </div>
               </div>
             </li>
-            <li>
+            <li
+              onMouseEnter={() => handleMouseEnter('rent')}
+              onMouseLeave={() => handleMouseLeave('rent')}
+              className={closedByClick.has('rent') ? 'dropdown-closed-by-click' : ''}
+            >
               <a href="#">Rent</a>
-              <div className="cnm-mega cnm-mega-right">
+              <div
+                className={`cnm-mega cnm-mega-right ${activeDropdown === 'rent' ? 'is-active' : ''}`}
+                onClick={(e) => {
+                  // Don't close if clicking on a link (let link handle it)
+                  if ((e.target as HTMLElement).tagName !== 'A') {
+                    handleDropdownClick('rent');
+                  }
+                }}
+              >
                 <div className="columns">
                   <div className="column">
                     <div className="cnm-mega-content">
@@ -139,17 +302,22 @@ export default function Navbar() {
                               {leftColumnTypes.length > 0 ? (
                                 leftColumnTypes.map((type) => (
                                   <li key={type}>
-                                    <Link href={`/properties-search?city=41&type=${encodeURIComponent(type)}&listtype=RENT`}>
+                                    <Link
+                                      href={`/properties-search?city=41&type=${encodeURIComponent(type)}&listtype=RENT`}
+                                      onClick={(e) => {
+                                        handleLinkClick('rent', e);
+                                      }}
+                                    >
                                       {type}
                                     </Link>
                                   </li>
                                 ))
                               ) : (
                                 <>
-                                  <li><Link href="/properties-search?city=41&type=APARTMENT&listtype=RENT">Apartment</Link></li>
-                                  <li><Link href="/properties-search?city=41&type=VILLA&listtype=RENT">Villa</Link></li>
-                                  <li><Link href="/properties-search?city=41&type=TOWNHOUSE&listtype=RENT">Townhouse</Link></li>
-                                  <li><Link href="/properties-search?city=41&type=PENTHOUSE&listtype=RENT">Penthouse</Link></li>
+                                  <li><Link href="/properties-search?city=41&type=APARTMENT&listtype=RENT" onClick={(e) => { handleLinkClick('rent', e); }}>Apartment</Link></li>
+                                  <li><Link href="/properties-search?city=41&type=VILLA&listtype=RENT" onClick={(e) => { handleLinkClick('rent', e); }}>Villa</Link></li>
+                                  <li><Link href="/properties-search?city=41&type=TOWNHOUSE&listtype=RENT" onClick={(e) => { handleLinkClick('rent', e); }}>Townhouse</Link></li>
+                                  <li><Link href="/properties-search?city=41&type=PENTHOUSE&listtype=RENT" onClick={(e) => { handleLinkClick('rent', e); }}>Penthouse</Link></li>
                                 </>
                               )}
                             </ul>
@@ -159,19 +327,24 @@ export default function Navbar() {
                               {rightColumnTypes.length > 0 ? (
                                 rightColumnTypes.map((type) => (
                                   <li key={type}>
-                                    <Link href={`/properties-search?city=41&type=${encodeURIComponent(type)}&listtype=RENT`}>
+                                    <Link
+                                      href={`/properties-search?city=41&type=${encodeURIComponent(type)}&listtype=RENT`}
+                                      onClick={(e) => {
+                                        handleLinkClick('rent', e);
+                                      }}
+                                    >
                                       {type}
                                     </Link>
                                   </li>
                                 ))
                               ) : (
                                 <>
-                                  <li><Link href="/properties-search?city=41&type=HOTEL_APARTMENT&listtype=RENT">Studio</Link></li>
-                                  <li><Link href="/properties-search?city=41&type=DUPLEX&listtype=RENT">Duplex</Link></li>
-                                  <li><Link href="/properties-search?city=41&type=COMMERCIAL_BUILDING&listtype=RENT">Commercial</Link></li>
+                                  <li><Link href="/properties-search?city=41&type=HOTEL_APARTMENT&listtype=RENT" onClick={(e) => { handleLinkClick('rent', e); }}>Studio</Link></li>
+                                  <li><Link href="/properties-search?city=41&type=DUPLEX&listtype=RENT" onClick={(e) => { handleLinkClick('rent', e); }}>Duplex</Link></li>
+                                  <li><Link href="/properties-search?city=41&type=COMMERCIAL_BUILDING&listtype=RENT" onClick={(e) => { handleLinkClick('rent', e); }}>Commercial</Link></li>
                                 </>
                               )}
-                              <li><Link href="/properties-search?city=41&listtype=RENT">See All</Link></li>
+                              <li><Link href="/properties-search?city=41&listtype=RENT" onClick={(e) => { handleLinkClick('rent', e); }}>See All</Link></li>
                             </ul>
                           </div>
                         </div>
@@ -192,9 +365,22 @@ export default function Navbar() {
             </li>
             <li><a href="#listings-anchor">New Projects</a></li>
             <li><a href="#developers-anchor">Developers</a></li>
-            <li>
+            <li
+              onMouseEnter={() => handleMouseEnter('locations')}
+              onMouseLeave={() => handleMouseLeave('locations')}
+              className={closedByClick.has('locations') ? 'dropdown-closed-by-click' : ''}
+            >
               <a href="#">Locations</a>
-              <div className="cnm-mega-dd" style={{ background: 'transparent', boxShadow: 'none', border: 'none', padding: 0 }}>
+              <div
+                className={`cnm-mega-dd ${activeDropdown === 'locations' ? 'is-active' : ''}`}
+                style={{ background: 'transparent', boxShadow: 'none', border: 'none', padding: 0 }}
+                onClick={(e) => {
+                  // Don't close if clicking on a link (let link handle it)
+                  if ((e.target as HTMLElement).tagName !== 'A') {
+                    handleDropdownClick('locations');
+                  }
+                }}
+              >
                 <ul className="dd" style={{
                   maxHeight: '400px',
                   overflowY: 'auto',
@@ -216,6 +402,7 @@ export default function Navbar() {
                             borderBottom: '1px solid rgba(255,255,255,0.05)',
                             fontSize: '0.95rem'
                           }}
+                          onClick={(e) => { handleLinkClick('locations', e); }}
                           className="hover:has-text-link"
                         >{name}</Link>
                       </li>
@@ -223,8 +410,8 @@ export default function Navbar() {
                   ) : (
                     // Fallback
                     <>
-                      <li><Link href="/properties-search?regionId=47" style={{ padding: '8px 20px', display: 'block' }}>Downtown Dubai</Link></li>
-                      <li><Link href="/properties-search?regionId=50" style={{ padding: '8px 20px', display: 'block' }}>Dubai Marina</Link></li>
+                      <li><Link href="/properties-search?regionId=47" style={{ padding: '8px 20px', display: 'block' }} onClick={(e) => { handleLinkClick('locations', e); }}>Downtown Dubai</Link></li>
+                      <li><Link href="/properties-search?regionId=50" style={{ padding: '8px 20px', display: 'block' }} onClick={(e) => { handleLinkClick('locations', e); }}>Dubai Marina</Link></li>
                     </>
                   )}
                 </ul>
@@ -233,12 +420,24 @@ export default function Navbar() {
             <li><a href="#services-anchor">Services</a></li>
             <li><Link href="/blogs">Blogs</Link></li>
             <li><a href="#why-choose-us">Why Us</a></li>
-            <li>
+            <li
+              onMouseEnter={() => handleMouseEnter('more')}
+              onMouseLeave={() => handleMouseLeave('more')}
+              className={closedByClick.has('more') ? 'dropdown-closed-by-click' : ''}
+            >
               <a href="#">More</a>
-              <div className="cnm-mega-dd">
+              <div
+                className={`cnm-mega-dd ${activeDropdown === 'more' ? 'is-active' : ''}`}
+                onClick={(e) => {
+                  // Don't close if clicking on a link (let link handle it)
+                  if ((e.target as HTMLElement).tagName !== 'A') {
+                    handleDropdownClick('more');
+                  }
+                }}
+              >
                 <ul className="dd">
-                  <li><a href="#about-us-anchor">About</a></li>
-                  <li><a href="#contact-us-anchor">Get In Touch</a></li>
+                  <li><a href="#about-us-anchor" onClick={(e) => { handleLinkClick('more', e); }}>About</a></li>
+                  <li><a href="#contact-us-anchor" onClick={(e) => { handleLinkClick('more', e); }}>Get In Touch</a></li>
                 </ul>
               </div>
             </li>

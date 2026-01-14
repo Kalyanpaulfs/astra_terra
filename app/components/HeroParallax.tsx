@@ -20,3 +20,4 @@ export default function HeroParallax() {
     return null; // This component only adds side effects
 }
 
+

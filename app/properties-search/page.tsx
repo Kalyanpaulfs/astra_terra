@@ -3,6 +3,7 @@
 import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import PropertyCard from '../components/PropertyCard';
+import { PropertiesSearchSkeleton } from '../components/Skeletons';
 
 interface PropertyMeta {
   cities: Record<number, string>;
@@ -73,16 +74,44 @@ function PropertiesSearchContent() {
 
   if (!meta && loading) {
     return (
-      <div className="container" style={{ minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <div className="loader is-loading"></div>
-      </div>
+      <section className="section" style={{ minHeight: '80vh', paddingTop: '120px', paddingLeft: '2rem', paddingRight: '2rem' }}>
+        <div className="container" style={{ maxWidth: '100%' }}>
+          <PropertiesSearchSkeleton />
+        </div>
+      </section>
     );
   }
 
   return (
-    <section className="section" style={{ minHeight: '80vh' }}>
-      <div className="container">
-        {listings.length > 0 ? (
+    <section className="section" style={{ minHeight: '80vh', paddingLeft: '2rem', paddingRight: '2rem' }}>
+      <div className="container" style={{ maxWidth: '100%' }}>
+        {loading ? (
+          <>
+            <div className="mb-6 has-text-centered">
+              <div 
+                className="skeleton-pulse"
+                style={{
+                  height: '48px',
+                  width: '300px',
+                  backgroundColor: '#e8e8e8',
+                  borderRadius: '8px',
+                  margin: '0 auto 20px'
+                }}
+              />
+              <div 
+                className="skeleton-pulse"
+                style={{
+                  height: '32px',
+                  width: '200px',
+                  backgroundColor: '#f0f0f0',
+                  borderRadius: '4px',
+                  margin: '0 auto'
+                }}
+              />
+            </div>
+            <PropertiesSearchSkeleton />
+          </>
+        ) : listings.length > 0 ? (
           <>
             <div className="mb-6 has-text-centered">
               <h1 className="title is-2 has-text-weight-bold mb-3" style={{ color: '#C5A265', fontFamily: '"Playfair Display", serif' }}>
@@ -114,42 +143,27 @@ function PropertiesSearchContent() {
                 </h2>
               )}
 
-              <div className="is-flex is-justify-content-center is-align-items-center mt-4">
-                <div style={{
-                  backgroundColor: '#f5f5f5',
-                  padding: '8px 20px',
-                  borderRadius: '50px',
-                  border: '1px solid #e0e0e0',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px'
+              <div className="is-flex is-justify-content-center is-align-items-center mt-4 mb-5">
+                <p style={{
+                  color: '#6B7280',
+                  fontSize: '14px',
+                  fontWeight: 400,
+                  margin: 0
                 }}>
-                  <span style={{ color: '#0D1625', fontSize: '12px', fontWeight: 600, letterSpacing: '1px', textTransform: 'uppercase' }}>Total Found</span>
-                  <span style={{ display: 'block', width: '1px', height: '16px', backgroundColor: '#ccc' }}></span>
-                  <span style={{ color: '#C5A265', fontSize: '14px', fontWeight: 800 }}>
-                    {loading ? '...' : `${listings.length} Listings`}
-                  </span>
-                </div>
+                  {loading ? 'Loading...' : `${listings.length} ${listings.length === 1 ? 'property' : 'properties'} found`}
+                </p>
               </div>
             </div>
 
             <div className="at-properties-grid">
-              {loading ? (
-                Array.from({ length: 6 }).map((_, idx) => (
-                  <div key={idx} style={{
-                    height: '480px',
-                    backgroundColor: '#f5f5f5',
-                    borderRadius: '8px',
-                    animation: 'pulse 1.5s infinite ease-in-out'
-                  }}></div>
-                ))
-              ) : listings.length > 0 ? (
-                listings.map((listing, idx) => (
-                  <div key={idx}>
-                    <PropertyCard listing={listing} variant="grid" />
-                  </div>
-                ))
-              ) : (
+              {listings.map((listing, idx) => (
+                <div key={idx}>
+                  <PropertyCard listing={listing} variant="grid" />
+                </div>
+              ))}
+            </div>
+            {listings.length === 0 && (
+              <div className="at-properties-grid">
                 <div style={{ gridColumn: '1 / -1', padding: '60px 0', textAlign: 'center' }}>
                   <div style={{
                     display: 'inline-flex',
@@ -169,15 +183,8 @@ function PropertiesSearchContent() {
                   </h3>
                   <p style={{ color: '#a0a0a0' }}>Try exploring other categories.</p>
                 </div>
-              )}
-            </div>
-            <style jsx>{`
-              @keyframes pulse {
-                0% { opacity: 0.6; }
-                50% { opacity: 0.8; }
-                100% { opacity: 0.6; }
-              }
-            `}</style>
+              </div>
+            )}
           </>
         ) : (
           <div style={{
