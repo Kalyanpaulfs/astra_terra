@@ -1,5 +1,3 @@
-import { unstable_noStore as noStore } from 'next/cache';
-
 const PIXXI_API_URL = process.env.PIXXI_API_URL || 'https://dataapi.pixxicrm.ae/pixxiapi/v1/properties/Astra Terra Properties L.L.C';
 const CACHE_DURATION = 3600; // 1 hour in seconds
 
@@ -47,7 +45,8 @@ export async function getMetadata(): Promise<PropertyMeta> {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({ size: 1000, status: 'ACTIVE' }),
-            cache: 'no-store' // Disable Next.js cache - response exceeds 2MB limit, using in-memory cache instead
+            // Allow static generation with ISR; rely primarily on our in-memory cache
+            next: { revalidate: CACHE_DURATION },
         });
 
         if (!response.ok) {
@@ -118,7 +117,8 @@ export async function getListings(filter: ListingsFilter = { size: 12 }) {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(payload),
-            cache: 'no-store' // Disable Next.js cache - response exceeds 2MB limit
+            // Enable ISR-friendly caching so functions can run during static generation
+            next: { revalidate: CACHE_DURATION },
         });
 
         if (!response.ok) {
@@ -166,7 +166,7 @@ export async function getProperty(id: string) {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(payload),
-            cache: 'no-store'
+            next: { revalidate: CACHE_DURATION },
         });
 
         if (!response.ok) throw new Error("Failed to fetch property by filter");
@@ -203,7 +203,7 @@ export async function getProperty(id: string) {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(payload),
-                cache: 'no-store'
+                next: { revalidate: CACHE_DURATION },
             });
 
             if (!response.ok) throw new Error("Failed to fetch batch");

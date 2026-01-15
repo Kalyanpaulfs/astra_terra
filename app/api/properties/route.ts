@@ -22,7 +22,9 @@ function setCache(key: string, data: any) {
 // GET /api/properties - Get featured properties (home page)
 export async function GET(request: NextRequest) {
   try {
-    const searchParams = request.nextUrl.searchParams;
+    // Use the standard URL API instead of request.nextUrl to avoid
+    // Next.js DynamicServerError during static generation.
+    const { searchParams } = new URL(request.url);
     const action = searchParams.get('action') || 'list';
 
     // Check if token is configured
