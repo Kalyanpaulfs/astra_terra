@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 
@@ -13,6 +14,9 @@ interface MobileNavProps {
 
 export default function MobileNav({ isOpen, onClose, propertyTypes = [], regions = {} }: MobileNavProps) {
   const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
+  const pathname = usePathname();
+  const router = useRouter();
+  const isHomePage = pathname === '/';
 
   // Default Types if fetch fails
   const types = propertyTypes.length > 0 ? propertyTypes : ['APARTMENT', 'VILLA', 'TOWNHOUSE', 'PENTHOUSE', 'HOTEL_APARTMENT', 'DUPLEX', 'COMMERCIAL_BUILDING'];
@@ -74,16 +78,16 @@ export default function MobileNav({ isOpen, onClose, propertyTypes = [], regions
             </ul>
           </li>
           <li>
-            <a href="#listings-anchor" className="mnm2-close" onClick={onClose}>
+            <Link href="/properties-search?listtype=NEW" className="mnm2-close" onClick={onClose}>
               <i className="ph ph-buildings"></i>
               <span>New Projects</span>
-            </a>
+            </Link>
           </li>
           <li>
-            <a href="#developers-anchor" className="mnm2-close" onClick={onClose}>
+            <Link href="/developers" className="mnm2-close" onClick={onClose}>
               <i className="ph ph-users-three"></i>
               <span>Developers</span>
-            </a>
+            </Link>
           </li>
           <li className={openSubmenu === 'locations' ? 'has-sub open' : 'has-sub'}>
             <a href="#" onClick={(e) => { e.preventDefault(); setOpenSubmenu(openSubmenu === 'locations' ? null : 'locations'); }}>
@@ -105,7 +109,23 @@ export default function MobileNav({ isOpen, onClose, propertyTypes = [], regions
             </ul>
           </li>
           <li>
-            <a href="#services-anchor" className="mnm2-close" onClick={onClose}>
+            <a
+              href={isHomePage ? '#services-anchor' : '/#services-anchor'}
+              className="mnm2-close"
+              onClick={(e) => {
+                if (isHomePage) {
+                  e.preventDefault();
+                  onClose();
+                  const element = document.querySelector('#services-anchor');
+                  if (element) {
+                    element.scrollIntoView({ behavior: 'smooth' });
+                  }
+                } else {
+                  // Navigate to home with hash
+                  onClose();
+                }
+              }}
+            >
               <i className="ph ph-briefcase"></i>
               <span>Services</span>
             </a>

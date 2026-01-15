@@ -4,6 +4,7 @@ import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import PropertyCard from '../components/PropertyCard';
 import { PropertiesSearchSkeleton } from '../components/Skeletons';
+import Pagination from '../components/Pagination';
 
 interface PropertyMeta {
   cities: Record<number, string>;
@@ -16,6 +17,12 @@ function PropertiesSearchContent() {
   const [listings, setListings] = useState<any[]>([]);
   const [meta, setMeta] = useState<PropertyMeta | null>(null);
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 9;
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchParams]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -48,7 +55,7 @@ function PropertiesSearchContent() {
         if (regionId) params.set('regionId', regionId);
         if (developer) params.set('developer', developer);
         // Increase size to show all properties (or a large batch) as requested
-        params.set('size', '100');
+        params.set('size', '1000');
 
         // Fetch properties
         const listingsResponse = await fetch(`/api/properties?${params.toString()}`);
@@ -88,7 +95,7 @@ function PropertiesSearchContent() {
         {loading ? (
           <>
             <div className="mb-6 has-text-centered">
-              <div 
+              <div
                 className="skeleton-pulse"
                 style={{
                   height: '48px',
@@ -98,7 +105,7 @@ function PropertiesSearchContent() {
                   margin: '0 auto 20px'
                 }}
               />
-              <div 
+              <div
                 className="skeleton-pulse"
                 style={{
                   height: '32px',
@@ -113,22 +120,44 @@ function PropertiesSearchContent() {
           </>
         ) : listings.length > 0 ? (
           <>
-            <div className="mb-6 has-text-centered">
-              <h1 className="title is-2 has-text-weight-bold mb-3" style={{ color: '#C5A265', fontFamily: '"Playfair Display", serif' }}>
+            <div className="mb-6 has-text-centered" style={{
+              background: searchParams.get('listtype') === 'NEW' ? '#0D1625' : 'transparent',
+              padding: searchParams.get('listtype') === 'NEW' ? '80px 20px 40px' : '0',
+              marginLeft: '-2rem',
+              marginRight: '-2rem',
+              marginTop: '-2rem',
+              marginBottom: searchParams.get('listtype') === 'NEW' ? '2rem' : '1.5rem'
+            }}>
+              <h1 className="title is-2 has-text-weight-bold mb-3" style={{
+                color: '#C5A265',
+                fontFamily: '"Playfair Display", serif',
+                fontSize: searchParams.get('listtype') === 'NEW' ? '3rem' : '2rem'
+              }}>
                 {searchParams.get('developer')
                   ? `Properties by ${searchParams.get('developer')}`
-                  : (searchParams.get('listtype') === 'RENT' ? 'Properties for Rent' : 'Properties for Sale')}
+                  : searchParams.get('listtype') === 'NEW'
+                    ? 'New Projects'
+                    : searchParams.get('listtype') === 'RENT'
+                      ? 'Properties for Rent'
+                      : 'Properties for Sale'}
               </h1>
+
+              {searchParams.get('listtype') === 'NEW' && (
+                <p style={{ color: '#a0a0a0', fontSize: '1.1rem', marginBottom: '0' }}>
+                  Explore Dubai's latest off-plan developments
+                </p>
+              )}
 
               {searchParams.get('type') && (
                 <h2 className="title is-4 mb-4" style={{
-                  color: '#0D1625',
+                  color: searchParams.get('listtype') === 'NEW' ? '#ffffff' : '#0D1625',
                   fontWeight: 700,
                   textTransform: 'uppercase',
                   letterSpacing: '3px',
                   display: 'inline-block',
                   position: 'relative',
-                  paddingBottom: '12px'
+                  paddingBottom: '12px',
+                  marginTop: '16px'
                 }}>
                   {searchParams.get('type')}
                   <span style={{
@@ -142,25 +171,52 @@ function PropertiesSearchContent() {
                   }}></span>
                 </h2>
               )}
+            </div>
 
-              <div className="is-flex is-justify-content-center is-align-items-center mt-4 mb-5">
+            <div className="is-flex is-justify-content-center is-align-items-center mt-4 mb-5">
+              <div style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '12px',
+                padding: '10px 30px',
+                background: 'rgba(197, 162, 101, 0.05)',
+                borderRadius: '50px',
+                border: '1px solid rgba(197, 162, 101, 0.2)',
+                boxShadow: '0 2px 10px rgba(0,0,0,0.03)'
+              }}>
+                <span style={{ width: '5px', height: '5px', borderRadius: '50%', backgroundColor: '#C5A265' }}></span>
                 <p style={{
-                  color: '#6B7280',
-                  fontSize: '14px',
-                  fontWeight: 400,
-                  margin: 0
+                  color: '#0D1625',
+                  fontSize: '0.95rem',
+                  fontWeight: 500,
+                  margin: 0,
+                  letterSpacing: '1px',
+                  textTransform: 'uppercase',
+                  fontFamily: '"Montserrat", sans-serif'
                 }}>
-                  {loading ? 'Loading...' : `${listings.length} ${listings.length === 1 ? 'property' : 'properties'} found`}
+                  {loading ? 'Loading...' : <><span style={{ color: '#C5A265', fontWeight: 700 }}>{listings.length}</span> {listings.length === 1 ? 'PROPERTY' : 'PROPERTIES'} FOUND</>}
                 </p>
+                <span style={{ width: '5px', height: '5px', borderRadius: '50%', backgroundColor: '#C5A265' }}></span>
               </div>
             </div>
 
             <div className="at-properties-grid">
-              {listings.map((listing, idx) => (
+              {listings.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map((listing, idx) => (
                 <div key={idx}>
                   <PropertyCard listing={listing} variant="grid" />
                 </div>
               ))}
+            </div>
+
+            <div className="container mt-6">
+              <Pagination
+                currentPage={currentPage}
+                totalPages={Math.ceil(listings.length / itemsPerPage)}
+                onPageChange={(page) => {
+                  setCurrentPage(page);
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+              />
             </div>
             {listings.length === 0 && (
               <div className="at-properties-grid">
@@ -232,7 +288,7 @@ function PropertiesSearchContent() {
           </div>
         )}
       </div>
-    </section>
+    </section >
   );
 }
 

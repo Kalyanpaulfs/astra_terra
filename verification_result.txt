@@ -1,0 +1,6 @@
+
+Total SELL (All Cities): 102
+Total SELL (City 41): 98
+Total RENT properties: 74
+Total Combined: 176
+    

@@ -13,6 +13,15 @@ export default function Navbar() {
   const [propertyTypes, setPropertyTypes] = useState<string[]>([]);
   const [regions, setRegions] = useState<Record<string, string>>({});
 
+  // Helper to format property types (APARTMENT -> Apartment)
+  const formatPropertyType = (type: string) => {
+    return type
+      .toLowerCase()
+      .split('_')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
+  };
+
   // Developer Branch State for Dropdown Logic
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [closedByClick, setClosedByClick] = useState<Set<string>>(new Set());
@@ -26,6 +35,21 @@ export default function Navbar() {
 
   // Determine if we're on homepage
   const isHomePage = pathname === '/';
+
+  // Handle hash scrolling after navigation (for cross-page anchor links)
+  useEffect(() => {
+    const hash = window.location.hash;
+    if (hash && isHomePage) {
+      // Small delay to ensure the page has rendered
+      const timer = setTimeout(() => {
+        const element = document.querySelector(hash);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [pathname, isHomePage]);
 
   // Handler to close dropdown when link is clicked - closes immediately
   const handleLinkClick = (dropdownName: string, e?: React.MouseEvent) => {
@@ -214,22 +238,22 @@ export default function Navbar() {
                                 leftColumnTypes.map((type) => (
                                   <li key={type}>
                                     <Link
-                                      href={`/properties-search?city=41&type=${encodeURIComponent(type)}&listtype=SELL`}
+                                      href={`/properties-search?type=${encodeURIComponent(type)}&listtype=SELL`}
                                       onClick={(e) => {
                                         handleLinkClick('buy', e);
                                       }}
                                     >
-                                      {type}
+                                      {formatPropertyType(type)}
                                     </Link>
                                   </li>
                                 ))
                               ) : (
                                 // Fallback loading/empty state or default items if fetch fails
                                 <>
-                                  <li><Link href="/properties-search?city=41&type=APARTMENT&listtype=SELL" onClick={(e) => { handleLinkClick('buy', e); }}>Apartment</Link></li>
-                                  <li><Link href="/properties-search?city=41&type=VILLA&listtype=SELL" onClick={(e) => { handleLinkClick('buy', e); }}>Villa</Link></li>
-                                  <li><Link href="/properties-search?city=41&type=TOWNHOUSE&listtype=SELL" onClick={(e) => { handleLinkClick('buy', e); }}>Townhouse</Link></li>
-                                  <li><Link href="/properties-search?city=41&type=PENTHOUSE&listtype=SELL" onClick={(e) => { handleLinkClick('buy', e); }}>Penthouse</Link></li>
+                                  <li><Link href="/properties-search?type=APARTMENT&listtype=SELL" onClick={(e) => { handleLinkClick('buy', e); }}>Apartment</Link></li>
+                                  <li><Link href="/properties-search?type=VILLA&listtype=SELL" onClick={(e) => { handleLinkClick('buy', e); }}>Villa</Link></li>
+                                  <li><Link href="/properties-search?type=TOWNHOUSE&listtype=SELL" onClick={(e) => { handleLinkClick('buy', e); }}>Townhouse</Link></li>
+                                  <li><Link href="/properties-search?type=PENTHOUSE&listtype=SELL" onClick={(e) => { handleLinkClick('buy', e); }}>Penthouse</Link></li>
                                 </>
                               )}
                             </ul>
@@ -240,23 +264,23 @@ export default function Navbar() {
                                 rightColumnTypes.map((type) => (
                                   <li key={type}>
                                     <Link
-                                      href={`/properties-search?city=41&type=${encodeURIComponent(type)}&listtype=SELL`}
+                                      href={`/properties-search?type=${encodeURIComponent(type)}&listtype=SELL`}
                                       onClick={(e) => {
                                         handleLinkClick('buy', e);
                                       }}
                                     >
-                                      {type}
+                                      {formatPropertyType(type)}
                                     </Link>
                                   </li>
                                 ))
                               ) : (
                                 <>
-                                  <li><Link href="/properties-search?city=41&type=HOTEL_APARTMENT&listtype=SELL" onClick={(e) => { handleLinkClick('buy', e); }}>Studio</Link></li>
-                                  <li><Link href="/properties-search?city=41&type=DUPLEX&listtype=SELL" onClick={(e) => { handleLinkClick('buy', e); }}>Duplex</Link></li>
-                                  <li><Link href="/properties-search?city=41&type=COMMERCIAL_BUILDING&listtype=SELL" onClick={(e) => { handleLinkClick('buy', e); }}>Commercial</Link></li>
+                                  <li><Link href="/properties-search?type=HOTEL_APARTMENT&listtype=SELL" onClick={(e) => { handleLinkClick('buy', e); }}>Studio</Link></li>
+                                  <li><Link href="/properties-search?type=DUPLEX&listtype=SELL" onClick={(e) => { handleLinkClick('buy', e); }}>Duplex</Link></li>
+                                  <li><Link href="/properties-search?type=COMMERCIAL_BUILDING&listtype=SELL" onClick={(e) => { handleLinkClick('buy', e); }}>Commercial</Link></li>
                                 </>
                               )}
-                              <li><Link href="/properties-search?city=41&listtype=SELL" onClick={(e) => { handleLinkClick('buy', e); }}>See All</Link></li>
+                              <li><Link href="/properties-search?listtype=SELL" onClick={(e) => { handleLinkClick('buy', e); }}>See All</Link></li>
                             </ul>
                           </div>
                         </div>
@@ -303,21 +327,21 @@ export default function Navbar() {
                                 leftColumnTypes.map((type) => (
                                   <li key={type}>
                                     <Link
-                                      href={`/properties-search?city=41&type=${encodeURIComponent(type)}&listtype=RENT`}
+                                      href={`/properties-search?type=${encodeURIComponent(type)}&listtype=RENT`}
                                       onClick={(e) => {
                                         handleLinkClick('rent', e);
                                       }}
                                     >
-                                      {type}
+                                      {formatPropertyType(type)}
                                     </Link>
                                   </li>
                                 ))
                               ) : (
                                 <>
-                                  <li><Link href="/properties-search?city=41&type=APARTMENT&listtype=RENT" onClick={(e) => { handleLinkClick('rent', e); }}>Apartment</Link></li>
-                                  <li><Link href="/properties-search?city=41&type=VILLA&listtype=RENT" onClick={(e) => { handleLinkClick('rent', e); }}>Villa</Link></li>
-                                  <li><Link href="/properties-search?city=41&type=TOWNHOUSE&listtype=RENT" onClick={(e) => { handleLinkClick('rent', e); }}>Townhouse</Link></li>
-                                  <li><Link href="/properties-search?city=41&type=PENTHOUSE&listtype=RENT" onClick={(e) => { handleLinkClick('rent', e); }}>Penthouse</Link></li>
+                                  <li><Link href="/properties-search?type=APARTMENT&listtype=RENT" onClick={(e) => { handleLinkClick('rent', e); }}>Apartment</Link></li>
+                                  <li><Link href="/properties-search?type=VILLA&listtype=RENT" onClick={(e) => { handleLinkClick('rent', e); }}>Villa</Link></li>
+                                  <li><Link href="/properties-search?type=TOWNHOUSE&listtype=RENT" onClick={(e) => { handleLinkClick('rent', e); }}>Townhouse</Link></li>
+                                  <li><Link href="/properties-search?type=PENTHOUSE&listtype=RENT" onClick={(e) => { handleLinkClick('rent', e); }}>Penthouse</Link></li>
                                 </>
                               )}
                             </ul>
@@ -328,23 +352,23 @@ export default function Navbar() {
                                 rightColumnTypes.map((type) => (
                                   <li key={type}>
                                     <Link
-                                      href={`/properties-search?city=41&type=${encodeURIComponent(type)}&listtype=RENT`}
+                                      href={`/properties-search?type=${encodeURIComponent(type)}&listtype=RENT`}
                                       onClick={(e) => {
                                         handleLinkClick('rent', e);
                                       }}
                                     >
-                                      {type}
+                                      {formatPropertyType(type)}
                                     </Link>
                                   </li>
                                 ))
                               ) : (
                                 <>
-                                  <li><Link href="/properties-search?city=41&type=HOTEL_APARTMENT&listtype=RENT" onClick={(e) => { handleLinkClick('rent', e); }}>Studio</Link></li>
-                                  <li><Link href="/properties-search?city=41&type=DUPLEX&listtype=RENT" onClick={(e) => { handleLinkClick('rent', e); }}>Duplex</Link></li>
-                                  <li><Link href="/properties-search?city=41&type=COMMERCIAL_BUILDING&listtype=RENT" onClick={(e) => { handleLinkClick('rent', e); }}>Commercial</Link></li>
+                                  <li><Link href="/properties-search?type=HOTEL_APARTMENT&listtype=RENT" onClick={(e) => { handleLinkClick('rent', e); }}>Studio</Link></li>
+                                  <li><Link href="/properties-search?type=DUPLEX&listtype=RENT" onClick={(e) => { handleLinkClick('rent', e); }}>Duplex</Link></li>
+                                  <li><Link href="/properties-search?type=COMMERCIAL_BUILDING&listtype=RENT" onClick={(e) => { handleLinkClick('rent', e); }}>Commercial</Link></li>
                                 </>
                               )}
-                              <li><Link href="/properties-search?city=41&listtype=RENT" onClick={(e) => { handleLinkClick('rent', e); }}>See All</Link></li>
+                              <li><Link href="/properties-search?listtype=RENT" onClick={(e) => { handleLinkClick('rent', e); }}>See All</Link></li>
                             </ul>
                           </div>
                         </div>
@@ -363,8 +387,8 @@ export default function Navbar() {
                 </div>
               </div>
             </li>
-            <li><a href="#listings-anchor">New Projects</a></li>
-            <li><a href="#developers-anchor">Developers</a></li>
+            <li><Link href="/properties-search?listtype=NEW">New Projects</Link></li>
+            <li><Link href="/developers">Developers</Link></li>
             <li
               onMouseEnter={() => handleMouseEnter('locations')}
               onMouseLeave={() => handleMouseLeave('locations')}
@@ -372,8 +396,7 @@ export default function Navbar() {
             >
               <a href="#">Locations</a>
               <div
-                className={`cnm-mega-dd ${activeDropdown === 'locations' ? 'is-active' : ''}`}
-                style={{ background: 'transparent', boxShadow: 'none', border: 'none', padding: 0 }}
+                className={`cnm-mega cnm-mega-right ${activeDropdown === 'locations' ? 'is-active' : ''}`}
                 onClick={(e) => {
                   // Don't close if clicking on a link (let link handle it)
                   if ((e.target as HTMLElement).tagName !== 'A') {
@@ -381,44 +404,87 @@ export default function Navbar() {
                   }
                 }}
               >
-                <ul className="dd" style={{
-                  maxHeight: '400px',
-                  overflowY: 'auto',
-                  backgroundColor: '#1A222F',
-                  width: '300px',
-                  padding: '10px 0',
-                  border: '1px solid rgba(197, 162, 101, 0.3)',
-                  boxShadow: '0 8px 30px rgba(0,0,0,0.6)'
-                }}>
-                  {Object.keys(regions).length > 0 ? (
-                    Object.entries(regions).map(([id, name]) => (
-                      <li key={id}>
-                        <Link
-                          href={`/properties-search?regionId=${id}`}
-                          style={{
-                            padding: '8px 20px',
-                            display: 'block',
-                            color: '#e0e0e0',
-                            borderBottom: '1px solid rgba(255,255,255,0.05)',
-                            fontSize: '0.95rem'
-                          }}
-                          onClick={(e) => { handleLinkClick('locations', e); }}
-                          className="hover:has-text-link"
-                        >{name}</Link>
-                      </li>
-                    ))
-                  ) : (
-                    // Fallback
-                    <>
-                      <li><Link href="/properties-search?regionId=47" style={{ padding: '8px 20px', display: 'block' }} onClick={(e) => { handleLinkClick('locations', e); }}>Downtown Dubai</Link></li>
-                      <li><Link href="/properties-search?regionId=50" style={{ padding: '8px 20px', display: 'block' }} onClick={(e) => { handleLinkClick('locations', e); }}>Dubai Marina</Link></li>
-                    </>
-                  )}
-                </ul>
+                <div className="columns">
+                  <div className="column">
+                    <div className="cnm-mega-content">
+                      <h5 className="title is-6 has-text-white">Properties by Location</h5>
+                      <div className="cnm-mc-csection">
+                        <div className="columns">
+                          <div className="column">
+                            <ul className="cnm-mc-plist" style={{ maxHeight: '350px', overflowY: 'auto' }}>
+                              {Object.keys(regions).length > 0 ? (
+                                Object.entries(regions).map(([id, name]) => (
+                                  <li key={id}>
+                                    <Link
+                                      href={`/properties-search?regionId=${id}`}
+                                      onClick={(e) => { handleLinkClick('locations', e); }}
+                                    >
+                                      {name}
+                                    </Link>
+                                  </li>
+                                ))
+                              ) : (
+                                <>
+                                  <li><Link href="/properties-search?regionId=47" onClick={(e) => { handleLinkClick('locations', e); }}>Downtown Dubai</Link></li>
+                                  <li><Link href="/properties-search?regionId=50" onClick={(e) => { handleLinkClick('locations', e); }}>Dubai Marina</Link></li>
+                                </>
+                              )}
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="column">
+                    <div className="cnm-mc-imgs">
+                      <Image src="/img/loc/bg1.jpg" alt="Locations" width={400} height={300} />
+                      <div className="snip">
+                        <h5 className="title is-6 is-white">Explore Locations</h5>
+                        <Link href="/properties-search"><button className="button is-small is-focused">View All</button></Link>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </li>
-            <li><a href="#services-anchor">Services</a></li>
+            <li>
+              <a
+                href={isHomePage ? '#services-anchor' : '/#services-anchor'}
+                onClick={(e) => {
+                  if (isHomePage) {
+                    e.preventDefault();
+                    const element = document.querySelector('#services-anchor');
+                    if (element) {
+                      element.scrollIntoView({ behavior: 'smooth' });
+                    }
+                  }
+                  // If not on home page, let the default navigation happen with the hash
+                }}
+              >
+                Services
+              </a>
+            </li>
             <li><Link href="/blogs">Blogs</Link></li>
+            <li>
+              <Link href="/list-your-property" style={{
+                color: '#C5A265',
+                border: '1px solid #C5A265',
+                padding: '8px 16px',
+                borderRadius: '4px',
+                transition: 'all 0.3s ease'
+              }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = '#C5A265';
+                  e.currentTarget.style.color = '#000';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = 'transparent';
+                  e.currentTarget.style.color = '#C5A265';
+                }}
+              >
+                List Your Property
+              </Link>
+            </li>
             <li><a href="#why-choose-us">Why Us</a></li>
             <li
               onMouseEnter={() => handleMouseEnter('more')}
@@ -427,7 +493,7 @@ export default function Navbar() {
             >
               <a href="#">More</a>
               <div
-                className={`cnm-mega-dd ${activeDropdown === 'more' ? 'is-active' : ''}`}
+                className={`cnm-mega cnm-mega-right ${activeDropdown === 'more' ? 'is-active' : ''}`}
                 onClick={(e) => {
                   // Don't close if clicking on a link (let link handle it)
                   if ((e.target as HTMLElement).tagName !== 'A') {
@@ -435,10 +501,32 @@ export default function Navbar() {
                   }
                 }}
               >
-                <ul className="dd">
-                  <li><a href="#about-us-anchor" onClick={(e) => { handleLinkClick('more', e); }}>About</a></li>
-                  <li><a href="#contact-us-anchor" onClick={(e) => { handleLinkClick('more', e); }}>Get In Touch</a></li>
-                </ul>
+                <div className="columns">
+                  <div className="column">
+                    <div className="cnm-mega-content">
+                      <h5 className="title is-6 has-text-white">Learn More</h5>
+                      <div className="cnm-mc-csection">
+                        <div className="columns">
+                          <div className="column">
+                            <ul className="cnm-mc-plist">
+                              <li><a href="#about-us-anchor" onClick={(e) => { handleLinkClick('more', e); }}>About Us</a></li>
+                              <li><a href="#contact-us-anchor" onClick={(e) => { handleLinkClick('more', e); }}>Get In Touch</a></li>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="column">
+                    <div className="cnm-mc-imgs">
+                      <Image src="/img/loc/bg2.jpg" alt="Contact" width={400} height={300} />
+                      <div className="snip">
+                        <h5 className="title is-6 is-white">Get In Touch</h5>
+                        <Link href="#contact-us-anchor"><button className="button is-small is-focused">Contact Us</button></Link>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </li>
           </ul>

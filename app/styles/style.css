@@ -2943,3 +2943,575 @@ pre {
 		grid-template-columns: 1fr;
 	}
 }
+
+/* ========================================
+   DEVELOPERS PAGE STYLES
+   ======================================== */
+
+/* Developers Page Container */
+.at-developers-page {
+	min-height: 100vh;
+	background-color: #0D1625;
+	padding: 70px 2rem 60px;
+}
+
+/* Developers Page Header */
+.at-dp-header {
+	text-align: center;
+	margin-bottom: 32px;
+}
+
+.at-dp-header h1 {
+	font-family: 'Playfair Display', serif;
+	font-size: 3.5rem;
+	color: #C5A265;
+	margin-bottom: 16px;
+	letter-spacing: -0.5px;
+}
+
+.at-dp-header p {
+	color: #b0b0b0;
+	font-size: 1.25rem;
+	max-width: 600px;
+	margin: 0 auto;
+	line-height: 1.6;
+}
+
+/* Search Bar */
+.at-dp-search {
+	max-width: 600px;
+	margin: 0 auto 40px;
+	text-align: center;
+}
+
+.at-dp-search-wrapper {
+	position: relative;
+	display: flex;
+	align-items: center;
+	background: rgba(255, 255, 255, 0.05);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	border-radius: 50px;
+	padding: 0 20px;
+	transition: all 0.3s ease;
+}
+
+.at-dp-search-wrapper:focus-within {
+	background: rgba(255, 255, 255, 0.08);
+	border-color: rgba(197, 162, 101, 0.4);
+	box-shadow: 0 0 0 4px rgba(197, 162, 101, 0.1);
+}
+
+.at-dp-search-wrapper i {
+	color: #C5A265;
+	font-size: 1.2rem;
+	margin-right: 12px;
+}
+
+.at-dp-search-input {
+	flex: 1;
+	background: transparent;
+	border: none;
+	outline: none;
+	color: #ffffff;
+	font-size: 1rem;
+	padding: 16px 0;
+}
+
+.at-dp-search-input::placeholder {
+	color: rgba(255, 255, 255, 0.4);
+}
+
+.at-dp-search-clear {
+	background: rgba(255, 255, 255, 0.1);
+	border: none;
+	width: 28px;
+	height: 28px;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	transition: all 0.2s ease;
+	color: #a0a0a0;
+}
+
+.at-dp-search-clear:hover {
+	background: rgba(197, 162, 101, 0.3);
+	color: #C5A265;
+}
+
+.at-dp-results-count {
+	color: #a0a0a0;
+	font-size: 0.9rem;
+	margin-top: 12px;
+}
+
+/* Clear Search Button */
+.at-dp-clear-btn {
+	margin-top: 20px;
+	padding: 12px 28px;
+	background: transparent;
+	border: 1px solid #C5A265;
+	border-radius: 50px;
+	color: #C5A265;
+	font-size: 0.9rem;
+	cursor: pointer;
+	transition: all 0.2s ease;
+}
+
+.at-dp-clear-btn:hover {
+	background: #C5A265;
+	color: #0D1625;
+}
+
+/* Pagination Container */
+.at-dp-pagination {
+	margin-top: 48px;
+	padding-top: 32px;
+	border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* Developers Grid */
+.at-dp-grid {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	gap: 24px;
+	max-width: 1400px;
+	margin: 0 auto;
+}
+
+@media only screen and (max-width: 1200px) {
+	.at-dp-grid {
+		grid-template-columns: repeat(3, 1fr);
+	}
+}
+
+@media only screen and (max-width: 900px) {
+	.at-dp-grid {
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
+
+@media only screen and (max-width: 600px) {
+	.at-dp-grid {
+		grid-template-columns: 1fr;
+	}
+
+	.at-developers-page {
+		padding: 100px 1rem 40px;
+	}
+
+	.at-dp-header h1 {
+		font-size: 2.2rem;
+	}
+
+	.at-dp-header p {
+		font-size: 1rem;
+	}
+
+	.at-dp-search {
+		margin-bottom: 32px;
+	}
+
+	.at-dp-search-input {
+		font-size: 0.95rem;
+		padding: 14px 0;
+	}
+}
+
+/* Developer Card */
+.at-developer-card {
+	display: flex;
+	flex-direction: column;
+	background: rgba(255, 255, 255, 0.03);
+	border: 1px solid rgba(255, 255, 255, 0.08);
+	border-radius: 12px;
+	padding: 24px;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	text-decoration: none;
+}
+
+.at-developer-card:hover {
+	background: rgba(197, 162, 101, 0.05);
+	border-color: rgba(197, 162, 101, 0.3);
+	transform: translateY(-4px);
+	box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+}
+
+.at-dc-logo {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 100px;
+	margin-bottom: 16px;
+	background: rgba(255, 255, 255, 0.95);
+	border-radius: 8px;
+	padding: 16px;
+}
+
+.at-dc-logo img {
+	max-width: 100%;
+	max-height: 100%;
+	object-fit: contain;
+}
+
+.at-dc-placeholder {
+	width: 80px;
+	height: 80px;
+	background: linear-gradient(135deg, #C5A265 0%, #94774B 100%);
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.at-dc-placeholder span {
+	font-size: 2rem;
+	font-weight: 700;
+	color: #0D1625;
+	font-family: 'Playfair Display', serif;
+}
+
+.at-dc-info {
+	text-align: center;
+}
+
+.at-dc-name {
+	font-size: 1.1rem;
+	font-weight: 600;
+	color: #ffffff;
+	margin: 0 0 12px 0;
+}
+
+.at-dc-counts {
+	display: flex;
+	justify-content: center;
+	gap: 16px;
+	flex-wrap: wrap;
+}
+
+.at-dc-count {
+	font-size: 0.85rem;
+	color: #a0a0a0;
+}
+
+.at-dc-count strong {
+	color: #C5A265;
+	font-weight: 500;
+	margin-right: 4px;
+}
+
+/* Developer Card Skeleton */
+.at-dc-skeleton {
+	pointer-events: none;
+}
+
+.at-dc-skeleton .at-dc-logo {
+	background: rgba(255, 255, 255, 0.05);
+}
+
+/* Empty State */
+.at-dp-empty {
+	text-align: center;
+	padding: 80px 20px;
+	color: #ffffff;
+}
+
+.at-dp-empty h3 {
+	font-family: 'Playfair Display', serif;
+	font-size: 1.5rem;
+	margin-bottom: 8px;
+}
+
+.at-dp-empty p {
+	color: #a0a0a0;
+}
+
+/* ========================================
+   DEVELOPER DETAIL PAGE STYLES
+   ======================================== */
+
+.at-developer-detail-page {
+	min-height: 100vh;
+	background-color: #0D1625;
+	padding: 120px 2rem 60px;
+}
+
+/* Detail Page Header */
+.at-ddp-header {
+	text-align: center;
+	margin-bottom: 32px;
+	max-width: 800px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.at-ddp-back {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	color: #C5A265;
+	text-decoration: none;
+	font-size: 0.9rem;
+	margin-bottom: 16px;
+	transition: color 0.2s ease;
+}
+
+.at-ddp-back:hover {
+	color: #DEC993;
+}
+
+.at-ddp-header h1 {
+	font-family: 'Playfair Display', serif;
+	font-size: 2rem;
+	color: #C5A265;
+	margin-bottom: 8px;
+}
+
+.at-ddp-header p {
+	color: #a0a0a0;
+	font-size: 0.95rem;
+}
+
+/* Filter Tabs */
+.at-ddp-tabs {
+	display: flex;
+	justify-content: center;
+	gap: 12px;
+	margin-bottom: 40px;
+	flex-wrap: wrap;
+}
+
+.at-ddp-tab {
+	padding: 12px 24px;
+	background: rgba(255, 255, 255, 0.05);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	border-radius: 50px;
+	color: #a0a0a0;
+	font-size: 0.9rem;
+	font-weight: 500;
+	cursor: pointer;
+	transition: all 0.2s ease;
+}
+
+.at-ddp-tab:hover {
+	background: rgba(197, 162, 101, 0.1);
+	border-color: rgba(197, 162, 101, 0.3);
+	color: #C5A265;
+}
+
+.at-ddp-tab.active {
+	background: linear-gradient(135deg, #C5A265 0%, #94774B 100%);
+	border-color: #C5A265;
+	color: #0D1625;
+	font-weight: 600;
+}
+
+/* Detail Page Empty State */
+.at-ddp-empty {
+	text-align: center;
+	padding: 80px 20px;
+	color: #ffffff;
+}
+
+.at-ddp-empty h3 {
+	font-family: 'Playfair Display', serif;
+	font-size: 1.5rem;
+	margin-bottom: 8px;
+}
+
+.at-ddp-empty p {
+	color: #a0a0a0;
+}
+
+/* Skeleton Pulse Animation */
+.skeleton-pulse {
+	background: linear-gradient(90deg,
+			rgba(255, 255, 255, 0.05) 25%,
+			rgba(255, 255, 255, 0.1) 50%,
+			rgba(255, 255, 255, 0.05) 75%);
+	background-size: 200% 100%;
+	animation: skeleton-pulse 1.5s infinite;
+	border-radius: 4px;
+}
+
+@keyframes skeleton-pulse {
+	0% {
+		background-position: 200% 0;
+	}
+
+	100% {
+		background-position: -200% 0;
+	}
+}
+
+/* Mobile Adjustments for Detail Page */
+@media only screen and (max-width: 768px) {
+	.at-developer-detail-page {
+		padding: 100px 1rem 40px;
+	}
+
+	.at-ddp-header h1 {
+		font-size: 1.5rem;
+	}
+
+	.at-ddp-tabs {
+		gap: 8px;
+	}
+
+	.at-ddp-tab {
+		padding: 10px 16px;
+		font-size: 0.85rem;
+	}
+}
+
+/* ========================================
+   LOADING INDICATOR STYLES
+   ======================================== */
+
+/* Loading indicator in header */
+.at-ddp-loading-indicator {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 12px;
+	margin-top: 20px;
+}
+
+.at-ddp-loading-indicator p {
+	color: #a0a0a0;
+	font-size: 0.9rem;
+	margin: 0;
+}
+
+/* Spinner */
+.at-ddp-spinner {
+	width: 40px;
+	height: 40px;
+	border: 3px solid rgba(197, 162, 101, 0.2);
+	border-top-color: #C5A265;
+	border-radius: 50%;
+	animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+/* Skeleton tab */
+.at-ddp-tab-skeleton {
+	width: 100px;
+	height: 44px;
+	border-radius: 50px;
+}
+
+/* ========================================
+   ENHANCED DEVELOPER CARD LOGO STYLING
+   ======================================== */
+
+/* Premium logo container - light, clean, airy */
+.at-dc-logo {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 100px;
+	margin-bottom: 16px;
+	background: linear-gradient(145deg, #ffffff 0%, #f8f8f8 100%);
+	border-radius: 10px;
+	padding: 20px;
+	border: 1px solid rgba(0, 0, 0, 0.04);
+	box-shadow:
+		inset 0 1px 0 rgba(255, 255, 255, 0.8),
+		0 2px 8px rgba(0, 0, 0, 0.04);
+	transition: all 0.3s ease;
+}
+
+.at-developer-card:hover .at-dc-logo {
+	background: linear-gradient(145deg, #ffffff 0%, #fafafa 100%);
+	box-shadow:
+		inset 0 1px 0 rgba(255, 255, 255, 1),
+		0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.at-dc-logo img {
+	max-width: 100%;
+	max-height: 100%;
+	object-fit: contain;
+	filter: none;
+	opacity: 1;
+}
+
+/* Placeholder styling - for developers without logos */
+.at-dc-placeholder {
+	width: 70px;
+	height: 70px;
+	background: linear-gradient(135deg, #C5A265 0%, #B8956A 100%);
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	box-shadow: 0 4px 12px rgba(197, 162, 101, 0.3);
+}
+
+.at-dc-placeholder span {
+	font-size: 1.8rem;
+	font-weight: 700;
+	color: #ffffff;
+	font-family: 'Playfair Display', serif;
+	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Card enhancements */
+.at-developer-card {
+	display: flex;
+	flex-direction: column;
+	background: rgba(255, 255, 255, 0.02);
+	border: 1px solid rgba(255, 255, 255, 0.06);
+	border-radius: 16px;
+	padding: 20px;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	text-decoration: none;
+}
+
+.at-developer-card:hover {
+	background: rgba(255, 255, 255, 0.04);
+	border-color: rgba(197, 162, 101, 0.25);
+	transform: translateY(-6px);
+	box-shadow:
+		0 20px 40px rgba(0, 0, 0, 0.2),
+		0 0 0 1px rgba(197, 162, 101, 0.1);
+}
+
+/* Developer name styling */
+.at-dc-name {
+	font-size: 1rem;
+	font-weight: 600;
+	color: #ffffff;
+	margin: 0 0 10px 0;
+	text-align: center;
+}
+
+/* Counts styling */
+.at-dc-counts {
+	display: flex;
+	justify-content: center;
+	gap: 12px;
+	flex-wrap: wrap;
+}
+
+.at-dc-count {
+	font-size: 0.8rem;
+	color: rgba(255, 255, 255, 0.6);
+	display: flex;
+	align-items: center;
+	gap: 4px;
+}
+
+.at-dc-count strong {
+	color: #C5A265;
+	font-weight: 600;
+}

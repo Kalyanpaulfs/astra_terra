@@ -72,10 +72,10 @@ export default function Footer() {
           <div className="atf-link-col">
             <div className="atfl-title">OFF PLAN</div>
             <ul className="atfl">
-              <li><Link href="#">New Projects</Link></li>
+              <li><Link href="/properties-search?listtype=NEW">New Projects</Link></li>
               <li><Link href="#">Guide to Buying</Link></li>
               <li><Link href="#">Communities in Dubai</Link></li>
-              <li><Link href="#">Developers in Dubai</Link></li>
+              <li><Link href="/developers">Developers in Dubai</Link></li>
               <li><Link href="#">Branded Residences</Link></li>
             </ul>
           </div>
@@ -114,7 +114,7 @@ export default function Footer() {
               <li><Link href="#">Agents</Link></li>
               <li><Link href="#">Careers</Link></li>
               <li><Link href="#">Services</Link></li>
-              <li><Link href="#">Developers</Link></li>
+              <li><Link href="/developers">Developers</Link></li>
             </ul>
           </div>
         </div>

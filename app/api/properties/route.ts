@@ -105,6 +105,93 @@ export async function GET(request: NextRequest) {
       return NextResponse.json(meta);
     }
 
+    if (action === 'developers') {
+      // Get developers with property counts
+      const cacheKey = 'pixxi.developers';
+      const cached = getCached(cacheKey);
+      if (cached) {
+        return NextResponse.json(cached);
+      }
+
+      const response = await fetch(PIXXI_API_URL, {
+        method: 'POST',
+        headers: {
+          'X-PIXXI-TOKEN': token,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ size: 1000, status: 'ACTIVE' }),
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Pixxi API error:', response.status, errorText);
+        return NextResponse.json(
+          { error: 'Failed to fetch developers', details: errorText },
+          { status: response.status }
+        );
+      }
+
+      const data = await response.json();
+      const listings = data?.data?.list || [];
+
+      // Log first listing to see developer field names
+      if (listings.length > 0) {
+        console.log('[DEVELOPERS] First listing developer fields:', {
+          developer: listings[0].developer,
+          developerName: listings[0].developerName,
+          developerLogo: listings[0].developerLogo,
+          listingType: listings[0].listingType,
+        });
+      }
+
+      // Extract developers and count properties by type
+      const developerMap = new Map<string, { name: string; logo: string; counts: { new: number; sell: number; rent: number } }>();
+
+      listings.forEach((listing: any) => {
+        // Try different possible field names for developer
+        const developerName = listing.developer || listing.developerName || listing.developerCompany || '';
+        const developerLogo = listing.developerLogo || listing.developerImage || '';
+        const listingType = (listing.listingType || '').toUpperCase();
+
+        if (!developerName) return;
+
+        if (!developerMap.has(developerName)) {
+          developerMap.set(developerName, {
+            name: developerName,
+            logo: developerLogo,
+            counts: { new: 0, sell: 0, rent: 0 }
+          });
+        }
+
+        const dev = developerMap.get(developerName)!;
+
+        // Update logo if we find one and don't have one yet
+        if (developerLogo && !dev.logo) {
+          dev.logo = developerLogo;
+        }
+
+        // Count by listing type
+        if (listingType === 'NEW' || listingType === 'OFF_PLAN') {
+          dev.counts.new++;
+        } else if (listingType === 'SELL' || listingType === 'SALE') {
+          dev.counts.sell++;
+        } else if (listingType === 'RENT') {
+          dev.counts.rent++;
+        }
+      });
+
+      // Convert to array and sort by total properties
+      const developers = Array.from(developerMap.values())
+        .sort((a, b) => {
+          const totalA = a.counts.new + a.counts.sell + a.counts.rent;
+          const totalB = b.counts.new + b.counts.sell + b.counts.rent;
+          return totalB - totalA;
+        });
+
+      setCache(cacheKey, { developers });
+      return NextResponse.json({ developers });
+    }
+
     // Get property listings
     const city = searchParams.get('city');
     const type = searchParams.get('type');
