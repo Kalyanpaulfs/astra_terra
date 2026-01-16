@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 export default function ServicesSection() {
     const sectionRef = useRef<HTMLElement>(null);
     const [visibleCards, setVisibleCards] = useState<number>(0);
+    const [scrollOffset, setScrollOffset] = useState<number>(0);
 
     const cards = [
         {
@@ -76,6 +77,24 @@ export default function ServicesSection() {
             }
 
             setVisibleCards(count);
+
+            // Calculate scroll offset for the second row (cards 4, 5, 6)
+            // When cards 4+ start appearing, we need to shift the content up
+            // This offset smoothly transitions from 0 to ~120px as we reveal the second row
+            let offset = 0;
+            if (count >= 4) {
+                // Once 4th card appears, start shifting up
+                // Calculate how many cards into the second row we are (0-3)
+                const secondRowProgress = Math.min((count - 3) / 3, 1);
+                offset = secondRowProgress * 100; // Max 100px shift
+            } else if (count === 3) {
+                // Start the transition slightly earlier for smoother feel
+                const transitionProgress = (progress * (totalCards + 1)) - 3;
+                if (transitionProgress > 0) {
+                    offset = Math.min(transitionProgress * 80, 30); // Subtle early shift
+                }
+            }
+            setScrollOffset(offset);
         };
 
         window.addEventListener('scroll', handleScroll);
@@ -101,13 +120,25 @@ export default function ServicesSection() {
                     minHeight: '100vh',
                     display: 'flex',
                     alignItems: 'center',
-                    justifyContent: 'center'
+                    justifyContent: 'center',
+                    overflow: 'hidden'
                 }}
             >
                 {/* Reuse existing services-section styling for logic transparency, 
                     but we need to override the padding/margins to fit perfectly in 100vh 
                 */}
-                <div className="services-section" style={{ height: '100%', width: '100%', padding: '0', display: 'flex', alignItems: 'center' }}>
+                <div
+                    className="services-section"
+                    style={{
+                        height: '100%',
+                        width: '100%',
+                        padding: '0',
+                        display: 'flex',
+                        alignItems: 'center',
+                        transform: `translateY(-${scrollOffset}px)`,
+                        transition: 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
+                    }}
+                >
 
                     {/* Background elements are in CSS via .services-section::before/after */}
 

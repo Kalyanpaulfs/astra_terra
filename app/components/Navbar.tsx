@@ -479,25 +479,9 @@ export default function Navbar() {
               </a>
             </li>
             <li><Link href="/blogs">Blogs</Link></li>
-            <li>
-              <Link href="/list-your-property" style={{
-                color: '#C5A265',
-                border: '1px solid #C5A265',
-                padding: '8px 16px',
-                borderRadius: '4px',
-                transition: 'all 0.3s ease'
-              }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = '#C5A265';
-                  e.currentTarget.style.color = '#000';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = 'transparent';
-                  e.currentTarget.style.color = '#C5A265';
-                }}
-              >
-                List Your Property
-              </Link>
+            <li className="nav-cta-item"><Link href="/list-your-property" className="nav-cta-button">
+              List Your Property
+            </Link>
             </li>
             <li><a href="#why-choose-us">Why us ?</a></li>
             <li
