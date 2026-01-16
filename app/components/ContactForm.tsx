@@ -74,10 +74,7 @@ export default function ContactForm() {
   };
 
   return (
-    <div className="contact-us-form-card">
-      <div className="atf-header contact-us-form-header">
-        <div className="atfh-header">Send us a Message</div>
-      </div>
+    <>
       {submitStatus && (
         <div className={`notification ${submitStatus.type === 'success' ? 'is-success' : 'is-danger'}`}>
           {submitStatus.message}
@@ -189,6 +186,6 @@ export default function ContactForm() {
           </button>
         </div>
       </form>
-    </div>
+    </>
   );
 }
