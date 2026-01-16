@@ -452,6 +452,38 @@
     color: #DEC993;
 }
 
+/* List Your Property - Premium Gold CTA in Mobile Nav */
+.mnm2-links li.list-property-mobile {
+    margin-top: 15px;
+    margin-bottom: 5px;
+    border-bottom: none;
+}
+
+.mnm2-links li.list-property-mobile .list-property-link {
+    background: linear-gradient(135deg, rgba(222, 201, 147, 0.15) 0%, rgba(148, 119, 75, 0.15) 100%);
+    border: 1px solid #C5A265;
+    border-radius: 10px;
+    padding: 16px 15px;
+    color: #DEC993;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+}
+
+.mnm2-links li.list-property-mobile .list-property-link:hover {
+    background: linear-gradient(135deg, #DEC993 0%, #94774B 100%);
+    color: #0D1625;
+}
+
+.mnm2-links li.list-property-mobile .list-property-link i {
+    color: #DEC993;
+    transition: color 0.3s ease;
+}
+
+.mnm2-links li.list-property-mobile .list-property-link:hover i {
+    color: #0D1625;
+}
+
 .mnm-footer {
     padding: 30px 20px;
     border-top: 1px solid rgba(255, 255, 255, 0.05);
@@ -719,15 +751,61 @@
 }
 
 /* SERVICES SECTION STYLES */
+
+/* Premium Background Wrapper */
+.services-section {
+    position: relative;
+    overflow: hidden;
+    padding: 20px 0;
+}
+
+/* Premium Background - Luxury Penthouse Interior */
+.services-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('/img/services-bg.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    filter: blur(4px);
+    z-index: 0;
+}
+
+/* Light Dark Overlay */
+.services-section::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(180deg,
+            rgba(13, 22, 37, 0.70) 0%,
+            rgba(13, 22, 37, 0.65) 50%,
+            rgba(13, 22, 37, 0.75) 100%);
+    z-index: 1;
+}
+
 .services-container {
-    padding: 60px 20px 20px 20px;
+    position: relative;
+    z-index: 2;
+    padding: 70px 10px 10px 10px;
+    /* Reduced top padding further */
     max-width: 1368px;
     margin: 0 auto;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
 }
 
 .atsv-header {
     text-align: center;
-    margin-bottom: 50px;
+    margin-bottom: 25px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -735,9 +813,10 @@
 
 .atsvh-title {
     font-family: 'Playfair Display', serif;
-    font-size: 48px;
+    font-size: 32px;
+    /* Smaller title */
     color: white;
-    margin-bottom: 15px;
+    margin-bottom: 5px;
 }
 
 .atsvh-hl {
@@ -750,48 +829,79 @@
 
 .atsvh-txt {
     color: #ccc;
-    font-size: 22px;
+    font-size: 16px;
     max-width: 600px;
-    line-height: 1.6;
+    line-height: 1.4;
 }
 
 .services-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 30px;
-    padding: 0 10px;
+    gap: 12px;
+    padding: 0 5px;
 }
 
 .atsv-card {
-    background: #262e3b;
-    /* Matching Dark Theme */
-    padding: 40px 30px;
+    background: rgba(38, 46, 59, 0.9);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    padding: 15px 12px;
     border-radius: 12px;
     text-align: center;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.6s ease, box-shadow 0.3s ease, border-color 0.3s ease;
     height: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
+    /* Initial state - hidden */
+    opacity: 0;
+    transform: translateY(60px) scale(0.95);
+}
+
+.atsv-card.visible-scroll {
+    opacity: 1;
+    transform: translateY(0) scale(1);
 }
 
 .atsv-card:hover {
-    transform: translateY(-10px);
+    /* Hover effect needs to work on top of visible state */
+    transform: translateY(-10px) scale(1.02);
     box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
     border-color: #DEC993;
 }
 
+/* Mobile Overrides for Scroll Logic */
+@media screen and (max-width: 1024px) {
+    .services-section-wrapper {
+        height: auto !important;
+    }
+
+    .services-section-sticky {
+        position: relative !important;
+        height: auto !important;
+        overflow: visible !important;
+    }
+
+    /* On mobile, show all cards immediately or use simple scroll trigger */
+    .atsv-card {
+        opacity: 1 !important;
+        transform: none !important;
+    }
+}
+
+
+
 .atsvc-icon {
-    width: 80px;
-    height: 80px;
+    width: 45px;
+    height: 45px;
     background: rgba(222, 201, 147, 0.1);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 25px;
+    margin-bottom: 8px;
     transition: background 0.3s ease;
 }
 
@@ -800,16 +910,16 @@
 }
 
 .atsvc-icon i {
-    font-size: 40px;
+    font-size: 24px;
     color: #DEC993;
 }
 
 .atsv-card h5 {
     font-family: 'Montserrat', sans-serif;
-    font-size: 20px;
+    font-size: 16px;
     font-weight: 700;
     color: white;
-    margin: 0 0 15px 0;
+    margin: 0 0 8px 0;
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
@@ -840,12 +950,45 @@
 
 /* WHY CHOOSE US SECTION */
 .why-us-section {
-    padding: 10px 0 80px 0;
-    background-color: #0D1625;
+    padding: 80px 0;
+    position: relative;
     overflow: hidden;
 }
 
+/* Premium Background - Property Deal Handshake */
+.why-us-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('/img/why-choose-us-bg.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    filter: blur(4px);
+    z-index: 0;
+}
+
+/* Lighter Gradient Overlay */
+.why-us-section::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(180deg,
+            rgba(13, 22, 37, 0.65) 0%,
+            rgba(13, 22, 37, 0.60) 50%,
+            rgba(13, 22, 37, 0.70) 100%);
+    z-index: 1;
+}
+
 .why-us-section .services-container {
+    position: relative;
+    z-index: 2;
     padding-top: 20px !important;
 }
 
@@ -859,54 +1002,103 @@
     max-width: 700px !important;
 }
 
+/* Stacked Cards Container */
 .testimonials-wrapper {
     position: relative;
     width: 100%;
-    margin-top: 50px;
-    overflow: hidden;
-    /* Gradient mask to hide partial cards at edges */
-    -webkit-mask-image: linear-gradient(to right,
-            transparent 0%,
-            black 5%,
-            black 95%,
-            transparent 100%);
-    mask-image: linear-gradient(to right,
-            transparent 0%,
-            black 5%,
-            black 95%,
-            transparent 100%);
+    max-width: 600px;
+    margin: 50px auto 0;
+    height: 320px;
+    perspective: 1000px;
 }
 
-.testimonials-track {
-    display: flex;
-    width: 100%;
-    /* Transition handled in inline style for dynamics, or here provided class is toggled */
-    transition: transform 0.8s ease-in-out;
-    will-change: transform;
-}
-
-/* Keyframes removed */
-
+/* Individual Card Base Styles */
 .testimonial-card {
-    flex: 0 0 33.3333%;
-    max-width: 33.3333%;
-    padding: 0 15px;
-    /* Spacing */
-    box-sizing: border-box;
-    flex-shrink: 0;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 520px;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.testimonial-card.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Card Stacking Positions - Complete Overlap */
+.testimonial-card.stack-0 {
+    z-index: 10;
+    transform: translateX(-50%) translateY(0) rotate(0deg) scale(1);
+    opacity: 1;
+}
+
+/* Hide all cards behind the active one */
+.testimonial-card.stack-1,
+.testimonial-card.stack-2,
+.testimonial-card.stack-3 {
+    z-index: 5;
+    transform: translateX(-50%) translateY(0) rotate(0deg) scale(1);
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Entry Animations */
+@keyframes slideFromLeft {
+    0% {
+        transform: translateX(-150%) translateY(0) rotate(-3deg) scale(0.9);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translateX(-50%) translateY(0) rotate(0deg) scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes slideFromRight {
+    0% {
+        transform: translateX(50%) translateY(0) rotate(3deg) scale(0.9);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translateX(-50%) translateY(0) rotate(0deg) scale(1);
+        opacity: 1;
+    }
+}
+
+.testimonial-card.entering-left {
+    animation: slideFromLeft 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.testimonial-card.entering-right {
+    animation: slideFromRight 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* Remove old track styles - no longer needed */
+.testimonials-track {
+    display: contents;
 }
 
 .testimonial-content {
     height: 100%;
-    /* Equal height */
-    background: #262e3b;
+    background: rgba(38, 46, 59, 0.95);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     padding: 30px;
-    border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    border: 1px solid rgba(222, 201, 147, 0.2);
     border-top: 3px solid #DEC993;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4),
+        0 0 30px rgba(13, 22, 37, 0.3);
     transition: transform 0.3s ease, border-color 0.3s ease;
 }
 
@@ -914,10 +1106,6 @@
     transform: translateY(-5px);
     border-color: #DEC993;
 }
-
-/* Removed original .testimonial-card styles that conflict */
-
-/* Old hover moved to .testimonial-content */
 
 .testimonial-rating {
     display: flex;
@@ -935,9 +1123,9 @@
 }
 
 .testimonial-text {
-    color: #ccc;
-    font-size: 14px;
-    line-height: 1.6;
+    color: #e0e0e0;
+    font-size: 15px;
+    line-height: 1.7;
     margin-bottom: 20px;
     font-style: italic;
 }
@@ -954,17 +1142,47 @@
     font-size: 15px;
 }
 
+/* Google Review Badge */
+.google-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.6);
+    margin-left: auto;
+}
+
+.google-badge i {
+    color: #4285F4;
+}
+
 /* MOBILE ADJUSTMENTS FOR WHY US */
 @media screen and (max-width: 768px) {
-    .testimonial-card {
-        flex: 0 0 100%;
+    .testimonials-wrapper {
         max-width: 100%;
         padding: 0 20px;
+        height: 350px;
+    }
+
+    .testimonial-card {
+        max-width: 100%;
+    }
+
+    .testimonial-card.stack-1,
+    .testimonial-card.stack-2,
+    .testimonial-card.stack-3 {
+        display: none;
     }
 
     .why-us-section {
         padding: 60px 0;
     }
 
-    /* Animation duration removal */
+    .testimonial-content {
+        padding: 25px;
+    }
+
+    .testimonial-text {
+        font-size: 14px;
+    }
 }

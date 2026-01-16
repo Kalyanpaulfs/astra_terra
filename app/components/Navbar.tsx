@@ -12,6 +12,20 @@ export default function Navbar() {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [propertyTypes, setPropertyTypes] = useState<string[]>([]);
   const [regions, setRegions] = useState<Record<string, string>>({});
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  // Scroll detection for sticky navbar transition
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY;
+      setIsScrolled(scrollTop > 50);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll(); // Check initial scroll position
+
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   // Helper to format property types (APARTMENT -> Apartment)
   const formatPropertyType = (type: string) => {
@@ -203,7 +217,7 @@ export default function Navbar() {
         propertyTypes={propertyTypes}
         regions={regions}
       />
-      <div className={`custom-navbar ${isHomePage ? 'navbar-home' : 'navbar-other'}`}>
+      <div className={`custom-navbar ${isHomePage ? 'navbar-home' : 'navbar-other'}${isScrolled ? ' navbar-scrolled' : ''}`}>
         <div className="custom-navbar-nav">
           <Link href="/">
             <Image
@@ -485,7 +499,7 @@ export default function Navbar() {
                 List Your Property
               </Link>
             </li>
-            <li><a href="#why-choose-us">Why Us</a></li>
+            <li><a href="#why-choose-us">Why us ?</a></li>
             <li
               onMouseEnter={() => handleMouseEnter('more')}
               onMouseLeave={() => handleMouseLeave('more')}

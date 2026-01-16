@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 const reviews = [
     {
@@ -33,101 +33,103 @@ const reviews = [
     }
 ];
 
-// Duplicate reviews to create a seamless infinite loop
-const infiniteReviews = [...reviews, ...reviews];
-
 export default function WhyChooseUs() {
-    const [currentIndex, setCurrentIndex] = React.useState(0);
-    const [itemsToShow, setItemsToShow] = React.useState(3);
-    const [isTransitioning, setIsTransitioning] = React.useState(true);
+    const [activeIndex, setActiveIndex] = useState(0);
+    const [animationClass, setAnimationClass] = useState('entering-left');
+    const [isAnimating, setIsAnimating] = useState(false);
 
-    // Duplicate arrays to facilitate seamless infinite loop
-    const extendedReviews = [...reviews, ...reviews, ...reviews];
-    const totalOriginal = reviews.length;
+    // Function to get the stack position for a card relative to active
+    const getStackPosition = useCallback((index: number) => {
+        const diff = (index - activeIndex + reviews.length) % reviews.length;
+        if (diff === 0) return 0; // Active card
+        if (diff === 1 || diff === reviews.length - 1) return 1;
+        if (diff === 2 || diff === reviews.length - 2) return 2;
+        if (diff === 3 || diff === reviews.length - 3) return 3;
+        return -1; // Hidden
+    }, [activeIndex]);
 
-    // Responsive items count
-    React.useEffect(() => {
-        const handleResize = () => {
-            if (window.innerWidth < 768) {
-                setItemsToShow(1);
-            } else {
-                setItemsToShow(3);
+    // Auto-advance cards
+    useEffect(() => {
+        const interval = setInterval(() => {
+            if (!isAnimating) {
+                setIsAnimating(true);
+                // Alternate entry direction
+                const nextIndex = (activeIndex + 1) % reviews.length;
+                setAnimationClass(nextIndex % 2 === 0 ? 'entering-left' : 'entering-right');
+
+                // Small delay for animation to start
+                setTimeout(() => {
+                    setActiveIndex(nextIndex);
+                    // Reset animating state after animation completes
+                    setTimeout(() => {
+                        setIsAnimating(false);
+                    }, 1200); // Match animation duration
+                }, 50);
             }
-        };
+        }, 4000); // 4 seconds between cards
 
-        // Initial call
-        handleResize();
-
-        window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
-    }, []);
-
-    const nextSlide = React.useCallback(() => {
-        // Move forward by the number of visible items
-        setCurrentIndex(prev => prev + itemsToShow);
-        setIsTransitioning(true);
-    }, [itemsToShow]);
-
-    // Auto-rotation
-    React.useEffect(() => {
-        const interval = setInterval(nextSlide, 4000); // 4 seconds
         return () => clearInterval(interval);
-    }, [nextSlide]);
+    }, [activeIndex, isAnimating]);
 
-    // Handle the infinite loop reset
-    const handleTransitionEnd = () => {
-        // If we have scrolled past the second set (safe buffer point), reset instantly to first set
-        // The effective index range for the "middle" set is [totalOriginal, 2*totalOriginal)
-        // If current index is high enough, we shift back by totalOriginal len to keep in sync
-        if (currentIndex >= totalOriginal * 2) {
-            setIsTransitioning(false);
-            setCurrentIndex(prev => prev - totalOriginal);
-            // React will process this state update. 
-            // We need to ensure transition is re-enabled in next frame if we want to continue animating later
-            // But since next move happens on timer, just setting state is enough?
-            // No, if we don't re-enable transitioning, next slide will jump.
-            // We can let the next slide re-enable it (it sets setIsTransitioning(true)).
+    // Get visible cards (active + 3 stacked behind)
+    const getCardClasses = (index: number) => {
+        const stackPos = getStackPosition(index);
+        const classes = ['testimonial-card'];
+
+        if (stackPos >= 0 && stackPos <= 3) {
+            classes.push(`stack-${stackPos}`);
+            classes.push('active');
         }
+
+        // Add entry animation to the active card
+        if (stackPos === 0 && isAnimating) {
+            classes.push(animationClass);
+        }
+
+        return classes.join(' ');
     };
 
     return (
         <section className="why-us-section" id="why-choose-us">
-            <div className="services-container" style={{ overflow: 'hidden' }}>
+            <div className="services-container" style={{ overflow: 'visible' }}>
                 <div className="atsv-header">
-                    <h2 className="atsvh-title">Why Choose Us</h2>
+                    <h2 className="atsvh-title">Client Success Stories</h2>
                     <div className="atsvh-hl"></div>
                     <p className="atsvh-txt">
-                        Discover why Astra Terra is the preferred choice for premium real estate in Dubai.
+                        Real experiences from clients who trusted us with their property journey in Dubai.
                     </p>
                 </div>
 
                 <div className="testimonials-wrapper">
-                    <div
-                        className="testimonials-track"
-                        style={{
-                            transform: `translateX(-${currentIndex * (100 / itemsToShow)}%)`,
-                            transition: isTransitioning ? 'transform 2s cubic-bezier(0.25, 0.1, 0.25, 1)' : 'none',
-                        }}
-                        onTransitionEnd={handleTransitionEnd}
-                    >
-                        {extendedReviews.map((review, index) => (
-                            <div key={index} className="testimonial-card">
-                                <div className="testimonial-content">
-                                    <div className="testimonial-rating">
-                                        <i className="ph-fill ph-star"></i>
-                                        <i className="ph-fill ph-star"></i>
-                                        <i className="ph-fill ph-star"></i>
-                                        <i className="ph-fill ph-star"></i>
-                                        <i className="ph-fill ph-star"></i>
-                                    </div>
-                                    <p className="testimonial-text">{review.text}</p>
-                                    <div className="testimonial-author">
-                                        <span className="author-name">{review.name}</span>
-                                    </div>
+                    {reviews.map((review, index) => (
+                        <div
+                            key={index}
+                            className={getCardClasses(index)}
+                        >
+                            <div className="testimonial-content">
+                                <div className="testimonial-rating">
+                                    <i className="ph-fill ph-star"></i>
+                                    <i className="ph-fill ph-star"></i>
+                                    <i className="ph-fill ph-star"></i>
+                                    <i className="ph-fill ph-star"></i>
+                                    <i className="ph-fill ph-star"></i>
+                                </div>
+                                <p className="testimonial-text">{review.text}</p>
+                                <div className="testimonial-author">
+                                    <span className="author-name">{review.name}</span>
+                                    <span className="google-badge">
+                                        <svg viewBox="0 0 24 24" width="18" height="18" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4" />
+                                            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
+                                            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05" />
+                                            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
+                                        </svg>
+                                        Google Review
+                                    </span>
                                 </div>
                             </div>
-                        ))}
-                    </div>
+                        </div>
+                    ))}
                 </div>
             </div>
         </section>
