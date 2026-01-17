@@ -26,9 +26,10 @@ interface PropertyCardProps {
     };
   };
   variant?: 'featured' | 'horizontal' | 'grid';
+  disableWrapper?: boolean;
 }
 
-export default function PropertyCard({ listing, variant = 'featured' }: PropertyCardProps) {
+export default function PropertyCard({ listing, variant = 'featured', disableWrapper }: PropertyCardProps) {
   // Simple computation - no need for useMemo for this lightweight operation
   const tagList = listing.amenities?.slice(0, 2) || [];
   if (listing.propertyType?.[0]) {
@@ -176,51 +177,59 @@ export default function PropertyCard({ listing, variant = 'featured' }: Property
   }
 
   // Featured card variant (default / carousel)
+  const content = (
+    <div className="at-property-card">
+      <Link href={linkUrl} className="at-pc-head">
+        <span className="at-pch-highlight">Featured</span>
+        <ul className="at-pch-info">
+          {tags.map((tag, idx) => (
+            <li key={idx}>{formatText(tag)}</li>
+          ))}
+        </ul>
+        <Image
+          className="at-pch-img"
+          src={listing.photos?.[0] || '/img/prop/default-thumb.jpg'}
+          alt={listing.title}
+          width={600}
+          height={400}
+          style={{ objectFit: 'cover' }}
+        />
+      </Link>
+      <div className="at-pc-body">
+        <div className="at-pcb-info">
+          <div className="at-pcbi-price">
+            AED {formatPrice(listing.price)}
+          </div>
+          <Link href={linkUrl} className="at-pcbi-title">
+            {listing.title.length > 50 ? `${listing.title.substring(0, 50)}...` : listing.title}
+          </Link>
+          <div className="at-pcbi-loc">
+            <i className="ph-fill ph-map-pin"></i>
+            {listing.community || listing.region}
+          </div>
+        </div>
+        <ul className="at-pcb-specs">
+          <li><i className="ph ph-bed"></i> <span>{listing.bedRooms || '—'} Beds</span></li>
+          <li><i className="ph ph-bathtub"></i> <span>{listing.rentParam?.bathrooms || '—'} Baths</span></li>
+          <li><i className="ph ph-square"></i> <span>{listing.size || '—'} sqft</span></li>
+          <li><i className="ph ph-car"></i> <span>{listing.rentParam?.parking || '—'} Prk</span></li>
+        </ul>
+      </div>
+      <div className="at-pc-footer">
+        <Link href={linkUrl} className="at-pcf-btn at-pcf-btn-details">
+          <span>View Property Details</span>
+        </Link>
+      </div>
+    </div>
+  );
+
+  if (disableWrapper) {
+    return content;
+  }
+
   return (
     <div className="at-pc-wrap">
-      <div className="at-property-card">
-        <Link href={linkUrl} className="at-pc-head">
-          <span className="at-pch-highlight">Featured</span>
-          <ul className="at-pch-info">
-            {tags.map((tag, idx) => (
-              <li key={idx}>{formatText(tag)}</li>
-            ))}
-          </ul>
-          <Image
-            className="at-pch-img"
-            src={listing.photos?.[0] || '/img/prop/default-thumb.jpg'}
-            alt={listing.title}
-            width={600}
-            height={400}
-            style={{ objectFit: 'cover' }}
-          />
-        </Link>
-        <div className="at-pc-body">
-          <div className="at-pcb-info">
-            <div className="at-pcbi-price">
-              AED {formatPrice(listing.price)}
-            </div>
-            <Link href={linkUrl} className="at-pcbi-title">
-              {listing.title.length > 50 ? `${listing.title.substring(0, 50)}...` : listing.title}
-            </Link>
-            <div className="at-pcbi-loc">
-              <i className="ph-fill ph-map-pin"></i>
-              {listing.community || listing.region}
-            </div>
-          </div>
-          <ul className="at-pcb-specs">
-            <li><i className="ph ph-bed"></i> <span>{listing.bedRooms || '—'} Beds</span></li>
-            <li><i className="ph ph-bathtub"></i> <span>{listing.rentParam?.bathrooms || '—'} Baths</span></li>
-            <li><i className="ph ph-square"></i> <span>{listing.size || '—'} sqft</span></li>
-            <li><i className="ph ph-car"></i> <span>{listing.rentParam?.parking || '—'} Prk</span></li>
-          </ul>
-        </div>
-        <div className="at-pc-footer">
-          <Link href={linkUrl} className="at-pcf-btn at-pcf-btn-details">
-            <span>View Property Details</span>
-          </Link>
-        </div>
-      </div>
+      {content}
     </div>
   );
 }

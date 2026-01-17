@@ -2737,48 +2737,88 @@ pre {
 .atsv-card {
 	min-height: 256px;
 	margin: 0px;
-	padding: 20px 8px;
-	border: 0.5px solid rgba(255, 255, 255, 0.05);
+	padding: 30px 24px;
+	/* Glassmorphism base */
+	background: rgba(255, 255, 255, 0.03);
+	backdrop-filter: blur(10px);
+	-webkit-backdrop-filter: blur(10px);
+	border: 1px solid rgba(255, 255, 255, 0.08);
+
 	border-radius: 16px;
 	display: flex;
 	flex-direction: column;
-	gap: 10px;
+	gap: 16px;
 	align-items: center;
 	justify-content: flex-start;
+	transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+	position: relative;
+	overflow: hidden;
+}
+
+/* Hover effect */
+.atsv-card:hover {
+	transform: translateY(-8px);
+	background: rgba(255, 255, 255, 0.06);
+	border-color: rgba(212, 175, 55, 0.4);
+	/* Gold border on hover */
+	box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2),
+		inset 0 0 0 1px rgba(212, 175, 55, 0.1);
+	/* Inner gold glow */
 }
 
 .atsv-card .atsvc-icon {
-	width: 64px;
-	height: 64px;
-	font-size: 24px;
-	border-radius: 100%;
+	width: 72px;
+	height: 72px;
+	font-size: 28px;
+	border-radius: 20px;
+	/* Softer square/circle hybrid */
+	margin-bottom: 8px;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	background: linear-gradient(90deg,
-			#73582f 0%,
-			#94774B 25%,
-			#DEC993 50%,
-			#94774B 75%,
-			#73582f 100%);
-	background-size: 300% 100%;
-	background-position: 100% 0;
-	animation: shimmer 4s infinite linear;
+	background: linear-gradient(135deg,
+			rgba(115, 88, 47, 0.2) 0%,
+			rgba(148, 119, 75, 0.3) 100%);
+	border: 1px solid rgba(148, 119, 75, 0.3);
+	color: #DEC993;
+	transition: all 0.4s ease;
+}
+
+.atsv-card:hover .atsvc-icon {
+	background: linear-gradient(135deg, #DEC993 0%, #94774B 100%);
+	color: #0D1625;
+	/* Dark icon on gold bg */
+	transform: scale(1.1) rotate(3deg);
+	border-color: transparent;
+	box-shadow: 0 8px 20px rgba(148, 119, 75, 0.3);
 }
 
 .atsv-card h5 {
-	font-size: 16px;
+	font-family: 'Playfair Display', serif;
+	font-size: 20px;
 	line-height: 1.3em;
-	font-weight: 500;
+	font-weight: 600;
 	text-align: center;
+	color: white;
+	transition: color 0.3s ease;
+}
+
+.atsv-card:hover h5 {
+	color: #DEC993;
 }
 
 .atsv-card p {
-	font-size: 12px;
+	font-size: 14px;
+	line-height: 1.6em;
 	font-weight: 300;
-	color: rgba(255, 255, 255, 0.8);
+	color: rgba(255, 255, 255, 0.7);
 	text-align: center;
+	transition: color 0.3s ease;
+}
+
+.atsv-card:hover p {
+	color: rgba(255, 255, 255, 0.9);
 }
 
 /* Footer */
