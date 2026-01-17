@@ -37,6 +37,7 @@ export default function HomePage() {
 
       <WhyChooseUs />
 
+      <div style={{ height: '60px', backgroundColor: '#0D1625' }}></div>
       <ContactSection />
     </>
   );

@@ -4,6 +4,9 @@
     gap: 60px;
     align-items: center;
     margin-bottom: 60px;
+    overflow: hidden;
+    /* Fix for AOS animation scrollbar */
+    max-width: 100%;
 }
 
 .dxb-text-para {
