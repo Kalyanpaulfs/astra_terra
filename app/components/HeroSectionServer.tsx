@@ -25,7 +25,7 @@ export default function HeroSectionServer({ cities, propertyTypes }: HeroSection
             <div className="hero-content">
                 <div className="hero-header">
                     <div className="hsub-container">
-                        <div className="hero-subtitle">Dubai's Premier Real Estate Partner</div>
+                        <div className="hero-subtitle" style={{ background: 'linear-gradient(90deg, #DEC993 0%, #94774B 50%, #DEC993 100%)', color: '#0D1625' }}>Dubai's Premier Real Estate Partner</div>
                     </div>
                     <div className="hero-title">
                         Luxury Living in <br />
