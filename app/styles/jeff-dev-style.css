@@ -1465,3 +1465,206 @@
         font-size: 14px;
     }
 }
+
+/* ============================================
+   PREMIUM HERO FILTER REDESIGN - Glassmorphism
+   ============================================ */
+
+/* Container - Premium Glass */
+.premium-search-form {
+    background: rgba(13, 22, 37, 0.65) !important;
+    /* Darker Glass */
+    backdrop-filter: blur(24px) !important;
+    -webkit-backdrop-filter: blur(24px) !important;
+    border: 1px solid rgba(222, 201, 147, 0.25) !important;
+    /* Gold Border */
+    border-radius: 50px !important;
+    /* Pill Shape */
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+    padding: 12px 30px !important;
+    max-width: 1100px !important;
+    margin: 0 auto;
+}
+
+/* Adjust grid for pill shape */
+.ats-nf-container {
+    align-items: center !important;
+    gap: 15px !important;
+}
+
+/* Field Container */
+.at-field.premium-field {
+    gap: 6px !important;
+    position: relative;
+    padding-right: 20px;
+}
+
+.at-field.premium-field::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 30px;
+    width: 1px;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.ats-nfc-col:last-child .at-field.premium-field::after,
+.ats-nfc-col:nth-last-child(2) .at-field.premium-field::after {
+    display: none;
+}
+
+/* Labels - Elegant & Small */
+/* Labels - Elegant & Small */
+.atf-label.premium-label,
+.atf-label.premium-label span {
+    font-family: 'Inter', sans-serif !important;
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    color: #FFFFFF !important;
+    /* White for High Contrast */
+    text-transform: uppercase !important;
+    letter-spacing: 1px !important;
+    margin-bottom: 2px !important;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8) !important;
+}
+
+.atf-label.premium-label i {
+    color: #DEC993 !important;
+    font-size: 14px !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Dropdown Triggers - Transparent & Integrated */
+.custom-dropdown-trigger,
+.premium-price-trigger {
+    background: transparent !important;
+    border: none !important;
+    color: white !important;
+    padding: 0 !important;
+    height: auto !important;
+    box-shadow: none !important;
+    font-family: 'Playfair Display', serif !important;
+    letter-spacing: 0.5px;
+}
+
+.custom-dropdown-trigger .custom-dropdown-text,
+.premium-price-trigger .premium-price-text {
+    font-size: 18px !important;
+    font-weight: 500 !important;
+    color: white !important;
+}
+
+.custom-dropdown-trigger i,
+.premium-price-trigger i {
+    font-size: 12px !important;
+    color: rgba(255, 255, 255, 0.5) !important;
+    margin-left: 8px;
+}
+
+/* Hover States */
+.custom-dropdown-trigger:hover .custom-dropdown-text,
+.premium-price-trigger:hover .premium-price-text {
+    color: #DEC993 !important;
+}
+
+/* Placeholder State */
+.custom-dropdown-trigger:not(.has-value) .custom-dropdown-text,
+.premium-price-trigger:not(.has-value) .premium-price-text {
+    color: rgba(255, 255, 255, 0.6) !important;
+    font-style: normal !important;
+    font-family: 'Inter', sans-serif !important;
+    font-size: 16px !important;
+}
+
+/* Search Button - Premium Gold Pill */
+.premium-search-btn {
+    border-radius: 50px !important;
+    background: linear-gradient(135deg, #DEC993 0%, #C5A265 100%) !important;
+    border: none !important;
+    color: #0D1625 !important;
+    font-weight: 700 !important;
+    padding: 16px 36px !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1.5px !important;
+    font-size: 13px !important;
+    box-shadow: 0 10px 30px rgba(197, 162, 101, 0.3) !important;
+    height: 56px !important;
+    width: auto !important;
+    min-width: 180px !important;
+}
+
+.premium-search-btn i {
+    color: #0D1625 !important;
+    font-size: 18px !important;
+}
+
+.premium-search-btn:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 15px 40px rgba(197, 162, 101, 0.5) !important;
+    background: linear-gradient(135deg, #E8D9A8 0%, #DEC993 100%) !important;
+}
+
+/* Dropdown Menus - Dark Theme to Match */
+.custom-dropdown-menu,
+.premium-price-menu {
+    background: rgba(13, 22, 37, 0.95) !important;
+    backdrop-filter: blur(20px) !important;
+    border: 1px solid rgba(222, 201, 147, 0.3) !important;
+    border-radius: 16px !important;
+    margin-top: 15px !important;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5) !important;
+}
+
+.custom-dropdown-option {
+    color: rgba(255, 255, 255, 0.8) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+.custom-dropdown-option:hover {
+    background: rgba(222, 201, 147, 0.1) !important;
+    color: #DEC993 !important;
+}
+
+.premium-price-content {
+    background: transparent !important;
+}
+
+.premium-price-value {
+    color: white !important;
+}
+
+.premium-slider-container input[type=range]::-webkit-slider-thumb {
+    background: #DEC993 !important;
+    box-shadow: 0 0 10px rgba(222, 201, 147, 0.5) !important;
+}
+
+/* Responsive Adjustments */
+@media screen and (max-width: 1024px) {
+    .premium-search-form {
+        border-radius: 20px !important;
+        padding: 24px !important;
+        max-width: 90% !important;
+    }
+
+    .ats-nf-container {
+        flex-direction: column;
+        align-items: stretch !important;
+        gap: 20px !important;
+    }
+
+    .at-field.premium-field::after {
+        display: none;
+    }
+
+    .ats-nfc-col {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .premium-search-btn {
+        width: 100% !important;
+    }
+}
