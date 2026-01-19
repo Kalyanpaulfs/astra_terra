@@ -213,7 +213,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-image: url('/img/contact-bg.png');
+    background-image: url('/img/contact-bg.webp');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -1046,7 +1046,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-image: url('/img/services-bg.png');
+    background-image: url('/img/services-bg.webp');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -1242,7 +1242,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-image: url('/img/why-choose-us-bg.png');
+    background-image: url('/img/why-choose-us-bg.webp');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;

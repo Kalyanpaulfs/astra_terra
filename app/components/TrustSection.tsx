@@ -126,7 +126,7 @@ export default function TrustSection() {
             <div className="dxb-most-trusted-right" data-aos="fade-left" data-aos-delay="200">
                 <div className="dxb-most-trusted-image-wrapper">
                     <Image
-                        src="/img/dubai-trust.png"
+                        src="/img/dubai-trust.webp"
                         alt="Astra Terra - Luxury Dubai Real Estate with Burj Khalifa View"
                         width={800}
                         height={600}

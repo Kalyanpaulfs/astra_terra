@@ -207,7 +207,7 @@ export default function PropertyDetails() {
                 <div className="pd-gallery">
                     <div className="pd-main-img" style={{ position: 'relative', borderRadius: '16px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.1)', height: '100%', minHeight: '300px' }}>
                         <Image
-                            src={property.photos?.[selectedImage] || '/img/prop/default-large.jpg'}
+                            src={property.photos?.[selectedImage] || '/img/prop/default-large.webp'}
                             alt={property.title}
                             fill
                             style={{ objectFit: 'cover' }}

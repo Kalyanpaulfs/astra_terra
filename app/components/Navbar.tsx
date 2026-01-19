@@ -222,7 +222,7 @@ export default function Navbar() {
           <Link href="/">
             <Image
               className="custom-navbar-brand"
-              src="/img/brand.png"
+              src="/img/brand.webp"
               alt="astra terrah logo"
               width={120}
               height={32}
@@ -504,7 +504,7 @@ export default function Navbar() {
                   </div>
                   <div className="column">
                     <div className="cnm-mc-imgs">
-                      <Image src="/img/loc/bg2.jpg" alt="Contact" width={400} height={300} />
+                      <Image src="/img/loc/bg2.webp" alt="Contact" width={400} height={300} />
                       <div className="snip">
                         <h5 className="title is-6 is-white">Get In Touch</h5>
                         <Link href="#contact-us-anchor"><button className="button is-small is-focused">Contact Us</button></Link>
@@ -521,7 +521,7 @@ export default function Navbar() {
           >
             <Image
               className="mnt-icon"
-              src="/img/nav.png"
+              src="/img/nav.webp"
               alt="view menu icon"
               width={24}
               height={24}

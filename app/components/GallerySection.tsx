@@ -11,7 +11,7 @@ export default function GallerySection() {
 
     const images = Array.from({ length: 12 }, (_, i) => ({
         id: i + 1,
-        src: `/img/${i + 1}.jpg`,
+        src: `/img/${i + 1}.webp`,
         alt: `Luxury property ${i + 1}`,
     }));
 

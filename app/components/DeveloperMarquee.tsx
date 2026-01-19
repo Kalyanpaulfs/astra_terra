@@ -14,7 +14,7 @@ export default function DeveloperMarquee() {
             {[...developerLogos, ...developerLogos].map((num, idx) => (
               <li key={idx}>
                 <Image
-                  src={`/img/dev/${num}.png`}
+                  src={`/img/dev/${num}.webp`}
                   alt={`Developer logo ${num}`}
                   width={120}
                   height={60}

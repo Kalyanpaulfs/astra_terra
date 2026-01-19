@@ -66,7 +66,7 @@ export default function PropertyCard({ listing, variant = 'featured', disableWra
             <Link href={linkUrl} className="image">
               <Image
                 className="at-pch-img"
-                src={listing.photos?.[0] || '/img/prop/default-thumb.jpg'}
+                src={listing.photos?.[0] || '/img/prop/default-thumb.webp'}
                 alt={listing.title}
                 width={140}
                 height={140}
@@ -140,7 +140,7 @@ export default function PropertyCard({ listing, variant = 'featured', disableWra
           </ul>
           <Image
             className="at-pch-img"
-            src={listing.photos?.[0] || '/img/prop/default-thumb.jpg'}
+            src={listing.photos?.[0] || '/img/prop/default-thumb.webp'}
             alt={listing.title}
             width={600}
             height={400}
@@ -188,7 +188,7 @@ export default function PropertyCard({ listing, variant = 'featured', disableWra
         </ul>
         <Image
           className="at-pch-img"
-          src={listing.photos?.[0] || '/img/prop/default-thumb.jpg'}
+          src={listing.photos?.[0] || '/img/prop/default-thumb.webp'}
           alt={listing.title}
           width={600}
           height={400}

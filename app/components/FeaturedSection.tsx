@@ -122,7 +122,7 @@ export default function FeaturedSection({ listings }: FeaturedSectionProps) {
                     left: 0,
                     width: '100%',
                     height: '100%',
-                    backgroundImage: 'url(/img/bg/featured-bg.png)',
+                    backgroundImage: 'url(/img/bg/featured-bg.webp)',
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
                 }} />

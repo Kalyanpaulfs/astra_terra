@@ -42,7 +42,7 @@ export default function ListYourPropertyPage() {
                 {/* Background Image */}
                 <div style={{ position: 'absolute', inset: 0, zIndex: 0 }}>
                     <Image
-                        src="/img/hero_luxury_gen.jpg"
+                        src="/img/hero_luxury_gen.webp"
                         alt="Luxury Property Dubai"
                         fill
                         style={{ objectFit: 'cover' }}

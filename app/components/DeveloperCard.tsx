@@ -33,7 +33,7 @@ export default function DeveloperCard({ developer }: DeveloperCardProps) {
                         style={{ objectFit: 'contain' }}
                         onError={(e) => {
                             // Fallback to placeholder on error
-                            (e.target as HTMLImageElement).src = '/img/dev/placeholder.png';
+                            (e.target as HTMLImageElement).src = '/img/dev/placeholder.webp';
                         }}
                     />
                 ) : (

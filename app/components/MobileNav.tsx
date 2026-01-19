@@ -44,7 +44,7 @@ export default function MobileNav({ isOpen, onClose, propertyTypes = [], regions
         </div>
         <Image
           className="mnm-logo"
-          src="/img/brand.png"
+          src="/img/brand.webp"
           alt="astra terrah logo"
           width={150}
           height={40}

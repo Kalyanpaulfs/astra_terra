@@ -12,7 +12,7 @@ export default function Footer() {
             <Link href="/">
               <Image
                 className="atf-brand"
-                src="/img/brand.png"
+                src="/img/brand.webp"
                 alt="astra terra properties"
                 width={180}
                 height={50}
