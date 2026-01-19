@@ -8,6 +8,7 @@ import ContactSection from './components/ContactSection';
 import { HeroSkeleton, FeaturedSkeleton } from './components/Skeletons';
 
 import WhyChooseUs from './components/WhyChooseUs';
+import GallerySection from './components/GallerySection';
 
 export const revalidate = 3600; // Revalidate at least every hour
 
@@ -36,6 +37,9 @@ export default function HomePage() {
       </div>
 
       <WhyChooseUs />
+
+      {/* Premium Image Showcase - Visual pause before contact */}
+      <GallerySection />
 
       <div style={{ height: '60px', backgroundColor: '#0D1625' }}></div>
       <ContactSection />

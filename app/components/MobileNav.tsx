@@ -131,6 +131,12 @@ export default function MobileNav({ isOpen, onClose, propertyTypes = [], regions
             </a>
           </li>
           <li>
+            <Link href="/blogs" className="mnm2-close" onClick={onClose}>
+              <i className="ph ph-article"></i>
+              <span>Blogs</span>
+            </Link>
+          </li>
+          <li>
             <a href="#why-choose-us" className="mnm2-close" onClick={onClose}>
               <i className="ph ph-star"></i>
               <span>Why us ?</span>
@@ -140,7 +146,7 @@ export default function MobileNav({ isOpen, onClose, propertyTypes = [], regions
             <Link href="/list-your-property" className="mnm2-close list-property-link" onClick={onClose}>
               <i className="ph ph-house-simple"></i>
               <span>List Your Property</span>
-            </Link> 
+            </Link>
           </li>
           <li className={openSubmenu === 'more' ? 'has-sub open' : 'has-sub'}>
             <a href="#" onClick={(e) => { e.preventDefault(); setOpenSubmenu(openSubmenu === 'more' ? null : 'more'); }}>

@@ -230,6 +230,7 @@ export default function Navbar() {
             />
           </Link>
           <ul className="custom-nav-menu">
+            {/* BUY - Keep in main nav */}
             <li
               onMouseEnter={() => handleMouseEnter('buy')}
               onMouseLeave={() => handleMouseLeave('buy')}
@@ -313,6 +314,8 @@ export default function Navbar() {
                 </div>
               </div>
             </li>
+
+            {/* RENT - Keep in main nav */}
             <li
               onMouseEnter={() => handleMouseEnter('rent')}
               onMouseLeave={() => handleMouseLeave('rent')}
@@ -401,89 +404,14 @@ export default function Navbar() {
                 </div>
               </div>
             </li>
-            <li><Link href="/properties-search?listtype=NEW">New Projects</Link></li>
-            <li><Link href="/developers">Developers</Link></li>
-            <li
-              onMouseEnter={() => handleMouseEnter('locations')}
-              onMouseLeave={() => handleMouseLeave('locations')}
-              className={closedByClick.has('locations') ? 'dropdown-closed-by-click' : ''}
-            >
-              <a href="#">Locations</a>
-              <div
-                className={`cnm-mega cnm-mega-right ${activeDropdown === 'locations' ? 'is-active' : ''}`}
-                onClick={(e) => {
-                  // Don't close if clicking on a link (let link handle it)
-                  if ((e.target as HTMLElement).tagName !== 'A') {
-                    handleDropdownClick('locations');
-                  }
-                }}
-              >
-                <div className="columns">
-                  <div className="column">
-                    <div className="cnm-mega-content">
-                      <h5 className="title is-6 has-text-white">Properties by Location</h5>
-                      <div className="cnm-mc-csection">
-                        <div className="columns">
-                          <div className="column">
-                            <ul className="cnm-mc-plist" style={{ maxHeight: '350px', overflowY: 'auto' }}>
-                              {Object.keys(regions).length > 0 ? (
-                                Object.entries(regions).map(([id, name]) => (
-                                  <li key={id}>
-                                    <Link
-                                      href={`/properties-search?regionId=${id}`}
-                                      onClick={(e) => { handleLinkClick('locations', e); }}
-                                    >
-                                      {name}
-                                    </Link>
-                                  </li>
-                                ))
-                              ) : (
-                                <>
-                                  <li><Link href="/properties-search?regionId=47" onClick={(e) => { handleLinkClick('locations', e); }}>Downtown Dubai</Link></li>
-                                  <li><Link href="/properties-search?regionId=50" onClick={(e) => { handleLinkClick('locations', e); }}>Dubai Marina</Link></li>
-                                </>
-                              )}
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="column">
-                    <div className="cnm-mc-imgs">
-                      <Image src="/img/loc/bg1.jpg" alt="Locations" width={400} height={300} />
-                      <div className="snip">
-                        <h5 className="title is-6 is-white">Explore Locations</h5>
-                        <Link href="/properties-search"><button className="button is-small is-focused">View All</button></Link>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </li>
-            <li>
-              <a
-                href={isHomePage ? '#services-anchor' : '/#services-anchor'}
-                onClick={(e) => {
-                  if (isHomePage) {
-                    e.preventDefault();
-                    const element = document.querySelector('#services-anchor');
-                    if (element) {
-                      element.scrollIntoView({ behavior: 'smooth' });
-                    }
-                  }
-                  // If not on home page, let the default navigation happen with the hash
-                }}
-              >
-                Services
-              </a>
-            </li>
-            <li><Link href="/blogs">Blogs</Link></li>
+
+            {/* LIST YOUR PROPERTY - Keep in main nav (CTA button) */}
             <li className="nav-cta-item"><Link href="/list-your-property" className="nav-cta-button">
               List Your Property
             </Link>
             </li>
-            <li><a href="#why-choose-us">Why us ?</a></li>
+
+            {/* MORE - Contains all other nav items */}
             <li
               onMouseEnter={() => handleMouseEnter('more')}
               onMouseLeave={() => handleMouseLeave('more')}
@@ -491,7 +419,7 @@ export default function Navbar() {
             >
               <a href="#">More</a>
               <div
-                className={`cnm-mega cnm-mega-right ${activeDropdown === 'more' ? 'is-active' : ''}`}
+                className={`cnm-mega cnm-mega-right cnm-mega-more ${activeDropdown === 'more' ? 'is-active' : ''}`}
                 onClick={(e) => {
                   // Don't close if clicking on a link (let link handle it)
                   if ((e.target as HTMLElement).tagName !== 'A') {
@@ -502,10 +430,69 @@ export default function Navbar() {
                 <div className="columns">
                   <div className="column">
                     <div className="cnm-mega-content">
-                      <h5 className="title is-6 has-text-white">Learn More</h5>
+                      <h5 className="title is-6 has-text-white">Explore More</h5>
                       <div className="cnm-mc-csection">
                         <div className="columns">
                           <div className="column">
+                            <p className="cnm-mc-title">Properties</p>
+                            <ul className="cnm-mc-plist">
+                              <li><Link href="/properties-search?listtype=NEW" onClick={(e) => { handleLinkClick('more', e); }}>New Projects</Link></li>
+                              <li><Link href="/developers" onClick={(e) => { handleLinkClick('more', e); }}>Developers</Link></li>
+                            </ul>
+                          </div>
+                          <div className="column">
+                            <p className="cnm-mc-title">Locations</p>
+                            <ul className="cnm-mc-plist" style={{ maxHeight: '200px', overflowY: 'auto' }}>
+                              {Object.keys(regions).length > 0 ? (
+                                Object.entries(regions).slice(0, 8).map(([id, name]) => (
+                                  <li key={id}>
+                                    <Link
+                                      href={`/properties-search?regionId=${id}`}
+                                      onClick={(e) => { handleLinkClick('more', e); }}
+                                    >
+                                      {name}
+                                    </Link>
+                                  </li>
+                                ))
+                              ) : (
+                                <>
+                                  <li><Link href="/properties-search?regionId=47" onClick={(e) => { handleLinkClick('more', e); }}>Downtown Dubai</Link></li>
+                                  <li><Link href="/properties-search?regionId=50" onClick={(e) => { handleLinkClick('more', e); }}>Dubai Marina</Link></li>
+                                </>
+                              )}
+                              <li><Link href="/properties-search" onClick={(e) => { handleLinkClick('more', e); }}>View All Locations</Link></li>
+                            </ul>
+                          </div>
+                          <div className="column">
+                            <p className="cnm-mc-title">Resources</p>
+                            <ul className="cnm-mc-plist">
+                              <li>
+                                <a
+                                  href={isHomePage ? '#services-anchor' : '/#services-anchor'}
+                                  onClick={(e) => {
+                                    handleLinkClick('more', e);
+                                    if (isHomePage) {
+                                      e.preventDefault();
+                                      const element = document.querySelector('#services-anchor');
+                                      if (element) {
+                                        element.scrollIntoView({ behavior: 'smooth' });
+                                      }
+                                    }
+                                  }}
+                                >
+                                  Services
+                                </a>
+                              </li>
+                              <li><Link href="/blogs" onClick={(e) => { handleLinkClick('more', e); }}>Blogs</Link></li>
+                              <li><a href="#why-choose-us" onClick={(e) => { handleLinkClick('more', e); }}>Why us ?</a></li>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="cnm-mc-csection" style={{ marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+                        <div className="columns">
+                          <div className="column">
+                            <p className="cnm-mc-title">Contact</p>
                             <ul className="cnm-mc-plist">
                               <li><a href="#about-us-anchor" onClick={(e) => { handleLinkClick('more', e); }}>About Us</a></li>
                               <li><a href="#contact-us-anchor" onClick={(e) => { handleLinkClick('more', e); }}>Get In Touch</a></li>
