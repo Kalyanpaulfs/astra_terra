@@ -71,6 +71,7 @@ export default function PropertyCard({ listing, variant = 'featured', disableWra
                 width={140}
                 height={140}
                 style={{ objectFit: 'cover', width: '100%', borderRadius: '8px' }}
+                loading="lazy"
               />
             </Link>
           </div>
@@ -145,6 +146,7 @@ export default function PropertyCard({ listing, variant = 'featured', disableWra
             width={600}
             height={400}
             style={{ objectFit: 'cover' }}
+            loading="lazy"
           />
         </Link>
         <div className="at-pc-body">
@@ -193,6 +195,7 @@ export default function PropertyCard({ listing, variant = 'featured', disableWra
           width={600}
           height={400}
           style={{ objectFit: 'cover' }}
+          loading="lazy"
         />
       </Link>
       <div className="at-pc-body">

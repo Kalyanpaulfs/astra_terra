@@ -1,5 +1,7 @@
 import HeroParallax from './HeroParallax';
+import Image from 'next/image';
 import SearchBar from './SearchBar';
+import HeroVideo from './HeroVideo';
 
 interface HeroSectionProps {
     cities: Record<number, string>;
@@ -10,33 +12,27 @@ export default function HeroSectionServer({ cities, propertyTypes }: HeroSection
     return (
         <div className="at-hero">
             <HeroParallax />
-            <video
-                autoPlay
-                muted
-                loop
-                playsInline
-                className="video-bg"
-                style={{ position: 'absolute', width: '100%', height: '100%', objectFit: 'cover', zIndex: -1 }}
-            >
-                <source src="/video/Hero_Section.mp4" type="video/mp4" />
-                Your browser does not support the video tag.
-            </video>
+            <HeroVideo
+                poster="/video/hero.webp"
+                webmSrc="/video/hero.webm"
+                mp4Src="/video/hero.mp4"
+            />
 
             <div className="hero-content">
                 <div className="hero-header">
                     <div className="hsub-container">
-                        <div className="hero-subtitle" style={{ background: 'linear-gradient(90deg, #DEC993 0%, #94774B 50%, #DEC993 100%)', color: '#0D1625' }}>Dubai's Premier Real Estate Partner</div>
+                        <div className="hero-subtitle animate-gradient-bg" style={{ color: '#0D1625' }}>Dubai's Premier Real Estate Partner</div>
                     </div>
                     <div className="hero-title">
                         Luxury Living in <br />
                         <span className="gradient-txt">Dubai</span>
                     </div>
-                    <div className="hero-subtxt-width">
+                    {/* <div className="hero-subtxt-width">
                         <div className="hero-subtxt">
                             Discover extraordinary properties in the world's most prestigious city.<br />
                             From iconic towers to waterfront palaces.
                         </div>
-                    </div>
+                    </div> */}
                 </div>
                 <SearchBar cities={cities} propertyTypes={propertyTypes} />
             </div>

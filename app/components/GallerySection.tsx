@@ -186,10 +186,13 @@ export default function GallerySection() {
                         </button>
 
                         {/* Image Container */}
-                        <div className="lightbox-image-container">
-                            <img
+                        <div className="lightbox-image-container" style={{ position: 'relative', width: '100%', height: '80vh' }}>
+                            <Image
                                 src={selectedImageData.src}
                                 alt={selectedImageData.alt}
+                                fill
+                                priority
+                                style={{ objectFit: 'contain' }}
                                 className="lightbox-image"
                             />
                         </div>

@@ -7,14 +7,38 @@ import { useForm } from 'react-hook-form';
 export default function ListYourPropertyPage() {
     const { register, handleSubmit, formState: { errors, isSubmitting }, reset } = useForm();
     const [submitSuccess, setSubmitSuccess] = useState(false);
+    const [status, setStatus] = useState<{ type: 'success' | 'error', message: string } | null>(null);
 
     const onSubmit = async (data: any) => {
-        // Simulate API call
-        console.log('Form data:', data);
-        await new Promise(resolve => setTimeout(resolve, 1500));
-        setSubmitSuccess(true);
-        reset();
-        setTimeout(() => setSubmitSuccess(false), 5000);
+        setStatus(null);
+        try {
+            const response = await fetch('/api/contact', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    ...data,
+                    inquiry_type: 'LIST_PROPERTY',
+                }),
+            });
+
+            const result = await response.json();
+
+            if (!response.ok) {
+                throw new Error(result.error || 'Failed to submit request');
+            }
+
+            setSubmitSuccess(true);
+            reset();
+            // Optional: reset success state after some time if desired, or keep showing the success message
+        } catch (error: any) {
+            console.error('Submission error:', error);
+            setStatus({
+                type: 'error',
+                message: error.message || 'An error occurred. Please try again.'
+            });
+        }
     };
 
     // Shared styles for consistency
@@ -346,347 +370,362 @@ export default function ListYourPropertyPage() {
                                 </p>
                             </div>
                         ) : (
-                            <form onSubmit={handleSubmit(onSubmit)}>
-                                {/* Row 1: Name + Email */}
-                                <div style={{
-                                    display: 'grid',
-                                    gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-                                    gap: '24px',
-                                    marginBottom: '24px'
-                                }}>
-                                    <div>
-                                        <label style={{
-                                            display: 'block',
-                                            color: 'rgba(255,255,255,0.5)',
-                                            fontSize: '0.7rem',
-                                            fontWeight: 600,
-                                            letterSpacing: '1.5px',
-                                            textTransform: 'uppercase',
-                                            marginBottom: '10px'
-                                        }}>
-                                            Name
-                                        </label>
-                                        <input
-                                            {...register('name', { required: true })}
-                                            style={{
-                                                width: '100%',
-                                                backgroundColor: inputBg,
-                                                border: '1px solid rgba(255,255,255,0.1)',
-                                                borderRadius: '4px',
-                                                padding: '16px 18px',
-                                                color: '#fff',
-                                                fontSize: '1rem',
-                                                outline: 'none',
-                                                transition: 'border-color 0.2s'
-                                            }}
-                                            placeholder="Your Full Name"
-                                            onFocus={(e) => e.currentTarget.style.borderColor = goldAccent}
-                                            onBlur={(e) => e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'}
-                                        />
-                                        {errors.name && <p style={{ color: '#e74c3c', fontSize: '0.8rem', marginTop: '6px' }}>Required</p>}
-                                    </div>
-                                    <div>
-                                        <label style={{
-                                            display: 'block',
-                                            color: 'rgba(255,255,255,0.5)',
-                                            fontSize: '0.7rem',
-                                            fontWeight: 600,
-                                            letterSpacing: '1.5px',
-                                            textTransform: 'uppercase',
-                                            marginBottom: '10px'
-                                        }}>
-                                            Email ID
-                                        </label>
-                                        <input
-                                            {...register('email', { required: true, pattern: /^\S+@\S+$/i })}
-                                            style={{
-                                                width: '100%',
-                                                backgroundColor: inputBg,
-                                                border: '1px solid rgba(255,255,255,0.1)',
-                                                borderRadius: '4px',
-                                                padding: '16px 18px',
-                                                color: '#fff',
-                                                fontSize: '1rem',
-                                                outline: 'none',
-                                                transition: 'border-color 0.2s'
-                                            }}
-                                            placeholder="you@example.com"
-                                            type="email"
-                                            onFocus={(e) => e.currentTarget.style.borderColor = goldAccent}
-                                            onBlur={(e) => e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'}
-                                        />
-                                        {errors.email && <p style={{ color: '#e74c3c', fontSize: '0.8rem', marginTop: '6px' }}>Valid email required</p>}
-                                    </div>
-                                </div>
-
-                                {/* Row 2: Phone + Property Address */}
-                                <div style={{
-                                    display: 'grid',
-                                    gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-                                    gap: '24px',
-                                    marginBottom: '24px'
-                                }}>
-                                    <div>
-                                        <label style={{
-                                            display: 'block',
-                                            color: 'rgba(255,255,255,0.5)',
-                                            fontSize: '0.7rem',
-                                            fontWeight: 600,
-                                            letterSpacing: '1.5px',
-                                            textTransform: 'uppercase',
-                                            marginBottom: '10px'
-                                        }}>
-                                            Phone Number
-                                        </label>
-                                        <input
-                                            {...register('phone', { required: true })}
-                                            style={{
-                                                width: '100%',
-                                                backgroundColor: inputBg,
-                                                border: '1px solid rgba(255,255,255,0.1)',
-                                                borderRadius: '4px',
-                                                padding: '16px 18px',
-                                                color: '#fff',
-                                                fontSize: '1rem',
-                                                outline: 'none',
-                                                transition: 'border-color 0.2s'
-                                            }}
-                                            placeholder="+971 50 000 0000"
-                                            type="tel"
-                                            onFocus={(e) => e.currentTarget.style.borderColor = goldAccent}
-                                            onBlur={(e) => e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'}
-                                        />
-                                        {errors.phone && <p style={{ color: '#e74c3c', fontSize: '0.8rem', marginTop: '6px' }}>Required</p>}
-                                    </div>
-                                    <div>
-                                        <label style={{
-                                            display: 'block',
-                                            color: 'rgba(255,255,255,0.5)',
-                                            fontSize: '0.7rem',
-                                            fontWeight: 600,
-                                            letterSpacing: '1.5px',
-                                            textTransform: 'uppercase',
-                                            marginBottom: '10px'
-                                        }}>
-                                            Property Address
-                                        </label>
-                                        <input
-                                            {...register('propertyAddress', { required: true })}
-                                            style={{
-                                                width: '100%',
-                                                backgroundColor: inputBg,
-                                                border: '1px solid rgba(255,255,255,0.1)',
-                                                borderRadius: '4px',
-                                                padding: '16px 18px',
-                                                color: '#fff',
-                                                fontSize: '1rem',
-                                                outline: 'none',
-                                                transition: 'border-color 0.2s'
-                                            }}
-                                            placeholder="Building, Area, City"
-                                            onFocus={(e) => e.currentTarget.style.borderColor = goldAccent}
-                                            onBlur={(e) => e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'}
-                                        />
-                                        {errors.propertyAddress && <p style={{ color: '#e74c3c', fontSize: '0.8rem', marginTop: '6px' }}>Required</p>}
-                                    </div>
-                                </div>
-
-                                {/* Row 3: Property Type + Property Purpose */}
-                                <div style={{
-                                    display: 'grid',
-                                    gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-                                    gap: '24px',
-                                    marginBottom: '24px'
-                                }}>
-                                    <div>
-                                        <label style={{
-                                            display: 'block',
-                                            color: 'rgba(255,255,255,0.5)',
-                                            fontSize: '0.7rem',
-                                            fontWeight: 600,
-                                            letterSpacing: '1.5px',
-                                            textTransform: 'uppercase',
-                                            marginBottom: '10px'
-                                        }}>
-                                            Property Type
-                                        </label>
-                                        <select
-                                            {...register('propertyType')}
-                                            style={{
-                                                width: '100%',
-                                                backgroundColor: inputBg,
-                                                border: '1px solid rgba(255,255,255,0.1)',
-                                                borderRadius: '4px',
-                                                padding: '16px 18px',
-                                                color: '#fff',
-                                                fontSize: '1rem',
-                                                outline: 'none',
-                                                cursor: 'pointer',
-                                                appearance: 'none',
-                                                backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23C5A265' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10l-5 5z'/%3E%3C/svg%3E")`,
-                                                backgroundRepeat: 'no-repeat',
-                                                backgroundPosition: 'right 16px center'
-                                            }}
-                                        >
-                                            <option value="apartment">Apartment</option>
-                                            <option value="penthouse">Penthouse</option>
-                                            <option value="township">Township</option>
-                                            <option value="villa">Villa</option>
-                                            <option value="plots">Plots</option>
-                                            <option value="office">Office</option>
-                                            <option value="shop">Shop</option>
-                                            <option value="short-term">Short-term</option>
-                                            <option value="duplex">Duplex</option>
-                                            <option value="rental">Rental</option>
-                                            <option value="whole-building">Whole Building</option>
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <label style={{
-                                            display: 'block',
-                                            color: 'rgba(255,255,255,0.5)',
-                                            fontSize: '0.7rem',
-                                            fontWeight: 600,
-                                            letterSpacing: '1.5px',
-                                            textTransform: 'uppercase',
-                                            marginBottom: '10px'
-                                        }}>
-                                            Property Purpose
-                                        </label>
-                                        <select
-                                            {...register('propertyPurpose')}
-                                            style={{
-                                                width: '100%',
-                                                backgroundColor: inputBg,
-                                                border: '1px solid rgba(255,255,255,0.1)',
-                                                borderRadius: '4px',
-                                                padding: '16px 18px',
-                                                color: '#fff',
-                                                fontSize: '1rem',
-                                                outline: 'none',
-                                                cursor: 'pointer',
-                                                appearance: 'none',
-                                                backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23C5A265' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10l-5 5z'/%3E%3C/svg%3E")`,
-                                                backgroundRepeat: 'no-repeat',
-                                                backgroundPosition: 'right 16px center'
-                                            }}
-                                        >
-                                            <option value="for-sale">For Sale</option>
-                                            <option value="for-rent">For Rent</option>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                {/* Row 4: Bedroom (full width) */}
-                                <div style={{ marginBottom: '24px' }}>
-                                    <label style={{
-                                        display: 'block',
-                                        color: 'rgba(255,255,255,0.5)',
-                                        fontSize: '0.7rem',
-                                        fontWeight: 600,
-                                        letterSpacing: '1.5px',
-                                        textTransform: 'uppercase',
-                                        marginBottom: '10px'
+                            <>
+                                {status && status.type === 'error' && (
+                                    <div style={{
+                                        backgroundColor: 'rgba(231, 76, 60, 0.1)',
+                                        border: '1px solid #e74c3c',
+                                        color: '#e74c3c',
+                                        padding: '16px',
+                                        borderRadius: '4px',
+                                        marginBottom: '24px',
+                                        textAlign: 'center'
                                     }}>
-                                        Bedroom
-                                    </label>
-                                    <select
-                                        {...register('bedroom')}
+                                        {status.message}
+                                    </div>
+                                )}
+                                <form onSubmit={handleSubmit(onSubmit)}>
+                                    {/* Row 1: Name + Email */}
+                                    <div style={{
+                                        display: 'grid',
+                                        gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                                        gap: '24px',
+                                        marginBottom: '24px'
+                                    }}>
+                                        <div>
+                                            <label style={{
+                                                display: 'block',
+                                                color: 'rgba(255,255,255,0.5)',
+                                                fontSize: '0.7rem',
+                                                fontWeight: 600,
+                                                letterSpacing: '1.5px',
+                                                textTransform: 'uppercase',
+                                                marginBottom: '10px'
+                                            }}>
+                                                Name
+                                            </label>
+                                            <input
+                                                {...register('name', { required: true })}
+                                                style={{
+                                                    width: '100%',
+                                                    backgroundColor: inputBg,
+                                                    border: '1px solid rgba(255,255,255,0.1)',
+                                                    borderRadius: '4px',
+                                                    padding: '16px 18px',
+                                                    color: '#fff',
+                                                    fontSize: '1rem',
+                                                    outline: 'none',
+                                                    transition: 'border-color 0.2s'
+                                                }}
+                                                placeholder="Your Full Name"
+                                                onFocus={(e) => e.currentTarget.style.borderColor = goldAccent}
+                                                onBlur={(e) => e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'}
+                                            />
+                                            {errors.name && <p style={{ color: '#e74c3c', fontSize: '0.8rem', marginTop: '6px' }}>Required</p>}
+                                        </div>
+                                        <div>
+                                            <label style={{
+                                                display: 'block',
+                                                color: 'rgba(255,255,255,0.5)',
+                                                fontSize: '0.7rem',
+                                                fontWeight: 600,
+                                                letterSpacing: '1.5px',
+                                                textTransform: 'uppercase',
+                                                marginBottom: '10px'
+                                            }}>
+                                                Email ID
+                                            </label>
+                                            <input
+                                                {...register('email', { required: true, pattern: /^\S+@\S+$/i })}
+                                                style={{
+                                                    width: '100%',
+                                                    backgroundColor: inputBg,
+                                                    border: '1px solid rgba(255,255,255,0.1)',
+                                                    borderRadius: '4px',
+                                                    padding: '16px 18px',
+                                                    color: '#fff',
+                                                    fontSize: '1rem',
+                                                    outline: 'none',
+                                                    transition: 'border-color 0.2s'
+                                                }}
+                                                placeholder="you@example.com"
+                                                type="email"
+                                                onFocus={(e) => e.currentTarget.style.borderColor = goldAccent}
+                                                onBlur={(e) => e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'}
+                                            />
+                                            {errors.email && <p style={{ color: '#e74c3c', fontSize: '0.8rem', marginTop: '6px' }}>Valid email required</p>}
+                                        </div>
+                                    </div>
+
+                                    {/* Row 2: Phone + Property Address */}
+                                    <div style={{
+                                        display: 'grid',
+                                        gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                                        gap: '24px',
+                                        marginBottom: '24px'
+                                    }}>
+                                        <div>
+                                            <label style={{
+                                                display: 'block',
+                                                color: 'rgba(255,255,255,0.5)',
+                                                fontSize: '0.7rem',
+                                                fontWeight: 600,
+                                                letterSpacing: '1.5px',
+                                                textTransform: 'uppercase',
+                                                marginBottom: '10px'
+                                            }}>
+                                                Phone Number
+                                            </label>
+                                            <input
+                                                {...register('phone', { required: true })}
+                                                style={{
+                                                    width: '100%',
+                                                    backgroundColor: inputBg,
+                                                    border: '1px solid rgba(255,255,255,0.1)',
+                                                    borderRadius: '4px',
+                                                    padding: '16px 18px',
+                                                    color: '#fff',
+                                                    fontSize: '1rem',
+                                                    outline: 'none',
+                                                    transition: 'border-color 0.2s'
+                                                }}
+                                                placeholder="+971 50 000 0000"
+                                                type="tel"
+                                                onFocus={(e) => e.currentTarget.style.borderColor = goldAccent}
+                                                onBlur={(e) => e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'}
+                                            />
+                                            {errors.phone && <p style={{ color: '#e74c3c', fontSize: '0.8rem', marginTop: '6px' }}>Required</p>}
+                                        </div>
+                                        <div>
+                                            <label style={{
+                                                display: 'block',
+                                                color: 'rgba(255,255,255,0.5)',
+                                                fontSize: '0.7rem',
+                                                fontWeight: 600,
+                                                letterSpacing: '1.5px',
+                                                textTransform: 'uppercase',
+                                                marginBottom: '10px'
+                                            }}>
+                                                Property Address
+                                            </label>
+                                            <input
+                                                {...register('propertyAddress', { required: true })}
+                                                style={{
+                                                    width: '100%',
+                                                    backgroundColor: inputBg,
+                                                    border: '1px solid rgba(255,255,255,0.1)',
+                                                    borderRadius: '4px',
+                                                    padding: '16px 18px',
+                                                    color: '#fff',
+                                                    fontSize: '1rem',
+                                                    outline: 'none',
+                                                    transition: 'border-color 0.2s'
+                                                }}
+                                                placeholder="Building, Area, City"
+                                                onFocus={(e) => e.currentTarget.style.borderColor = goldAccent}
+                                                onBlur={(e) => e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'}
+                                            />
+                                            {errors.propertyAddress && <p style={{ color: '#e74c3c', fontSize: '0.8rem', marginTop: '6px' }}>Required</p>}
+                                        </div>
+                                    </div>
+
+                                    {/* Row 3: Property Type + Property Purpose */}
+                                    <div style={{
+                                        display: 'grid',
+                                        gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                                        gap: '24px',
+                                        marginBottom: '24px'
+                                    }}>
+                                        <div>
+                                            <label style={{
+                                                display: 'block',
+                                                color: 'rgba(255,255,255,0.5)',
+                                                fontSize: '0.7rem',
+                                                fontWeight: 600,
+                                                letterSpacing: '1.5px',
+                                                textTransform: 'uppercase',
+                                                marginBottom: '10px'
+                                            }}>
+                                                Property Type
+                                            </label>
+                                            <select
+                                                {...register('propertyType')}
+                                                style={{
+                                                    width: '100%',
+                                                    backgroundColor: inputBg,
+                                                    border: '1px solid rgba(255,255,255,0.1)',
+                                                    borderRadius: '4px',
+                                                    padding: '16px 18px',
+                                                    color: '#fff',
+                                                    fontSize: '1rem',
+                                                    outline: 'none',
+                                                    cursor: 'pointer',
+                                                    appearance: 'none',
+                                                    backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23C5A265' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10l-5 5z'/%3E%3C/svg%3E")`,
+                                                    backgroundRepeat: 'no-repeat',
+                                                    backgroundPosition: 'right 16px center'
+                                                }}
+                                            >
+                                                <option value="apartment">Apartment</option>
+                                                <option value="penthouse">Penthouse</option>
+                                                <option value="township">Township</option>
+                                                <option value="villa">Villa</option>
+                                                <option value="plots">Plots</option>
+                                                <option value="office">Office</option>
+                                                <option value="shop">Shop</option>
+                                                <option value="short-term">Short-term</option>
+                                                <option value="duplex">Duplex</option>
+                                                <option value="rental">Rental</option>
+                                                <option value="whole-building">Whole Building</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label style={{
+                                                display: 'block',
+                                                color: 'rgba(255,255,255,0.5)',
+                                                fontSize: '0.7rem',
+                                                fontWeight: 600,
+                                                letterSpacing: '1.5px',
+                                                textTransform: 'uppercase',
+                                                marginBottom: '10px'
+                                            }}>
+                                                Property Purpose
+                                            </label>
+                                            <select
+                                                {...register('propertyPurpose')}
+                                                style={{
+                                                    width: '100%',
+                                                    backgroundColor: inputBg,
+                                                    border: '1px solid rgba(255,255,255,0.1)',
+                                                    borderRadius: '4px',
+                                                    padding: '16px 18px',
+                                                    color: '#fff',
+                                                    fontSize: '1rem',
+                                                    outline: 'none',
+                                                    cursor: 'pointer',
+                                                    appearance: 'none',
+                                                    backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23C5A265' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10l-5 5z'/%3E%3C/svg%3E")`,
+                                                    backgroundRepeat: 'no-repeat',
+                                                    backgroundPosition: 'right 16px center'
+                                                }}
+                                            >
+                                                <option value="for-sale">For Sale</option>
+                                                <option value="for-rent">For Rent</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    {/* Row 4: Bedroom (full width) */}
+                                    <div style={{ marginBottom: '24px' }}>
+                                        <label style={{
+                                            display: 'block',
+                                            color: 'rgba(255,255,255,0.5)',
+                                            fontSize: '0.7rem',
+                                            fontWeight: 600,
+                                            letterSpacing: '1.5px',
+                                            textTransform: 'uppercase',
+                                            marginBottom: '10px'
+                                        }}>
+                                            Bedroom
+                                        </label>
+                                        <select
+                                            {...register('bedroom')}
+                                            style={{
+                                                width: '100%',
+                                                backgroundColor: inputBg,
+                                                border: '1px solid rgba(255,255,255,0.1)',
+                                                borderRadius: '4px',
+                                                padding: '16px 18px',
+                                                color: '#fff',
+                                                fontSize: '1rem',
+                                                outline: 'none',
+                                                cursor: 'pointer',
+                                                appearance: 'none',
+                                                backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23C5A265' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10l-5 5z'/%3E%3C/svg%3E")`,
+                                                backgroundRepeat: 'no-repeat',
+                                                backgroundPosition: 'right 16px center'
+                                            }}
+                                        >
+                                            <option value="studio">Studio</option>
+                                            <option value="1-bedroom">1 Bedroom</option>
+                                            <option value="2-bedroom">2 Bedroom</option>
+                                            <option value="3-bedroom">3 Bedroom</option>
+                                            <option value="4-bedroom">4 Bedroom</option>
+                                            <option value="5-bedroom">5 Bedroom</option>
+                                            <option value="6-plus-bedroom">6+ Bedroom</option>
+                                        </select>
+                                    </div>
+
+                                    {/* Row 5: Message (full width textarea) */}
+                                    <div style={{ marginBottom: '32px' }}>
+                                        <label style={{
+                                            display: 'block',
+                                            color: 'rgba(255,255,255,0.5)',
+                                            fontSize: '0.7rem',
+                                            fontWeight: 600,
+                                            letterSpacing: '1.5px',
+                                            textTransform: 'uppercase',
+                                            marginBottom: '10px'
+                                        }}>
+                                            Message
+                                        </label>
+                                        <textarea
+                                            {...register('message')}
+                                            style={{
+                                                width: '100%',
+                                                backgroundColor: inputBg,
+                                                border: '1px solid rgba(255,255,255,0.1)',
+                                                borderRadius: '4px',
+                                                padding: '16px 18px',
+                                                color: '#fff',
+                                                fontSize: '1rem',
+                                                outline: 'none',
+                                                transition: 'border-color 0.2s',
+                                                minHeight: '120px',
+                                                resize: 'vertical'
+                                            }}
+                                            placeholder="Tell us more about your property..."
+                                            onFocus={(e) => e.currentTarget.style.borderColor = goldAccent}
+                                            onBlur={(e) => e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'}
+                                        />
+                                    </div>
+
+                                    {/* Submit Button */}
+                                    <button
+                                        type="submit"
+                                        disabled={isSubmitting}
                                         style={{
                                             width: '100%',
-                                            backgroundColor: inputBg,
-                                            border: '1px solid rgba(255,255,255,0.1)',
+                                            backgroundColor: goldAccent,
+                                            color: darkBg,
+                                            border: 'none',
                                             borderRadius: '4px',
-                                            padding: '16px 18px',
-                                            color: '#fff',
-                                            fontSize: '1rem',
-                                            outline: 'none',
-                                            cursor: 'pointer',
-                                            appearance: 'none',
-                                            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23C5A265' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10l-5 5z'/%3E%3C/svg%3E")`,
-                                            backgroundRepeat: 'no-repeat',
-                                            backgroundPosition: 'right 16px center'
+                                            padding: '18px',
+                                            fontSize: '0.9rem',
+                                            fontWeight: 700,
+                                            textTransform: 'uppercase',
+                                            letterSpacing: '2px',
+                                            cursor: isSubmitting ? 'not-allowed' : 'pointer',
+                                            opacity: isSubmitting ? 0.7 : 1,
+                                            transition: 'all 0.3s ease'
+                                        }}
+                                        onMouseEnter={(e) => {
+                                            if (!isSubmitting) {
+                                                e.currentTarget.style.backgroundColor = '#DEC993';
+                                                e.currentTarget.style.transform = 'translateY(-2px)';
+                                            }
+                                        }}
+                                        onMouseLeave={(e) => {
+                                            if (!isSubmitting) {
+                                                e.currentTarget.style.backgroundColor = goldAccent;
+                                                e.currentTarget.style.transform = 'translateY(0)';
+                                            }
                                         }}
                                     >
-                                        <option value="studio">Studio</option>
-                                        <option value="1-bedroom">1 Bedroom</option>
-                                        <option value="2-bedroom">2 Bedroom</option>
-                                        <option value="3-bedroom">3 Bedroom</option>
-                                        <option value="4-bedroom">4 Bedroom</option>
-                                        <option value="5-bedroom">5 Bedroom</option>
-                                        <option value="6-plus-bedroom">6+ Bedroom</option>
-                                    </select>
-                                </div>
-
-                                {/* Row 5: Message (full width textarea) */}
-                                <div style={{ marginBottom: '32px' }}>
-                                    <label style={{
-                                        display: 'block',
-                                        color: 'rgba(255,255,255,0.5)',
-                                        fontSize: '0.7rem',
-                                        fontWeight: 600,
-                                        letterSpacing: '1.5px',
-                                        textTransform: 'uppercase',
-                                        marginBottom: '10px'
-                                    }}>
-                                        Message
-                                    </label>
-                                    <textarea
-                                        {...register('message')}
-                                        style={{
-                                            width: '100%',
-                                            backgroundColor: inputBg,
-                                            border: '1px solid rgba(255,255,255,0.1)',
-                                            borderRadius: '4px',
-                                            padding: '16px 18px',
-                                            color: '#fff',
-                                            fontSize: '1rem',
-                                            outline: 'none',
-                                            transition: 'border-color 0.2s',
-                                            minHeight: '120px',
-                                            resize: 'vertical'
-                                        }}
-                                        placeholder="Tell us more about your property..."
-                                        onFocus={(e) => e.currentTarget.style.borderColor = goldAccent}
-                                        onBlur={(e) => e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'}
-                                    />
-                                </div>
-
-                                {/* Submit Button */}
-                                <button
-                                    type="submit"
-                                    disabled={isSubmitting}
-                                    style={{
-                                        width: '100%',
-                                        backgroundColor: goldAccent,
-                                        color: darkBg,
-                                        border: 'none',
-                                        borderRadius: '4px',
-                                        padding: '18px',
-                                        fontSize: '0.9rem',
-                                        fontWeight: 700,
-                                        textTransform: 'uppercase',
-                                        letterSpacing: '2px',
-                                        cursor: isSubmitting ? 'not-allowed' : 'pointer',
-                                        opacity: isSubmitting ? 0.7 : 1,
-                                        transition: 'all 0.3s ease'
-                                    }}
-                                    onMouseEnter={(e) => {
-                                        if (!isSubmitting) {
-                                            e.currentTarget.style.backgroundColor = '#DEC993';
-                                            e.currentTarget.style.transform = 'translateY(-2px)';
-                                        }
-                                    }}
-                                    onMouseLeave={(e) => {
-                                        if (!isSubmitting) {
-                                            e.currentTarget.style.backgroundColor = goldAccent;
-                                            e.currentTarget.style.transform = 'translateY(0)';
-                                        }
-                                    }}
-                                >
-                                    {isSubmitting ? 'Submitting...' : 'Submit Details'}
-                                </button>
-                            </form>
+                                        {isSubmitting ? 'Submitting...' : 'Submit Details'}
+                                    </button>
+                                </form>
+                            </>
                         )}
                     </div>
                 </div>

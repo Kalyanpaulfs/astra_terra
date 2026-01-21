@@ -6,6 +6,7 @@ export async function POST(request: NextRequest) {
     const {
       'first-name': firstName,
       'last-name': lastName,
+      name, // Add 'name' support for List Your Property form
       email,
       phone,
       message,
@@ -14,7 +15,10 @@ export async function POST(request: NextRequest) {
     } = body;
 
     // Validate required fields
-    if (!firstName || !lastName || !email || !message || !inquiry_type) {
+    // For LIST_PROPERTY we might use 'name', 'email', 'phone', 'message', 'inquiry_type'
+    const hasName = (firstName && lastName) || name;
+
+    if (!hasName || !email || !inquiry_type) {
       return NextResponse.json(
         { error: 'Missing required fields' },
         { status: 400 }
@@ -54,9 +58,14 @@ export async function POST(request: NextRequest) {
     // Determine form ID based on inquiry type (configurable via env vars)
     const buyFormId = process.env.PIXXI_BUY_FORM_ID || '03d831e8-842f-463b-bff5-9a5b9a490e7b';
     const rentFormId = process.env.PIXXI_RENT_FORM_ID || '20348d4b-d85a-4989-8e43-87e63408bc09';
-    const formId = inquiry_type === 'RENT' ? rentFormId : buyFormId;
+    // Fallback to Buy ID if List ID is missing, but prefer a dedicated ID for listing
+    const listFormId = process.env.PIXXI_LIST_FORM_ID || buyFormId;
 
-    const fullName = `${firstName} ${lastName}`;
+    let formId = buyFormId;
+    if (inquiry_type === 'RENT') formId = rentFormId;
+    if (inquiry_type === 'LIST_PROPERTY') formId = listFormId;
+
+    const fullName = firstName && lastName ? `${firstName} ${lastName}` : body.name || '';
 
     // Send to Pixxi webhook
     const webhookToken = process.env.PIXXI_WEBHOOK_TOKEN || process.env.PIXXI_TOKEN;
@@ -79,6 +88,30 @@ export async function POST(request: NextRequest) {
         message,
       },
     };
+
+    // Add specific fields for List Your Property
+    if (inquiry_type === 'LIST_PROPERTY') {
+      const { propertyAddress, propertyType, propertyPurpose, bedroom } = body;
+      pixxiPayload.extraData = {
+        ...pixxiPayload.extraData,
+        'Property Address': propertyAddress,
+        'Property Type': propertyType,
+        'Property Purpose': propertyPurpose,
+        'Bedroom': bedroom,
+        'Enquiry Source': 'List Your Property Page'
+      };
+
+      // Also append to message for better visibility if CRM doesn't show extraData fields easily
+      pixxiPayload.extraData.message = `
+${message}
+
+--- Property Details ---
+Address: ${propertyAddress}
+Type: ${propertyType}
+Purpose: ${propertyPurpose}
+Bedroom: ${bedroom}
+`.trim();
+    }
 
     console.log('Sending to Pixxi CRM:', JSON.stringify(pixxiPayload, null, 2));
 

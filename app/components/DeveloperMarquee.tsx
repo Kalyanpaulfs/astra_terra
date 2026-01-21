@@ -7,7 +7,7 @@ export default function DeveloperMarquee() {
     <div className="at-container" id="developers-anchor">
       <div className="at-developer-section">
         <div className="at-developer-title">
-          <h5>Partner Developers</h5>
+          <h5>Partnered Developers</h5>
         </div>
         <div className="at-marquee-container">
           <ul className="at-marquee-list">
@@ -18,6 +18,7 @@ export default function DeveloperMarquee() {
                   alt={`Developer logo ${num}`}
                   width={120}
                   height={60}
+                  loading="lazy"
                 />
               </li>
             ))}

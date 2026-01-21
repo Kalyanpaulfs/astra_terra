@@ -142,7 +142,16 @@ export default function FeaturedSection({ listings }: FeaturedSectionProps) {
             {/* Content Header Layer */}
             <div className="atf-header" style={{ height: '30vh', minHeight: 'auto', zIndex: 1, position: 'relative' }}>
                 <div className="atfh-shc">
-                    <div className="atfh-subheader">Exclusive Collection</div>
+                    <div className="atfh-subheader animate-gradient-bg" style={{
+                        color: '#0D1625',
+                        padding: '8px 24px',
+                        borderRadius: '9999px',
+                        fontSize: '13px',
+                        fontWeight: '600',
+                        textTransform: 'uppercase',
+                        letterSpacing: '1px',
+                        display: 'inline-block'
+                    }}>Exclusive Collection</div>
                 </div>
                 {/* Updated header color to white for contrast */}
                 <div className="atfh-header" style={{ color: '#FFFFFF' }}>Premier Dubai Properties</div>
