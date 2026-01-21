@@ -121,12 +121,12 @@ export default function AdminDashboard() {
             // Upload to Cloudinary
             const formData = new FormData();
             formData.append('file', file);
-            formData.append('api_key', process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY || '714597318371755');
+            formData.append('api_key', process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY!);
             formData.append('timestamp', timestamp.toString()); // Convert to string safely
             formData.append('signature', signature);
             formData.append('folder', 'blogs');
 
-            const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || 'dumt7udjd';
+            const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME!;
             const res = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
                 method: 'POST',
                 body: formData
@@ -159,12 +159,12 @@ export default function AdminDashboard() {
 
             const formData = new FormData();
             formData.append('file', file);
-            formData.append('api_key', process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY || '714597318371755');
+            formData.append('api_key', process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY!);
             formData.append('timestamp', timestamp.toString());
             formData.append('signature', signature);
             formData.append('folder', 'blog-attachments');
 
-            const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || 'dumt7udjd';
+            const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME!;
             // Use auto/upload for generic files (PDF, etc.)
             const res = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/auto/upload`, {
                 method: 'POST',
