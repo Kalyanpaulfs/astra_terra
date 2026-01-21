@@ -323,6 +323,7 @@ pre {
 	padding: 18px 0 16px 0;
 	display: inline-block;
 	position: relative;
+	z-index: 10;
 }
 
 /* Premium Typography for Nav Links - Elegant & Refined */
@@ -477,22 +478,21 @@ pre {
 }
 
 
-/* Force no hover effect (Static State) */
+
+/* Simple Hover Effect (Subtle) */
 .custom-nav-menu .nav-cta-button:hover {
 	color: #0D1625 !important;
-	background: linear-gradient(135deg, #DEC993 0%, #C5A265 50%, #B59556 100%) !important;
-	/* Same as normal */
-	box-shadow:
-		0 4px 15px rgba(197, 162, 101, 0.35),
-		0 2px 6px rgba(0, 0, 0, 0.15),
-		inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
-	/* Same as normal */
+	background: linear-gradient(135deg, #E8D9A8 0%, #DEC993 50%, #C5A265 100%) !important;
+	/* Slightly lighter gold */
+	box-shadow: 0 4px 15px rgba(197, 162, 101, 0.4);
+	/* Soft shadow matching button color */
 	border: none !important;
 	text-shadow: none !important;
-	transform: none !important;
+	transform: translateY(-1px);
+	/* Subtle lift */
 }
 
-/* Hide shimmer on hover */
+/* Ensure shimmer stays hidden */
 .custom-nav-menu .nav-cta-button:hover::before {
 	display: none !important;
 }

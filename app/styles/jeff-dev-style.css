@@ -1678,6 +1678,8 @@
     background-color: #0D1625;
     padding: 100px 0;
     position: relative;
+    overflow: hidden;
+    /* Prevent horizontal scroll from animations */
 }
 
 .showcase-container {
@@ -2100,7 +2102,7 @@
     /* 2-column grid with alternating sizes for mobile */
     .showcase-grid {
         grid-template-columns: repeat(2, 1fr);
-        grid-template-rows: 180px 280px 180px 280px 180px 280px;
+        grid-template-rows: 180px 280px 180px 280px 180px 280px 180px 280px;
         gap: 10px;
         grid-template-areas:
             "img1 img2"

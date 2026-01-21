@@ -135,6 +135,11 @@ export default function Footer() {
                   <path d="M128,80a48,48,0,1,0,48,48A48.05,48.05,0,0,0,128,80Zm0,80a32,32,0,1,1,32-32A32.04,32.04,0,0,1,128,160ZM176,24H80A56.06,56.06,0,0,0,24,80v96a56.06,56.06,0,0,0,56,56h96a56.06,56.06,0,0,0,56-56V80A56.06,56.06,0,0,0,176,24Zm40,152a40,40,0,0,1-40,40H80a40,40,0,0,1-40-40V80A40,40,0,0,1,80,40h96a40,40,0,0,1,40,40ZM192,76a12,12,0,1,1-12-12A12,12,0,0,1,192,76Z"></path>
                 </svg>
               </a>
+              <a href="https://www.tiktok.com/@astraterraproperties" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 256 256">
+                  <path d="M224,72a8,8,0,0,1-8,8,48,48,0,0,1-48,48v48a56,56,0,1,1-56-56,8,8,0,0,1,0,16,40,40,0,1,0,40,40V24a8,8,0,0,1,8-8h40a8,8,0,0,1,8,8v48a8,8,0,0,1-8,8,48.06,48.06,0,0,1,40-48h8A8,8,0,0,1,224,72Z"></path>
+                </svg>
+              </a>
               <a href="https://www.linkedin.com/in/josephtoubia" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 256 256">
                   <path d="M216,24H40A16,16,0,0,0,24,40V216a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V40A16,16,0,0,0,216,24Zm0,192H40V40H216V216ZM96,112v64a8,8,0,0,1-16,0V112a8,8,0,0,1,16,0Zm-8-24a12,12,0,1,1,12-12A12,12,0,0,1,88,88Zm104,48v40a8,8,0,0,1-16,0V140a20,20,0,0,0-40,0v36a8,8,0,0,1-16,0V112a8,8,0,0,1,16,0v6a36,36,0,0,1,56,18Z"></path>

@@ -168,9 +168,10 @@ export default function BlogDetails() {
                     {blog.attachmentUrl && (
                         <div style={{ marginTop: '3rem', textAlign: 'center' }}>
                             <a
-                                href={blog.attachmentUrl.replace('/upload/', '/upload/fl_attachment/')}
+                                href={blog.attachmentUrl}
                                 target="_blank"
                                 rel="noopener noreferrer"
+                                download
                                 className="ba-btn"
                                 style={{
                                     display: 'inline-block',
