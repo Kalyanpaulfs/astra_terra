@@ -362,6 +362,17 @@ export default function AdminDashboard() {
                                     onChange={(e) => {
                                         const file = e.target.files?.[0];
                                         if (file) {
+                                            // Validate file type
+                                            const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+                                            const fileExtension = file.name.split('.').pop()?.toLowerCase();
+                                            const allowedExtensions = ['pdf', 'doc', 'docx'];
+
+                                            if (!allowedTypes.includes(file.type) && !allowedExtensions.includes(fileExtension || '')) {
+                                                showError(`Invalid file type!\nOnly PDF and DOC/DOCX files are allowed.`);
+                                                e.target.value = '';
+                                                return;
+                                            }
+
                                             if (file.size > 10 * 1024 * 1024) {
                                                 showError(`File is too large!\nMaximum allowed: 10MB\nSelected: ${(file.size / 1024 / 1024).toFixed(1)}MB`);
                                                 e.target.value = '';
@@ -371,6 +382,7 @@ export default function AdminDashboard() {
                                         }
                                     }}
                                     className="ba-input ba-file-input"
+                                    accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
                                 />
                             </div>
 
