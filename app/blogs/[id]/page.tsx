@@ -21,6 +21,7 @@ interface BlogPost {
     sections: BlogSection[];
     createdAt: any;
     authorEmail?: string;
+    attachmentUrl?: string;
 }
 
 export default function BlogDetails() {
@@ -101,6 +102,11 @@ export default function BlogDetails() {
     return (
         <>
             <div className="ba-container" style={{ paddingTop: '120px' }}>
+                <div style={{ marginBottom: '30px', maxWidth: '1000px', margin: '0 auto 30px auto' }}>
+                    <Link href="/blogs" className="ba-btn ba-btn-outline" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '8px 20px', fontSize: '0.9rem', borderRadius: '30px', textDecoration: 'none' }}>
+                        ← Back to Blogs
+                    </Link>
+                </div>
                 <article className="ba-article" style={{ maxWidth: '1000px' }}>
 
                     {/* Header Section */}
@@ -148,13 +154,39 @@ export default function BlogDetails() {
                                         </div>
                                     )}
 
-                                    <div className="ba-article-text" style={{ fontSize: '1.2rem', color: '#d1d5db' }}>
-                                        {section.content}
-                                    </div>
+                                    <div
+                                        className="ba-article-text"
+                                        style={{ fontSize: '1.2rem', color: '#d1d5db', lineHeight: '1.8' }}
+                                        dangerouslySetInnerHTML={{ __html: section.content }}
+                                    />
                                 </div>
                             ))}
                         </div>
                     </div>
+
+                    {/* Attachment Download Section */}
+                    {blog.attachmentUrl && (
+                        <div style={{ marginTop: '3rem', textAlign: 'center' }}>
+                            <a
+                                href={blog.attachmentUrl.replace('/upload/', '/upload/fl_attachment/')}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="ba-btn"
+                                style={{
+                                    display: 'inline-block',
+                                    textDecoration: 'none',
+                                    padding: '12px 30px',
+                                    backgroundColor: 'var(--accent-gold)',
+                                    color: 'white',
+                                    borderRadius: '50px',
+                                    fontWeight: 'bold',
+                                    boxShadow: '0 4px 15px rgba(184, 134, 11, 0.3)'
+                                }}
+                            >
+                                📥 Download Attached File
+                            </a>
+                        </div>
+                    )}
 
                     <div style={{ marginTop: '5rem', paddingTop: '3rem', borderTop: '1px solid var(--border-color)' }}>
                         <h3 className="ba-subtitle" style={{ textAlign: 'center', marginBottom: '2rem' }}>More Insights</h3>

@@ -6,6 +6,7 @@ import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
 import { collection, addDoc, serverTimestamp, query, orderBy, getDocs, deleteDoc, doc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import RichTextEditor from '../components/RichTextEditor';
 
 interface BlogSection {
     heading: string;
@@ -104,15 +105,86 @@ export default function AdminDashboard() {
     };
 
     const uploadImage = async (file: File) => {
+        if (file.size > 10 * 1024 * 1024) { // 10MB limit
+            alert(`File "${file.name}" is too large (>${(file.size / 1024 / 1024).toFixed(1)}MB). Limit is 10MB.`);
+            throw new Error('File size exceeds 10MB limit');
+        }
         try {
-            const storageRef = ref(storage, `blogs/${Date.now()}_${file.name}`);
-            const snapshot = await uploadBytes(storageRef, file);
-            return await getDownloadURL(snapshot.ref);
+            // Get Signature
+            const signRes = await fetch('/api/cloudinary/sign', {
+                method: 'POST',
+                body: JSON.stringify({ folder: 'blogs' })
+            });
+            const signData = await signRes.json();
+            const { timestamp, signature } = signData;
+
+            // Upload to Cloudinary
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('api_key', process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY || '714597318371755');
+            formData.append('timestamp', timestamp.toString()); // Convert to string safely
+            formData.append('signature', signature);
+            formData.append('folder', 'blogs');
+
+            const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || 'dumt7udjd';
+            const res = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
+                method: 'POST',
+                body: formData
+            });
+
+            const data = await res.json();
+            if (!res.ok) {
+                console.error("Cloudinary Error:", data);
+                throw new Error(data.error?.message || 'Upload failed');
+            }
+            return data.secure_url || "";
         } catch (e) {
             console.error("Image upload failed.", e);
             return "";
         }
     };
+
+    const uploadAttachment = async (file: File) => {
+        if (file.size > 10 * 1024 * 1024) { // 10MB limit
+            alert(`File "${file.name}" is too large. Limit is 10MB.`);
+            throw new Error('File size exceeds 10MB limit');
+        }
+        try {
+            const signRes = await fetch('/api/cloudinary/sign', {
+                method: 'POST',
+                body: JSON.stringify({ folder: 'blog-attachments' })
+            });
+            const signData = await signRes.json();
+            const { timestamp, signature } = signData;
+
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('api_key', process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY || '714597318371755');
+            formData.append('timestamp', timestamp.toString());
+            formData.append('signature', signature);
+            formData.append('folder', 'blog-attachments');
+
+            const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || 'dumt7udjd';
+            // Use auto/upload for generic files (PDF, etc.)
+            const res = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/auto/upload`, {
+                method: 'POST',
+                body: formData
+            });
+
+            const data = await res.json();
+            if (!res.ok) {
+                console.error("Cloudinary Attachment Error:", data);
+                throw new Error(data.error?.message || 'Upload failed');
+            }
+            return data.secure_url || "";
+        } catch (e) {
+            console.error("Attachment upload failed.", e);
+            throw e; // Rethrow to stop submission
+        }
+    };
+
+    // New State
+    const [attachment, setAttachment] = useState<File | null>(null);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -122,6 +194,13 @@ export default function AdminDashboard() {
             let mainImageUrl = '';
             if (mainImage) {
                 mainImageUrl = await uploadImage(mainImage);
+            }
+
+            let attachmentUrl = '';
+            // @ts-ignore
+            if (attachment) {
+                // @ts-ignore
+                attachmentUrl = await uploadAttachment(attachment);
             }
 
             const processedSections = await Promise.all(sections.map(async (section) => {
@@ -145,13 +224,16 @@ export default function AdminDashboard() {
                 sections: processedSections,
                 createdAt: serverTimestamp(),
                 authorId: user.uid,
-                authorEmail: user.email
+                authorEmail: user.email,
+                attachmentUrl: attachmentUrl || null
             });
 
             alert('Blog posted successfully!');
             setTitle('');
             setMainImage(null);
             setSections([{ heading: '', content: '' }]);
+            // @ts-ignore
+            setAttachment(null);
             setRefreshTrigger(prev => prev + 1);
         } catch (error) {
             console.error('Error posting blog:', error);
@@ -193,10 +275,42 @@ export default function AdminDashboard() {
         router.push('/admin');
     };
 
+    const [errorModal, setErrorModal] = useState({ show: false, message: '' });
+
+    const showError = (message: string) => {
+        setErrorModal({ show: true, message });
+    };
+
     if (loading) return <div className="ba-container"><div className="ba-loading"><div className="ba-spinner"></div></div></div>;
 
     return (
         <div className="ba-container">
+            {errorModal.show && (
+                <div style={{
+                    position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+                    backgroundColor: 'rgba(0,0,0,0.7)', zIndex: 1000,
+                    display: 'flex', justifyContent: 'center', alignItems: 'center'
+                }}>
+                    <div style={{
+                        backgroundColor: '#1a1a1a', padding: '30px', borderRadius: '12px',
+                        maxWidth: '400px', width: '90%', textAlign: 'center',
+                        border: '1px solid var(--border-color)',
+                        boxShadow: '0 10px 30px rgba(0,0,0,0.5)'
+                    }}>
+                        <h3 style={{ color: '#ff4444', marginBottom: '15px', fontSize: '1.2rem' }}>Error</h3>
+                        <p style={{ color: '#e0e0e0', marginBottom: '25px', lineHeight: '1.5' }}>
+                            {errorModal.message.split('\n').map((line, i) => <span key={i}>{line}<br /></span>)}
+                        </p>
+                        <button
+                            onClick={() => setErrorModal({ show: false, message: '' })}
+                            className="ba-btn"
+                            style={{ minWidth: '100px' }}
+                        >
+                            Close
+                        </button>
+                    </div>
+                </div>
+            )}
             <div className="ba-wrapper">
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
                     <h1 className="ba-title" style={{ margin: 0 }}>Admin Dashboard</h1>
@@ -221,12 +335,42 @@ export default function AdminDashboard() {
                             </div>
 
                             <div className="ba-form-group">
-                                <label className="ba-label">Main Thumbnail Image (Optional)</label>
+                                <label className="ba-label">Main Thumbnail Image (Optional) <span style={{ fontSize: '0.8rem', color: '#ff9900' }}>(Max 10MB)</span></label>
                                 <input
                                     type="file"
-                                    onChange={(e) => e.target.files && setMainImage(e.target.files[0])}
+                                    onChange={(e) => {
+                                        const file = e.target.files?.[0];
+                                        if (file) {
+                                            if (file.size > 10 * 1024 * 1024) {
+                                                showError(`File is too large!\nMaximum allowed: 10MB\nSelected: ${(file.size / 1024 / 1024).toFixed(1)}MB`);
+                                                e.target.value = ''; // Reset
+                                                return;
+                                            }
+                                            setMainImage(file);
+                                        }
+                                    }}
                                     className="ba-input ba-file-input"
                                     accept="image/*"
+                                />
+                            </div>
+
+                            <div className="ba-form-group">
+                                <label className="ba-label">Upload Attachment (PDF/Doc) (Optional) <span style={{ fontSize: '0.8rem', color: '#ff9900' }}>(Max 10MB)</span></label>
+                                <input
+                                    type="file"
+                                    // @ts-ignore
+                                    onChange={(e) => {
+                                        const file = e.target.files?.[0];
+                                        if (file) {
+                                            if (file.size > 10 * 1024 * 1024) {
+                                                showError(`File is too large!\nMaximum allowed: 10MB\nSelected: ${(file.size / 1024 / 1024).toFixed(1)}MB`);
+                                                e.target.value = '';
+                                                return;
+                                            }
+                                            setAttachment(file);
+                                        }
+                                    }}
+                                    className="ba-input ba-file-input"
                                 />
                             </div>
 
@@ -258,20 +402,30 @@ export default function AdminDashboard() {
                                                 className="ba-input"
                                             />
                                         </div>
+
                                         <div className="ba-form-group">
                                             <label className="ba-label">Content</label>
-                                            <textarea
+                                            <RichTextEditor
                                                 value={section.content}
-                                                onChange={(e) => handleSectionChange(index, 'content', e.target.value)}
-                                                className="ba-textarea"
-                                                rows={4}
+                                                onChange={(val) => handleSectionChange(index, 'content', val)}
+                                                placeholder="Write section content..."
                                             />
                                         </div>
                                         <div className="ba-form-group">
-                                            <label className="ba-label">Section Image (Optional)</label>
+                                            <label className="ba-label">Section Image (Optional) <span style={{ fontSize: '0.8rem', color: '#ff9900' }}>(Max 10MB)</span></label>
                                             <input
                                                 type="file"
-                                                onChange={(e) => e.target.files && handleSectionChange(index, 'imageFile', e.target.files[0])}
+                                                onChange={(e) => {
+                                                    const file = e.target.files?.[0];
+                                                    if (file) {
+                                                        if (file.size > 10 * 1024 * 1024) {
+                                                            showError(`File is too large!\nMaximum allowed: 10MB\nSelected: ${(file.size / 1024 / 1024).toFixed(1)}MB`);
+                                                            e.target.value = '';
+                                                            return;
+                                                        }
+                                                        handleSectionChange(index, 'imageFile', file);
+                                                    }
+                                                }}
                                                 className="ba-input ba-file-input"
                                                 accept="image/*"
                                             />
