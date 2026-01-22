@@ -13,9 +13,9 @@ export default function HeroSectionServer({ cities, propertyTypes }: HeroSection
         <div className="at-hero">
             <HeroParallax />
             <HeroVideo
-                poster="/video/hero.webp"
-                webmSrc="/video/hero.webm"
-                mp4Src="/video/hero.mp4"
+                poster="/video/hero_1.webp"
+                webmSrc="/video/hero_1.webm"
+                mp4Src="/video/hero_1.mp4"
             />
 
             <div className="hero-content">

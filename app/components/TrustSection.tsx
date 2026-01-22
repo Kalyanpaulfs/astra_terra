@@ -90,7 +90,7 @@ export default function TrustSection() {
                     <div className="atsvh-hl" style={{ marginTop: '20px' }} data-aos="fade-up" data-aos-delay="400"></div>
                 </div>
                 <p className="dxb-text-para" data-aos="fade-up" data-aos-delay="500">
-                    For over 3 years, Astra Terra Properties has been the trusted partner for discerning clients seeking exceptional real estate opportunities in Dubai's dynamic luxury market.
+                    For over 2 years, Astra Terra Properties has been the trusted partner for discerning clients seeking exceptional real estate opportunities in Dubai's dynamic luxury market.
                 </p>
                 <p className="dxb-text-para" data-aos="fade-up" data-aos-delay="600">
                     From iconic Downtown penthouses to exclusive Palm Jumeirah villas, we specialize in Dubai's most prestigious properties and provide unmatched expertise to international investors.
@@ -102,7 +102,7 @@ export default function TrustSection() {
                 <div className="dxb-most-trusted-stats-grid">
                     <div className="dxb-most-trusted-stat" data-aos="zoom-in" data-aos-delay="800">
                         <div className="dxb-most-trusted-icon"><i className="ph ph-medal"></i></div>
-                        <AnimatedNumber end={3} suffix="+" />
+                        <AnimatedNumber end={2} suffix="+" />
                         <div className="dxb-most-trusted-label">Years Experience</div>
                     </div>
                     <div className="dxb-most-trusted-stat" data-aos="zoom-in" data-aos-delay="900">
