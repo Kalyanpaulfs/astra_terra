@@ -3,6 +3,7 @@
 import { useEffect, useState, useMemo } from 'react';
 import DeveloperCard from '../components/DeveloperCard';
 import Pagination from '../components/Pagination';
+import { COLORS } from '../lib/constants';
 
 interface Developer {
     name: string;
@@ -134,7 +135,7 @@ export default function DevelopersPage() {
                 </>
             ) : (
                 <div className="at-dp-empty">
-                    <i className="ph ph-magnifying-glass" style={{ fontSize: '48px', color: '#C5A265', marginBottom: '16px' }}></i>
+                    <i className="ph ph-magnifying-glass" style={{ fontSize: '48px', color: COLORS.GOLD_ACCENT, marginBottom: '16px' }}></i>
                     <h3>{searchQuery ? 'No Developers Found' : 'No Developers Available'}</h3>
                     <p>{searchQuery ? `No developers match "${searchQuery}"` : 'Developer information is currently unavailable.'}</p>
                     {searchQuery && (

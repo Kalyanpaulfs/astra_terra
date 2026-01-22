@@ -5,6 +5,7 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import PropertyCard from '../components/PropertyCard';
 import { PropertiesSearchSkeleton } from '../components/Skeletons';
 import Pagination from '../components/Pagination';
+import { COLORS } from '../lib/constants';
 
 interface PropertyMeta {
   cities: Record<number, string>;
@@ -96,7 +97,7 @@ function PropertiesSearchContent() {
       paddingLeft: '2rem',
       paddingRight: '2rem',
       paddingTop: '100px', // Reduced top space further
-      backgroundImage: `linear-gradient(to bottom, rgba(5,10,16,0.9), rgba(5,10,16,0.95)), url('/img/buy-page-bg.png')`,
+      backgroundImage: `linear-gradient(to bottom, rgba(5,10,16,0.9), rgba(5,10,16,0.95)), url('/img/buy-page-bg.webp')`,
       backgroundSize: 'cover',
       backgroundPosition: 'center',
       backgroundAttachment: 'fixed',
@@ -166,8 +167,8 @@ function PropertiesSearchContent() {
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.background = 'rgba(222, 201, 147, 0.1)';
-                  e.currentTarget.style.borderColor = '#DEC993';
-                  e.currentTarget.style.color = '#DEC993';
+                  e.currentTarget.style.borderColor = 'COLORS.DUBAI_GOLD';
+                  e.currentTarget.style.color = 'COLORS.DUBAI_GOLD';
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.background = 'rgba(255,255,255,0.05)';
@@ -182,7 +183,7 @@ function PropertiesSearchContent() {
               {searchParams.get('type') ? (
                 <>
                   <h1 className="title is-1 mb-0" style={{
-                    background: 'linear-gradient(to right, #DFBD69, #926F34)', // Premium Gold Gradient
+                    background: 'COLORS.GOLD_GRADIENT', // Premium Gold Gradient
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
                     fontWeight: 400,
@@ -211,7 +212,7 @@ function PropertiesSearchContent() {
               ) : (
                 <>
                   <h1 className="title is-1 mb-0" style={{
-                    background: 'linear-gradient(to right, #DFBD69, #926F34)', // Premium Gold Gradient
+                    background: 'COLORS.GOLD_GRADIENT', // Premium Gold Gradient
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
                     fontWeight: 400,
@@ -258,7 +259,7 @@ function PropertiesSearchContent() {
                 border: '1px solid rgba(197, 162, 101, 0.2)',
                 boxShadow: '0 2px 10px rgba(0,0,0,0.03)'
               }}>
-                <span style={{ width: '5px', height: '5px', borderRadius: '50%', backgroundColor: '#C5A265' }}></span>
+                <span style={{ width: '5px', height: '5px', borderRadius: '50%', backgroundColor: 'COLORS.GOLD_ACCENT' }}></span>
                 <p style={{
                   color: 'white', // Updated to white
                   fontSize: '0.95rem',
@@ -268,9 +269,9 @@ function PropertiesSearchContent() {
                   textTransform: 'uppercase',
                   fontFamily: '"Montserrat", sans-serif'
                 }}>
-                  {loading ? 'Loading...' : <><span style={{ color: '#C5A265', fontWeight: 700 }}>{listings.length}</span> {listings.length === 1 ? 'PROPERTY' : 'PROPERTIES'} FOUND</>}
+                  {loading ? 'Loading...' : <><span style={{ color: 'COLORS.GOLD_ACCENT', fontWeight: 700 }}>{listings.length}</span> {listings.length === 1 ? 'PROPERTY' : 'PROPERTIES'} FOUND</>}
                 </p>
-                <span style={{ width: '5px', height: '5px', borderRadius: '50%', backgroundColor: '#C5A265' }}></span>
+                <span style={{ width: '5px', height: '5px', borderRadius: '50%', backgroundColor: 'COLORS.GOLD_ACCENT' }}></span>
               </div>
             </div>
 
@@ -306,7 +307,7 @@ function PropertiesSearchContent() {
                     justifyContent: 'center',
                     border: '1px solid rgba(197, 162, 101, 0.3)'
                   }}>
-                    <i className="ph ph-house" style={{ fontSize: '28px', color: '#C5A265' }}></i>
+                    <i className="ph ph-house" style={{ fontSize: '28px', color: 'COLORS.GOLD_ACCENT' }}></i>
                   </div>
                   <h3 className="title is-4" style={{ color: '#ffffff', fontFamily: '"Playfair Display", serif' }}>
                     No Properties Found
@@ -338,7 +339,7 @@ function PropertiesSearchContent() {
               justifyContent: 'center',
               border: '1px solid rgba(197, 162, 101, 0.3)'
             }}>
-              <i className="ph ph-magnifying-glass" style={{ fontSize: '40px', color: '#C5A265' }}></i>
+              <i className="ph ph-magnifying-glass" style={{ fontSize: '40px', color: 'COLORS.GOLD_ACCENT' }}></i>
             </div>
             <h3 className="title is-3" style={{ color: '#ffffff', fontFamily: '"Playfair Display", serif', marginBottom: '1rem' }}>
               No Properties Found
@@ -348,8 +349,8 @@ function PropertiesSearchContent() {
               Try adjusting your filters or exploring other categories.
             </p>
             <a href="/properties-search?city=41&listtype=SELL" className="button is-outlined" style={{
-              borderColor: '#C5A265',
-              color: '#C5A265',
+              borderColor: 'COLORS.GOLD_ACCENT',
+              color: 'COLORS.GOLD_ACCENT',
               background: 'transparent',
               marginTop: '1.5rem',
               borderRadius: '0',

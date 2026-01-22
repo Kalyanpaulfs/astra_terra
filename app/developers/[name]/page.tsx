@@ -4,6 +4,7 @@ import { useEffect, useState, useMemo, Suspense } from 'react';
 import { useParams, useSearchParams, useRouter } from 'next/navigation';
 import PropertyCard from '../../components/PropertyCard';
 import Pagination from '../../components/Pagination';
+import { COLORS } from '@/app/lib/constants';
 
 function DeveloperDetailContent() {
     const params = useParams();
@@ -192,7 +193,7 @@ function DeveloperDetailContent() {
                 </>
             ) : (
                 <div className="at-ddp-empty">
-                    <i className="ph ph-house" style={{ fontSize: '48px', color: '#C5A265', marginBottom: '16px' }}></i>
+                    <i className="ph ph-house" style={{ fontSize: '48px', color: COLORS.GOLD_ACCENT, marginBottom: '16px' }}></i>
                     <h3>No Properties Found</h3>
                     <p>No {activeTab !== 'all' ? activeTab : ''} properties available from this developer.</p>
                 </div>

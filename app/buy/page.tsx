@@ -3,23 +3,24 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import { COLORS } from '../lib/constants';
 
 // Mapping generic images to property types for a premium visual feel
 // In a real app these should come from the CMS/API
 const TYPE_IMAGES: Record<string, string> = {
-    'APARTMENT': '/img/apartment-new.png',
-    'VILLA': '/img/villa-new.png',
-    'TOWNHOUSE': '/img/townhouse-new.png',
-    'PENTHOUSE': '/img/penthouse-new.png',
-    'HOTEL_APARTMENT': '/img/hotel-new.png',
-    'DUPLEX': '/img/duplex-new.png',
-    'COMMERCIAL_BUILDING': '/img/commercial-new.png',
-    'HOTEL': '/img/luxury-hotel.png',
-    'OFFICE': '/img/office.png',
-    'RESIDENTIAL_BUILDING': '/img/residential-building.png',
-    'RESIDENTIAL_PLOT': '/img/residential-plot.png',
-    'RETAIL': '/img/retail.png',
-    'SHOP': '/img/shop.png',
+    'APARTMENT': '/img/apartment-new.webp',
+    'VILLA': '/img/villa-new.webp',
+    'TOWNHOUSE': '/img/townhouse-new.webp',
+    'PENTHOUSE': '/img/penthouse-new.webp',
+    'HOTEL_APARTMENT': '/img/hotel-new.webp',
+    'DUPLEX': '/img/duplex-new.webp',
+    'COMMERCIAL_BUILDING': '/img/commercial-new.webp',
+    'HOTEL': '/img/luxury-hotel.webp',
+    'OFFICE': '/img/office.webp',
+    'RESIDENTIAL_BUILDING': '/img/residential-building.webp',
+    'RESIDENTIAL_PLOT': '/img/residential-plot.webp',
+    'RETAIL': '/img/retail.webp',
+    'SHOP': '/img/shop.webp',
     // Fallbacks
     'default': '/img/snip.webp'
 };
@@ -73,7 +74,7 @@ export default function BuyPage() {
         <div className="buy-page-wrapper" style={{
             minHeight: '100vh',
             // Premium background image with overlay
-            backgroundImage: `linear-gradient(to bottom, rgba(5,10,16,0.7), rgba(5,10,16,0.9)), url('/img/buy-page-bg.png')`,
+            backgroundImage: `linear-gradient(to bottom, rgba(5,10,16,0.7), rgba(5,10,16,0.9)), url('/img/buy-page-bg.webp')`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundAttachment: 'fixed',
@@ -117,7 +118,7 @@ export default function BuyPage() {
                         transition={{ duration: 0.8 }}
                     >
                         <h6 style={{
-                            color: '#DEC993',
+                            color: COLORS.DUBAI_GOLD,
                             letterSpacing: '3px',
                             textTransform: 'uppercase',
                             fontSize: '0.9rem',
@@ -134,7 +135,7 @@ export default function BuyPage() {
                             lineHeight: '1.1',
                             fontFamily: '"Playfair Display", serif' // Using serif for luxury feel
                         }}>
-                            Buy Your Dream <span style={{ fontStyle: 'italic', fontWeight: '400', color: '#DEC993' }}>Property</span>
+                            Buy Your Dream <span style={{ fontStyle: 'italic', fontWeight: '400', color: COLORS.DUBAI_GOLD }}>Property</span>
                         </h1>
                         <p style={{
                             fontSize: '1.1rem',
@@ -156,7 +157,7 @@ export default function BuyPage() {
                             height: '40px',
                             border: '2px solid rgba(222,201,147,0.3)',
                             borderRadius: '50%',
-                            borderTopColor: '#DEC993',
+                            borderTopColor: COLORS.DUBAI_GOLD,
                             animation: 'spin 1s ease-in-out infinite'
                         }}></div>
                         <style jsx>{` @keyframes spin { to { transform: rotate(360deg); } } `}</style>
@@ -238,7 +239,7 @@ export default function BuyPage() {
                                                     <div className="hover-line" style={{
                                                         width: '40px',
                                                         height: '1px',
-                                                        backgroundColor: '#DEC993',
+                                                        backgroundColor: COLORS.DUBAI_GOLD,
                                                         marginBottom: '1rem',
                                                         transition: 'width 0.4s ease'
                                                     }}></div>
@@ -270,7 +271,7 @@ export default function BuyPage() {
                                                         marginTop: '0.5rem'
                                                     }}>
                                                         <span>View Collection</span>
-                                                        <i className="ph ph-arrow-right" style={{ color: '#DEC993' }}></i>
+                                                        <i className="ph ph-arrow-right" style={{ color: COLORS.DUBAI_GOLD }}></i>
                                                     </div>
                                                 </div>
                                             </div>

@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { useForm } from 'react-hook-form';
+import { COLORS } from '../lib/constants';
 
 export default function ListYourPropertyPage() {
     const { register, handleSubmit, formState: { errors, isSubmitting }, reset } = useForm();
@@ -44,7 +45,7 @@ export default function ListYourPropertyPage() {
     // Shared styles for consistency
     const sectionPadding = { padding: '100px 24px' };
     const containerMaxWidth = { maxWidth: '1200px', margin: '0 auto' };
-    const goldAccent = '#C5A265';
+    const goldAccent = COLORS.GOLD_ACCENT;
     const darkBg = '#0D1625';
     const cardBg = '#111927';
     const inputBg = '#0A0F1A';
@@ -123,7 +124,7 @@ export default function ListYourPropertyPage() {
                                 boxShadow: '0 4px 24px rgba(197, 162, 101, 0.3)'
                             }}
                             onMouseEnter={(e) => {
-                                e.currentTarget.style.backgroundColor = '#DEC993';
+                                e.currentTarget.style.backgroundColor = COLORS.DUBAI_GOLD;
                                 e.currentTarget.style.transform = 'translateY(-2px)';
                             }}
                             onMouseLeave={(e) => {
@@ -711,7 +712,7 @@ export default function ListYourPropertyPage() {
                                         }}
                                         onMouseEnter={(e) => {
                                             if (!isSubmitting) {
-                                                e.currentTarget.style.backgroundColor = '#DEC993';
+                                                e.currentTarget.style.backgroundColor = COLORS.DUBAI_GOLD;
                                                 e.currentTarget.style.transform = 'translateY(-2px)';
                                             }
                                         }}
