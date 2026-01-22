@@ -3147,11 +3147,39 @@ pre {
 	}
 
 	.at-marquee-container {
-		height: 60px;
+		height: 80px;
+		/* Increased height for better mobile visibility */
 	}
 
 	.at-marquee-list img {
-		max-height: 40px !important;
+		max-height: 50px !important;
+		/* Slightly larger logos on mobile */
+	}
+
+	/* Mobile-specific developer section adjustments */
+	.at-developer-section {
+		padding: 0 15px;
+	}
+
+	.at-developer-title {
+		top: 10px;
+		/* Adjusted position for mobile */
+	}
+
+	.at-developer-title>h5 {
+		font-size: 11px;
+		/* Smaller font on mobile */
+		letter-spacing: 1.5px;
+	}
+
+	.at-container {
+		padding: 30px 0;
+		/* Reduced padding on mobile */
+	}
+
+	/* Reduce logo spacing on mobile */
+	.at-marquee-list li {
+		padding: 0 20px;
 	}
 }
 
@@ -3176,7 +3204,32 @@ pre {
 	.at-pcbi-price {
 		font-size: 24px;
 	}
+
+	/* Extra small screen optimizations for developer marquee */
+	.at-marquee-container {
+		height: 70px;
+	}
+
+	.at-marquee-list img {
+		max-height: 45px !important;
+	}
+
+	.at-developer-title>h5 {
+		font-size: 10px;
+		letter-spacing: 1px;
+	}
+
+	.at-marquee-list li {
+		padding: 0 15px;
+		/* Further reduced spacing */
+	}
+
+	.at-container {
+		padding: 25px 0;
+		/* Even more compact on small screens */
+	}
 }
+
 
 /* Responsive Grid for Properties Search */
 .at-properties-grid {
