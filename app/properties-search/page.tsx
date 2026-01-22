@@ -179,7 +179,7 @@ function PropertiesSearchContent() {
                 BACK
               </button>
 
-              {searchParams.get('type') && (
+              {searchParams.get('type') ? (
                 <>
                   <h1 className="title is-1 mb-0" style={{
                     background: 'linear-gradient(to right, #DFBD69, #926F34)', // Premium Gold Gradient
@@ -190,10 +190,10 @@ function PropertiesSearchContent() {
                     fontFamily: '"Playfair Display", serif',
                     textTransform: 'uppercase',
                     letterSpacing: '1px',
-                    lineHeight: '1.2', // Slightly increased to ensure descenders aren't cut off
+                    lineHeight: '1.2',
                     marginTop: '0',
                     marginBottom: '0.5rem',
-                    paddingBottom: '5px' // Extra space for gradient bottom
+                    paddingBottom: '5px'
                   }}>
                     {searchParams.get('type')}
                   </h1>
@@ -208,9 +208,44 @@ function PropertiesSearchContent() {
                     Explore our exclusive collection of premium {searchParams.get('type')?.toLowerCase()}s in Dubai.
                   </p>
                 </>
+              ) : (
+                <>
+                  <h1 className="title is-1 mb-0" style={{
+                    background: 'linear-gradient(to right, #DFBD69, #926F34)', // Premium Gold Gradient
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    fontWeight: 400,
+                    fontSize: 'clamp(2.5rem, 5vw, 4rem)',
+                    fontFamily: '"Playfair Display", serif',
+                    textTransform: 'uppercase',
+                    letterSpacing: '1px',
+                    lineHeight: '1.2',
+                    marginTop: '0',
+                    marginBottom: '0.5rem',
+                    paddingBottom: '5px'
+                  }}>
+                    {searchParams.get('listtype') === 'RENT' ? 'Properties For Rent' :
+                      searchParams.get('listtype') === 'NEW' ? 'New Projects' :
+                        searchParams.get('developer') ? `Properties by ${searchParams.get('developer')}` :
+                          'All Properties'}
+                  </h1>
+
+                  <p style={{
+                    color: 'rgba(255,255,255,0.6)',
+                    fontSize: '1rem',
+                    maxWidth: '600px',
+                    lineHeight: '1.4',
+                    marginTop: '0'
+                  }}>
+                    {searchParams.get('listtype') === 'RENT'
+                      ? 'Discover our exclusive selection of luxury rental properties.'
+                      : searchParams.get('listtype') === 'NEW'
+                        ? 'Explore the latest off-plan developments in Dubai.'
+                        : 'Browse our complete portfolio of premium properties in Dubai.'}
+                  </p>
+                </>
               )}
             </div>
-
 
             <div className="is-flex is-justify-content-center is-align-items-center mt-4 mb-5">
               <div style={{

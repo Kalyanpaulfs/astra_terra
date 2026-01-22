@@ -7,12 +7,37 @@ import { useParams } from 'next/navigation';
 import { fetchProperty, fetchListings } from '@/app/lib/actions';
 import PropertyCard from './PropertyCard';
 
+import { usePathname } from 'next/navigation';
+
 export default function PropertyDetails() {
     const { id } = useParams();
+    const pathname = usePathname();
     const [property, setProperty] = useState<any>(null);
     const [similarProperties, setSimilarProperties] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [selectedImage, setSelectedImage] = useState(0);
+
+    // Determine smart back link based on current path and property data
+    const getBackLink = () => {
+        let base = '/properties-search';
+        const params = new URLSearchParams();
+
+        if (pathname?.includes('/rent')) {
+            params.set('listtype', 'RENT');
+        } else if (pathname?.includes('/buy')) {
+            params.set('listtype', 'SELL');
+        }
+
+        if (property?.propertyType) {
+            params.set('type', property.propertyType);
+        }
+
+        const queryString = params.toString();
+        return queryString ? `${base}?${queryString}` : base;
+    };
+
+    const backLink = getBackLink();
+
 
     useEffect(() => {
         if (!id) return;
@@ -176,7 +201,7 @@ export default function PropertyDetails() {
                 <div className="pd-header">
                     <div className="pd-header-content">
                         <div style={{ width: '100%', marginBottom: '10px' }}>
-                            <Link href="/properties-search" className="button is-small is-ghost pl-0" style={{ color: '#DEC993', textDecoration: 'none' }}>
+                            <Link href={backLink} className="button is-small is-ghost pl-0" style={{ color: '#DEC993', textDecoration: 'none' }}>
                                 <i className="ph ph-arrow-left" style={{ marginRight: '5px' }}></i> Back to Search
                             </Link>
                         </div>
