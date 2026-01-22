@@ -51,31 +51,17 @@ export default function MobileNav({ isOpen, onClose, propertyTypes = [], regions
           draggable={false}
         />
         <ul className="mnm2-links">
-          <li className={openSubmenu === 'buy' ? 'has-sub open' : 'has-sub'}>
-            <a href="#" onClick={(e) => { e.preventDefault(); setOpenSubmenu(openSubmenu === 'buy' ? null : 'buy'); }}>
+          <li>
+            <Link href="/buy" className="mnm2-close" onClick={onClose}>
               <i className="ph ph-house-line"></i>
               <span>Buy</span>
-              <i className="ph ph-caret-down arrow"></i>
-            </a>
-            <ul className="sub-links" style={{ maxHeight: '300px', overflowY: 'auto' }}>
-              {types.map((type) => (
-                <li key={type}><Link href={`/properties-search?city=41&type=${encodeURIComponent(type)}&listtype=SELL`} onClick={onClose}>{type.replace(/_/g, ' ')}</Link></li>
-              ))}
-              <li><Link href="/properties-search?city=41&listtype=SELL" onClick={onClose}>See All</Link></li>
-            </ul>
+            </Link>
           </li>
-          <li className={openSubmenu === 'rent' ? 'has-sub open' : 'has-sub'}>
-            <a href="#" onClick={(e) => { e.preventDefault(); setOpenSubmenu(openSubmenu === 'rent' ? null : 'rent'); }}>
+          <li>
+            <Link href="/rent" className="mnm2-close" onClick={onClose}>
               <i className="ph ph-key"></i>
               <span>Rent</span>
-              <i className="ph ph-caret-down arrow"></i>
-            </a>
-            <ul className="sub-links" style={{ maxHeight: '300px', overflowY: 'auto' }}>
-              {types.map((type) => (
-                <li key={type}><Link href={`/properties-search?city=41&type=${encodeURIComponent(type)}&listtype=RENT`} onClick={onClose}>{type.replace(/_/g, ' ')}</Link></li>
-              ))}
-              <li><Link href="/properties-search?city=41&listtype=RENT" onClick={onClose}>See All</Link></li>
-            </ul>
+            </Link>
           </li>
           <li>
             <Link href="/properties-search?listtype=NEW" className="mnm2-close" onClick={onClose}>
