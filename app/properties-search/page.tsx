@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState, Suspense } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import PropertyCard from '../components/PropertyCard';
 import { PropertiesSearchSkeleton } from '../components/Skeletons';
 import Pagination from '../components/Pagination';
@@ -13,6 +13,7 @@ interface PropertyMeta {
 }
 
 function PropertiesSearchContent() {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const [listings, setListings] = useState<any[]>([]);
   const [meta, setMeta] = useState<PropertyMeta | null>(null);
@@ -90,7 +91,17 @@ function PropertiesSearchContent() {
   }
 
   return (
-    <section className="section" style={{ minHeight: '80vh', paddingLeft: '2rem', paddingRight: '2rem' }}>
+    <section className="section" style={{
+      minHeight: '100vh',
+      paddingLeft: '2rem',
+      paddingRight: '2rem',
+      paddingTop: '100px', // Reduced top space further
+      backgroundImage: `linear-gradient(to bottom, rgba(5,10,16,0.9), rgba(5,10,16,0.95)), url('/img/buy-page-bg.png')`,
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      backgroundAttachment: 'fixed',
+      color: 'white' // Ensure default text is white
+    }}>
       <div className="container" style={{ maxWidth: '100%' }}>
         {loading ? (
           <>
@@ -120,58 +131,86 @@ function PropertiesSearchContent() {
           </>
         ) : listings.length > 0 ? (
           <>
-            <div className="mb-6 has-text-centered" style={{
-              background: searchParams.get('listtype') === 'NEW' ? '#0D1625' : 'transparent',
-              padding: searchParams.get('listtype') === 'NEW' ? '80px 20px 40px' : '0',
-              marginLeft: '-2rem',
-              marginRight: '-2rem',
-              marginTop: '-2rem',
-              marginBottom: searchParams.get('listtype') === 'NEW' ? '2rem' : '1.5rem'
+            <div className="mb-4" style={{
+              background: 'transparent',
+              marginBottom: '0.5rem',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              textAlign: 'center',
+              width: '100%',
+              position: 'relative',
+              paddingBottom: '1rem',
+              borderBottom: '1px solid rgba(255,255,255,0.1)'
             }}>
-              <h1 className="title is-2 has-text-weight-bold mb-3" style={{
-                color: '#C5A265',
-                fontFamily: '"Playfair Display", serif',
-                fontSize: searchParams.get('listtype') === 'NEW' ? '3rem' : '2rem'
-              }}>
-                {searchParams.get('developer')
-                  ? `Properties by ${searchParams.get('developer')}`
-                  : searchParams.get('listtype') === 'NEW'
-                    ? 'New Projects'
-                    : searchParams.get('listtype') === 'RENT'
-                      ? 'Properties for Rent'
-                      : 'Properties for Sale'}
-              </h1>
 
-              {searchParams.get('listtype') === 'NEW' && (
-                <p style={{ color: '#a0a0a0', fontSize: '1.1rem', marginBottom: '0' }}>
-                  Explore Dubai's latest off-plan developments
-                </p>
-              )}
+              {/* Back Button */}
+              <button
+                onClick={() => router.back()}
+                style={{
+                  alignSelf: 'flex-start',
+                  marginBottom: '1rem',
+                  background: 'rgba(255,255,255,0.05)',
+                  border: '1px solid rgba(255,255,255,0.1)',
+                  borderRadius: '30px',
+                  color: 'white',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  cursor: 'pointer',
+                  fontSize: '0.85rem',
+                  padding: '8px 20px',
+                  transition: 'all 0.3s ease',
+                  letterSpacing: '1px',
+                  zIndex: 10
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = 'rgba(222, 201, 147, 0.1)';
+                  e.currentTarget.style.borderColor = '#DEC993';
+                  e.currentTarget.style.color = '#DEC993';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = 'rgba(255,255,255,0.05)';
+                  e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)';
+                  e.currentTarget.style.color = 'white';
+                }}
+              >
+                <i className="ph ph-arrow-left" style={{ fontSize: '1rem' }}></i>
+                BACK
+              </button>
 
               {searchParams.get('type') && (
-                <h2 className="title is-4 mb-4" style={{
-                  color: searchParams.get('listtype') === 'NEW' ? '#ffffff' : '#0D1625',
-                  fontWeight: 700,
-                  textTransform: 'uppercase',
-                  letterSpacing: '3px',
-                  display: 'inline-block',
-                  position: 'relative',
-                  paddingBottom: '12px',
-                  marginTop: '16px'
-                }}>
-                  {searchParams.get('type')}
-                  <span style={{
-                    position: 'absolute',
-                    bottom: 0,
-                    left: '50%',
-                    transform: 'translateX(-50%)',
-                    width: '60px',
-                    height: '3px',
-                    backgroundColor: '#C5A265'
-                  }}></span>
-                </h2>
+                <>
+                  <h1 className="title is-1 mb-0" style={{
+                    background: 'linear-gradient(to right, #DFBD69, #926F34)', // Premium Gold Gradient
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    fontWeight: 400,
+                    fontSize: 'clamp(2.5rem, 5vw, 4rem)',
+                    fontFamily: '"Playfair Display", serif',
+                    textTransform: 'uppercase',
+                    letterSpacing: '1px',
+                    lineHeight: '1.2', // Slightly increased to ensure descenders aren't cut off
+                    marginTop: '0',
+                    marginBottom: '0.5rem',
+                    paddingBottom: '5px' // Extra space for gradient bottom
+                  }}>
+                    {searchParams.get('type')}
+                  </h1>
+
+                  <p style={{
+                    color: 'rgba(255,255,255,0.6)',
+                    fontSize: '1rem',
+                    maxWidth: '600px',
+                    lineHeight: '1.4',
+                    marginTop: '0'
+                  }}>
+                    Explore our exclusive collection of premium {searchParams.get('type')?.toLowerCase()}s in Dubai.
+                  </p>
+                </>
               )}
             </div>
+
 
             <div className="is-flex is-justify-content-center is-align-items-center mt-4 mb-5">
               <div style={{
@@ -186,7 +225,7 @@ function PropertiesSearchContent() {
               }}>
                 <span style={{ width: '5px', height: '5px', borderRadius: '50%', backgroundColor: '#C5A265' }}></span>
                 <p style={{
-                  color: '#0D1625',
+                  color: 'white', // Updated to white
                   fontSize: '0.95rem',
                   fontWeight: 500,
                   margin: 0,
@@ -286,8 +325,9 @@ function PropertiesSearchContent() {
               View All Properties
             </a>
           </div>
-        )}
-      </div>
+        )
+        }
+      </div >
     </section >
   );
 }
@@ -299,4 +339,3 @@ export default function PropertiesSearchPage() {
     </Suspense>
   );
 }
-
