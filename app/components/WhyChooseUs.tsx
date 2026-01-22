@@ -25,11 +25,47 @@ const reviews = [
     },
     {
         name: "Omar Tahiri",
-        text: "Great company. Very professional, organized, and detail-oriented."
+        text: "Very serious and very professional. A real pleasure to work with him"
     },
     {
         name: "Mehak Usman",
         text: "Amazing, educated, loyal, and highly experienced agent."
+    },
+    {
+        name: "Lumi.E.",
+        text: "Very helpful agent, friendly and good knowledge of the market. We appreciate his efforts and time."
+    },
+    {
+        name: "Eva w",
+        text: "Really one of the most professional , trusted and loyable Realtor that I know in 8 years living in the city. Also a very good person. It had been a pleasure to work with you"
+    },
+    {
+        name: "Ahmed Nagui Badawy",
+        text: "The best, most decent and high integrity real estate that I ever dealt with inside and outside Dubai."
+    },
+    {
+        name: "Abdalla Atris",
+        text: "Joe is superior, he sold my townhouse within 2 weeks. Very professional and helpful."
+    },
+    {
+        name: "noubin",
+        text: "such a good agent with behavior and also with prompt response"
+    },
+    {
+        name: "Kamila",
+        text: "Joseph is very kind and hard working, he's an incredible listener which made me so comfortable as the places he showed me matched my expectations, he delivered very fast and I got my dream renting place in the busy marina area that I've always dreamed of, I truly recommend Joseph. Kamila Kostka"
+    },
+    {
+        name: "Andrew Kadamani",
+        text: "Amazing service . He helped me alot finding the right place to invest. Straight forward and no time wasted."
+    },
+    {
+        name: "Yasaman heidarzad",
+        text: "I can say he is very honest , hard working , reliable ✔ Pleasure to have agent like joseph."
+    },
+    {
+        name: "Aziz Al",
+        text: "Excellent honest services Very professional and decent Mr. Joseph Toubia was very helpful and caring and excellent negotiator Thanks for your services"
     }
 ];
 

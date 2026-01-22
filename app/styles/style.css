@@ -480,21 +480,20 @@ pre {
 
 
 /* Simple Hover Effect (Subtle) */
+/* Premium Shimmer Hover Effect */
 .custom-nav-menu .nav-cta-button:hover {
 	color: #0D1625 !important;
 	background: linear-gradient(135deg, #E8D9A8 0%, #DEC993 50%, #C5A265 100%) !important;
-	/* Slightly lighter gold */
-	box-shadow: 0 4px 15px rgba(197, 162, 101, 0.4);
-	/* Soft shadow matching button color */
-	border: none !important;
-	text-shadow: none !important;
-	transform: translateY(-1px);
-	/* Subtle lift */
+	box-shadow: 0 10px 25px rgba(197, 162, 101, 0.4);
+	transform: translateY(-2px);
+	cursor: pointer;
 }
 
-/* Ensure shimmer stays hidden */
+/* Enable shimmer animation */
 .custom-nav-menu .nav-cta-button:hover::before {
-	display: none !important;
+	display: block !important;
+	left: 100%;
+	transition: left 0.6s ease;
 }
 
 .custom-nav-menu li .cnm-mega {
