@@ -65,7 +65,7 @@ export default function FounderPage() {
                     <div className={styles.profileImageWrapper}>
                         <div className={styles.profileImageContainer}>
                             <Image
-                                src="/img/Joseph.jpeg"
+                                src="/img/joseph.jpeg"
                                 alt="Joseph Toubia"
                                 fill
                                 className={styles.profileImage}
