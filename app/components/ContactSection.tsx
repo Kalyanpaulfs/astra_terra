@@ -64,7 +64,10 @@ export default function ContactSection() {
                                 </div>
                                 <div className="pcc-content">
                                     <h4 className="pcc-title">Email Us</h4>
-                                    <p className="pcc-text">info@astraterra.com</p>
+                                    <p className="pcc-text">
+                                        info@astraterra.com<br />
+                                        careers@astraterra.com
+                                    </p>
                                 </div>
                             </div>
 
@@ -76,7 +79,7 @@ export default function ContactSection() {
                                     <h4 className="pcc-title">Office Hours</h4>
                                     <p className="pcc-text">
                                         Mon-Fri: 9AM - 7PM<br />
-                                        Sat-Sun: 10AM - 5PM
+                                        Sat-Sun: Closed
                                     </p>
                                 </div>
                             </div>

@@ -495,6 +495,7 @@ export default function Navbar() {
                             <p className="cnm-mc-title">Contact</p>
                             <ul className="cnm-mc-plist">
                               <li><a href="#about-us-anchor" onClick={(e) => { handleLinkClick('more', e); }}>About Us</a></li>
+                              <li><Link href="/founder" onClick={(e) => { handleLinkClick('more', e); }}>Founder & CEO</Link></li>
                               <li><a href="#contact-us-anchor" onClick={(e) => { handleLinkClick('more', e); }}>Get In Touch</a></li>
                             </ul>
                           </div>

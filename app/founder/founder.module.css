@@ -1,0 +1,399 @@
+/* Global Page Styles */
+.pageContainer {
+    background-color: #0b0b0b;
+    color: #fff;
+    min-height: 100vh;
+    padding-top: 80px;
+    /* Navbar height */
+    font-family: 'Montserrat', sans-serif;
+    overflow-x: hidden;
+}
+
+/* --- Hero Section (Side-by-Side) --- */
+.hero {
+    position: relative;
+    width: 100%;
+    padding: 4rem 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #111 0%, #050505 100%);
+    min-height: 85vh;
+    /* Take up more height */
+}
+
+.heroBg {
+    position: absolute;
+    inset: 0;
+    opacity: 0.3;
+    /* Adjusted opacity for visibility */
+    pointer-events: none;
+    z-index: 0;
+    background-image: url('/img/dubai-trust.webp');
+    background-size: cover;
+    background-position: center;
+}
+
+.heroContent {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    max-width: 1200px;
+    /* Wider container */
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    align-items: center;
+}
+
+/* Image Side */
+.profileImageWrapper {
+    display: flex;
+    justify-content: center;
+    /* Add a subtle glow behind */
+}
+
+.profileImageContainer {
+    position: relative;
+    width: 18rem;
+    /* Larger image */
+    height: 18rem;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 4px solid #c6a87c;
+    box-shadow: 0 0 50px rgba(198, 168, 124, 0.2);
+    /* No padding, full fill as requested previously */
+}
+
+.profileImage {
+    object-fit: cover !important;
+    object-position: top center !important;
+    border-radius: 50%;
+}
+
+/* Text Side */
+.heroTextContent {
+    text-align: center;
+}
+
+.titleName {
+    font-family: 'Playfair Display', serif;
+    font-size: 3.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    line-height: 1.1;
+    background: linear-gradient(to right, #fff, #e2e2e2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.goldText {
+    color: #c6a87c;
+    -webkit-text-fill-color: #c6a87c;
+}
+
+.titleRole {
+    font-size: 1.5rem;
+    color: #c6a87c;
+    font-weight: 300;
+    letter-spacing: 0.1em;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+}
+
+.companyName {
+    font-size: 1rem;
+    color: #888;
+    letter-spacing: 0.15em;
+    font-weight: 600;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid #333;
+    display: inline-block;
+    padding-bottom: 1rem;
+}
+
+.bioSummary {
+    font-size: 1.125rem;
+    line-height: 1.8;
+    color: #d1d5db;
+    max-width: 600px;
+    margin: 0 auto;
+    /* Center text block */
+}
+
+/* --- Experience Section (Clean Timeline) --- */
+.experienceSection {
+    padding: 5rem 2rem;
+    background-color: #0e0e0e;
+    position: relative;
+    background-image: linear-gradient(rgba(14, 14, 14, 0.9), rgba(14, 14, 14, 0.9)), url('/img/contact-bg.webp');
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+}
+
+.sectionHeader {
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+.sectionTitle {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    color: #c6a87c;
+    margin-bottom: 1rem;
+}
+
+.sectionSubtitle {
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 0.875rem;
+}
+
+.timeline {
+    max-width: 900px;
+    margin: 0 auto;
+    position: relative;
+    /* Central line */
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, #c6a87c 0%, rgba(198, 168, 124, 0.1) 100%);
+    transform: translateX(-50%);
+}
+
+.timelineItem {
+    position: relative;
+    margin-bottom: 4rem;
+    width: 50%;
+}
+
+.timelineItem:nth-child(odd) {
+    left: 0;
+    padding-right: 3rem;
+    text-align: right;
+}
+
+.timelineItem:nth-child(even) {
+    left: 50%;
+    padding-left: 3rem;
+    text-align: left;
+}
+
+/* Dot on the line */
+.timelineDot {
+    position: absolute;
+    top: 0;
+    width: 1rem;
+    height: 1rem;
+    background-color: #0b0b0b;
+    border: 2px solid #c6a87c;
+    border-radius: 50%;
+    z-index: 2;
+    box-shadow: 0 0 10px rgba(198, 168, 124, 0.5);
+}
+
+.timelineItem:nth-child(odd) .timelineDot {
+    right: -0.5rem;
+    /* Center on line */
+}
+
+.timelineItem:nth-child(even) .timelineDot {
+    left: -0.5rem;
+    /* Center on line */
+}
+
+/* Card Styling */
+.expCard {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 2rem;
+    border-radius: 8px;
+    transition: transform 0.3s ease, border-color 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.expCard:hover {
+    transform: translateY(-5px);
+    border-color: rgba(198, 168, 124, 0.3);
+}
+
+.roleTitle {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 0.5rem;
+}
+
+.companyTitle {
+    font-size: 1rem;
+    color: #c6a87c;
+    font-weight: 500;
+    margin-bottom: 1rem;
+}
+
+.periodBadge {
+    display: inline-block;
+    font-size: 0.75rem;
+    padding: 0.25rem 0.75rem;
+    background: rgba(198, 168, 124, 0.1);
+    color: #c6a87c;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+}
+
+.description {
+    font-size: 0.9rem;
+    color: #aaa;
+    line-height: 1.6;
+}
+
+/* --- Education Section (Full Width Feature) --- */
+.educationSection {
+    padding: 4rem 2rem;
+    background-color: #050505;
+    border-top: 1px solid #1a1a1a;
+}
+
+.eduContent {
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    text-align: left;
+    border: 1px solid #222;
+    padding: 3rem;
+    border-radius: 12px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%);
+    border: 1px solid rgba(198, 168, 124, 0.2);
+    /* Gold accent border */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+}
+
+.eduIconCircle {
+    width: 5rem;
+    height: 5rem;
+    background: rgba(198, 168, 124, 0.05);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #c6a87c;
+    flex-shrink: 0;
+}
+
+.eduText h3 {
+    color: #c6a87c;
+    /* Gold Title */
+    font-family: 'Playfair Display', serif;
+    font-size: 1.75rem;
+    margin-bottom: 0.5rem;
+}
+
+.eduText p {
+    color: #888;
+}
+
+/* --- Connect Section --- */
+.connectSection {
+    padding: 6rem 2rem;
+    text-align: center;
+    background: linear-gradient(to bottom, #050505, #000);
+    position: relative;
+    border-top: 1px solid #222;
+}
+
+.connectSection::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center, rgba(198, 168, 124, 0.05) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.linkedinBtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 3rem;
+    background: #c6a87c;
+    /* Gold button for premium feel */
+    color: #000;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+}
+
+.linkedinBtn:hover {
+    background: #fff;
+    transform: scale(1.05);
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
+}
+
+/* Responsive */
+@media (min-width: 900px) {
+    .heroContent {
+        grid-template-columns: 1fr 1fr;
+        /* Side by Side */
+        text-align: left;
+    }
+
+    .heroTextContent {
+        text-align: left;
+    }
+
+    .titleName {
+        font-size: 4.5rem;
+    }
+
+    .bioSummary {
+        margin: 0;
+        /* Align left */
+    }
+
+    .profileImageContainer {
+        width: 22rem;
+        height: 22rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .timeline::before {
+        left: 20px;
+    }
+
+    .timelineItem {
+        width: 100%;
+        padding-left: 3rem !important;
+        padding-right: 0 !important;
+        text-align: left !important;
+    }
+
+    .timelineItem:nth-child(even) {
+        left: 0;
+    }
+
+    .timelineItem:nth-child(odd) .timelineDot,
+    .timelineItem:nth-child(even) .timelineDot {
+        left: 12px;
+        right: auto;
+    }
+
+    .eduContent {
+        flex-direction: column;
+        text-align: center;
+    }
+}
