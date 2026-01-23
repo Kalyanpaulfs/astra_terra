@@ -10,6 +10,7 @@ import { HeroSkeleton, FeaturedSkeleton } from './components/Skeletons';
 import WhyChooseUs from './components/WhyChooseUs';
 import GallerySection from './components/GallerySection';
 
+
 export const revalidate = 3600; // Revalidate at least every hour
 
 export default function HomePage() {
@@ -27,6 +28,8 @@ export default function HomePage() {
       <Suspense fallback={<FeaturedSkeleton />}>
         <FeaturedSectionStreaming />
       </Suspense>
+
+
 
       {/* Static content - renders immediately */}
       <div className="at-services" id="about-us-anchor">

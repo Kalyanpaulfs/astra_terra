@@ -59,3 +59,11 @@
 .fade-in {
   animation: fadeIn 0.3s ease-out;
 }
+
+/* Ensure Navbar sits above Map (Leaflet uses high z-indices) */
+/* Ensure Navbar sits above Map (Leaflet uses high z-indices) */
+.custom-navbar {
+  z-index: 9999 !important;
+  position: fixed !important;
+  /* Enforce fixed positioning to maintain layout AND apply z-index */
+}

@@ -232,18 +232,18 @@ export default function Navbar() {
           <ul className="custom-nav-menu">
             {/* BUY - Keep in main nav */}
             <li>
-              <Link href="/buy">Buy</Link>
+              <a href="/buy">Buy</a>
             </li>
 
             {/* RENT - Keep in main nav */}
             <li>
-              <Link href="/rent">Rent</Link>
+              <a href="/rent">Rent</a>
             </li>
 
             {/* LIST YOUR PROPERTY - Keep in main nav (CTA button) */}
-            <li className="nav-cta-item"><Link href="/list-your-property" className="nav-cta-button">
+            <li className="nav-cta-item"><a href="/list-your-property" className="nav-cta-button">
               List Your Property
-            </Link>
+            </a>
             </li>
 
             {/* MORE - Contains all other nav items */}
@@ -274,6 +274,7 @@ export default function Navbar() {
                               <li><Link href="/properties-search?listtype=NEW" onClick={(e) => { handleLinkClick('more', e); }}>New Projects</Link></li>
                               <li><Link href="/developers" onClick={(e) => { handleLinkClick('more', e); }}>Developers</Link></li>
                               <li><Link href="/locations" onClick={(e) => { handleLinkClick('more', e); }}>Locations</Link></li>
+                              <li><Link href="/map" onClick={(e) => { handleLinkClick('more', e); }}>Map Search</Link></li>
                             </ul>
                           </div>
 

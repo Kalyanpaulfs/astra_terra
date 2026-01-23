@@ -98,6 +98,35 @@ interface ListingsFilter {
     regionIds?: number[];
 }
 
+
+
+function normalizeProperty(listing: any) {
+    let lat = null;
+    let lng = null;
+
+    // Check various params for position
+    // Prioritize newParam > sellParam > rentParam
+    const param = listing.newParam || listing.sellParam || listing.rentParam;
+
+    if (param && param.position) {
+        const parts = param.position.split(',');
+        if (parts.length === 2) {
+            const parsedLat = parseFloat(parts[0]);
+            const parsedLng = parseFloat(parts[1]);
+            if (!isNaN(parsedLat) && !isNaN(parsedLng)) {
+                lat = parsedLat;
+                lng = parsedLng;
+            }
+        }
+    }
+
+    return {
+        ...listing,
+        latitude: lat,
+        longitude: lng
+    };
+}
+
 export async function getListings(filter: ListingsFilter = { size: 12 }) {
     const token = process.env.PIXXI_TOKEN;
     if (!token) {
@@ -126,7 +155,8 @@ export async function getListings(filter: ListingsFilter = { size: 12 }) {
         }
 
         const data = await response.json();
-        return data?.data?.list || [];
+        const list = data?.data?.list || [];
+        return list.map(normalizeProperty);
     } catch (error) {
         console.error('Error fetching listings:', error);
         return [];
@@ -184,7 +214,8 @@ export async function getProperty(id: string, debug = false) {
             const exactMatch = list.find((p: any) => String(p.id) === String(id) || p.referenceNumber === id || String(p.propertyId) === String(id));
             if (exactMatch) {
                 log(`[API DEBUG] Found exact match in initial fetch: ${exactMatch.title}`);
-                return debug ? { data: exactMatch, logs } : exactMatch;
+                const normalized = normalizeProperty(exactMatch);
+                return debug ? { data: normalized, logs } : normalized;
             }
             log(`[API DEBUG] Initial fetch returned ${list.length} items but NO exact match for ID ${id}`);
             // If API returned items but not exact match (weird), fall through to batch
@@ -230,7 +261,8 @@ export async function getProperty(id: string, debug = false) {
 
         if (found) {
             log(`[API] Found property in batch: ${found.title}`);
-            return debug ? { data: found, logs } : found;
+            const normalized = normalizeProperty(found);
+            return debug ? { data: normalized, logs } : normalized;
         }
 
         log(`[API] Property ${id} not found in top 100 active listings.`);

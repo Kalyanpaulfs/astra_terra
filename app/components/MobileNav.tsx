@@ -168,6 +168,7 @@ export default function MobileNav({ isOpen, onClose, propertyTypes = [], regions
               </li>
               <li><Link href="/founder" className="mnm2-close" onClick={onClose}>Founder & CEO</Link></li>
               <li><Link href="/locations" className="mnm2-close" onClick={onClose}>Locations</Link></li>
+              <li><Link href="/map" className="mnm2-close" onClick={onClose}>Map Search</Link></li>
               <li>
                 <a
                   href={isHomePage ? '#contact-us-anchor' : '/#contact-us-anchor'}
