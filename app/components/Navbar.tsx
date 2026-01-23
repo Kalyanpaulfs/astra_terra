@@ -271,13 +271,17 @@ export default function Navbar() {
                           <div className="column">
                             <p className="cnm-mc-title">Properties</p>
                             <ul className="cnm-mc-plist">
-                              <li><Link href="/properties-search?listtype=NEW" onClick={(e) => { handleLinkClick('more', e); }}>New Projects</Link></li>
-                              <li><Link href="/developers" onClick={(e) => { handleLinkClick('more', e); }}>Developers</Link></li>
-                              <li><Link href="/locations" onClick={(e) => { handleLinkClick('more', e); }}>Locations</Link></li>
-                              <li><Link href="/map" onClick={(e) => { handleLinkClick('more', e); }}>Map Search</Link></li>
+                              <li><a href="/properties-search?listtype=NEW" onClick={(e) => { handleLinkClick('more', e); }}>New Projects</a></li>
+                              <li><a href="/developers" onClick={(e) => { handleLinkClick('more', e); }}>Developers</a></li>
+                              <li><a href="/locations" onClick={(e) => { handleLinkClick('more', e); }}>Locations</a></li>
+                              <li><a href="/map" onClick={(e) => { handleLinkClick('more', e); }}>Map Search</a></li>
                             </ul>
                           </div>
+                        </div>
+                      </div>
 
+                      <div className="cnm-mc-csection" style={{ marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+                        <div className="columns">
                           <div className="column">
                             <p className="cnm-mc-title">Resources</p>
                             <ul className="cnm-mc-plist">
@@ -298,7 +302,7 @@ export default function Navbar() {
                                   Services
                                 </a>
                               </li>
-                              <li><Link href="/blogs" onClick={(e) => { handleLinkClick('more', e); }}>Blogs</Link></li>
+                              <li><a href="/blogs" onClick={(e) => { handleLinkClick('more', e); }}>Blogs</a></li>
                               <li>
                                 <a
                                   href={isHomePage ? '#why-choose-us' : '/#why-choose-us'}
@@ -334,7 +338,7 @@ export default function Navbar() {
                                   }}
                                 >About Us</a>
                               </li>
-                              <li><Link href="/founder" onClick={(e) => { handleLinkClick('more', e); }}>Founder & CEO</Link></li>
+                              <li><a href="/founder" onClick={(e) => { handleLinkClick('more', e); }}>Founder & CEO</a></li>
                               <li>
                                 <a
                                   href={isHomePage ? '#contact-us-anchor' : '/#contact-us-anchor'}

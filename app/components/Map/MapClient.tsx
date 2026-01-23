@@ -41,9 +41,36 @@ interface MapClientProps {
 const MapClient = ({ properties }: MapClientProps) => {
     // Default center (Dubai)
     const [center, setCenter] = useState<[number, number]>([25.2048, 55.2708]);
+    const [activeFilter, setActiveFilter] = useState<'ALL' | 'SELL' | 'RENT' | 'NEW'>('ALL');
 
     // Filter properties
     const validProperties = properties.filter(p => p.latitude && p.longitude);
+
+    const filteredProperties = validProperties.filter(property => {
+        if (activeFilter === 'ALL') return true;
+
+        // Normalize checking
+        const type = property.listingType || '';
+        const status = property.completionStatus || '';
+
+        if (activeFilter === 'SELL') {
+            return type === 'SELL' || property.sellParam;
+        }
+        if (activeFilter === 'RENT') {
+            return type === 'RENT' || property.rentParam;
+        }
+        if (activeFilter === 'NEW') {
+            // Check for various "New Project" indicators
+            return type === 'NEW' ||
+                status === 'OFF_PLAN' ||
+                status === 'concept' ||
+                status === 'under_construction' ||
+                (property.propertyType && property.propertyType.includes('PROJECT'));
+        }
+        return true;
+    });
+
+    console.log(`[MapClient] Filter: ${activeFilter}, Count: ${filteredProperties.length}`);
 
     console.log('[MapClient] Rendering with valid properties:', validProperties.length);
     if (validProperties.length > 0) {
@@ -89,7 +116,7 @@ const MapClient = ({ properties }: MapClientProps) => {
                     url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
                 />
 
-                {validProperties.map((property) => {
+                {filteredProperties.map((property) => {
                     const photo = (property.photos && property.photos.length > 0 && property.photos[0]) ||
                         (property.imgUrl && property.imgUrl.length > 0 && property.imgUrl[0]) ||
                         '/img/placeholder.jpg';
@@ -135,6 +162,83 @@ const MapClient = ({ properties }: MapClientProps) => {
                     );
                 })}
             </MapContainer>
+
+            {/* Filter UI - Absolute Overlay with Premium Styling - Using Inline Styles for reliability */}
+            <div style={{
+                position: 'absolute',
+                top: '120px', // Adjusted to clear the fixed Navbar
+                left: '20px',
+                zIndex: 500,
+                backgroundColor: 'rgba(13, 22, 37, 0.95)', // Dark Navy
+                backdropFilter: 'blur(10px)',
+                padding: '16px',
+                borderRadius: '16px',
+                boxShadow: '0 10px 30px rgba(0,0,0,0.3)',
+                border: '1px solid rgba(222, 201, 147, 0.2)', // Gold border
+                transition: 'all 0.3s ease'
+            }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                    <span style={{
+                        fontSize: '10px',
+                        fontWeight: '700',
+                        color: '#DEC993',
+                        textTransform: 'uppercase',
+                        letterSpacing: '2px',
+                        padding: '0 4px',
+                        borderBottom: '1px solid rgba(222, 201, 147, 0.2)',
+                        paddingBottom: '8px'
+                    }}>Filter Properties</span>
+                    <div style={{ display: 'flex', gap: '8px' }}>
+                        {[
+                            { id: 'ALL', label: 'All' },
+                            { id: 'SELL', label: 'Buy' },
+                            { id: 'RENT', label: 'Rent' },
+                            { id: 'NEW', label: 'New Projects' }
+                        ].map((filter) => {
+                            const isActive = activeFilter === filter.id;
+                            return (
+                                <button
+                                    key={filter.id}
+                                    onClick={() => setActiveFilter(filter.id as any)}
+                                    style={{
+                                        padding: '10px 16px',
+                                        fontSize: '11px',
+                                        fontWeight: '700',
+                                        borderRadius: '8px',
+                                        transition: 'all 0.3s ease',
+                                        textTransform: 'uppercase',
+                                        letterSpacing: '1px',
+                                        cursor: 'pointer',
+                                        border: isActive ? 'none' : '1px solid rgba(255,255,255,0.1)',
+                                        background: isActive
+                                            ? 'linear-gradient(135deg, #DEC993 0%, #C5A265 100%)'
+                                            : 'rgba(255,255,255,0.05)',
+                                        color: isActive ? '#0D1625' : 'rgba(255,255,255,0.7)',
+                                        boxShadow: isActive ? '0 4px 15px rgba(222, 201, 147, 0.3)' : 'none',
+                                        transform: isActive ? 'translateY(-1px)' : 'none'
+                                    }}
+                                    onMouseEnter={(e) => {
+                                        if (!isActive) {
+                                            e.currentTarget.style.color = '#DEC993';
+                                            e.currentTarget.style.borderColor = 'rgba(222, 201, 147, 0.3)';
+                                            e.currentTarget.style.background = 'rgba(255,255,255,0.1)';
+                                        }
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        if (!isActive) {
+                                            e.currentTarget.style.color = 'rgba(255,255,255,0.7)';
+                                            e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)';
+                                            e.currentTarget.style.background = 'rgba(255,255,255,0.05)';
+                                        }
+                                    }}
+                                >
+                                    {filter.label}
+                                </button>
+                            );
+                        })}
+                    </div>
+                </div>
+            </div>
         </div>
     );
 };

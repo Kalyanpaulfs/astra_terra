@@ -61,28 +61,28 @@ export default function MobileNav({ isOpen, onClose, propertyTypes = [], regions
         />
         <ul className="mnm2-links">
           <li>
-            <Link href="/buy" className="mnm2-close" onClick={onClose}>
+            <a href="/buy" className="mnm2-close" onClick={onClose}>
               <i className="ph ph-house-line"></i>
               <span>Buy</span>
-            </Link>
+            </a>
           </li>
           <li>
-            <Link href="/rent" className="mnm2-close" onClick={onClose}>
+            <a href="/rent" className="mnm2-close" onClick={onClose}>
               <i className="ph ph-key"></i>
               <span>Rent</span>
-            </Link>
+            </a>
           </li>
           <li>
-            <Link href="/properties-search?listtype=NEW" className="mnm2-close" onClick={onClose}>
+            <a href="/properties-search?listtype=NEW" className="mnm2-close" onClick={onClose}>
               <i className="ph ph-buildings"></i>
               <span>New Projects</span>
-            </Link>
+            </a>
           </li>
           <li>
-            <Link href="/developers" className="mnm2-close" onClick={onClose}>
+            <a href="/developers" className="mnm2-close" onClick={onClose}>
               <i className="ph ph-users-three"></i>
               <span>Developers</span>
-            </Link>
+            </a>
           </li>
 
           <li>
@@ -107,10 +107,10 @@ export default function MobileNav({ isOpen, onClose, propertyTypes = [], regions
             </a>
           </li>
           <li>
-            <Link href="/blogs" className="mnm2-close" onClick={onClose}>
+            <a href="/blogs" className="mnm2-close" onClick={onClose}>
               <i className="ph ph-article"></i>
               <span>Blogs</span>
-            </Link>
+            </a>
           </li>
           <li>
             <a
@@ -134,10 +134,10 @@ export default function MobileNav({ isOpen, onClose, propertyTypes = [], regions
             </a>
           </li>
           <li className="list-property-mobile">
-            <Link href="/list-your-property" className="mnm2-close list-property-link" onClick={onClose}>
+            <a href="/list-your-property" className="mnm2-close list-property-link" onClick={onClose}>
               <i className="ph ph-house-simple"></i>
               <span>List Your Property</span>
-            </Link>
+            </a>
           </li>
           <li className={openSubmenu === 'more' ? 'has-sub open' : 'has-sub'}>
             <a href="#" onClick={(e) => { e.preventDefault(); setOpenSubmenu(openSubmenu === 'more' ? null : 'more'); }}>
@@ -146,6 +146,11 @@ export default function MobileNav({ isOpen, onClose, propertyTypes = [], regions
               <i className="ph ph-caret-down arrow"></i>
             </a>
             <ul className="sub-links">
+              <li><a href="/locations" className="mnm2-close" onClick={onClose}>Locations</a></li>
+              <li><a href="/map" className="mnm2-close" onClick={onClose}>Map Search</a></li>
+
+              <li style={{ borderTop: '1px solid rgba(255, 255, 255, 0.1)', margin: '10px 20px' }}></li>
+
               <li>
                 <a
                   href={isHomePage ? '#about-us-anchor' : '/#about-us-anchor'}
@@ -166,9 +171,7 @@ export default function MobileNav({ isOpen, onClose, propertyTypes = [], regions
                   About Us
                 </a>
               </li>
-              <li><Link href="/founder" className="mnm2-close" onClick={onClose}>Founder & CEO</Link></li>
-              <li><Link href="/locations" className="mnm2-close" onClick={onClose}>Locations</Link></li>
-              <li><Link href="/map" className="mnm2-close" onClick={onClose}>Map Search</Link></li>
+              <li><a href="/founder" className="mnm2-close" onClick={onClose}>Founder & CEO</a></li>
               <li>
                 <a
                   href={isHomePage ? '#contact-us-anchor' : '/#contact-us-anchor'}
