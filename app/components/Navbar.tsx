@@ -78,7 +78,7 @@ export default function Navbar() {
     // Immediately add class to parent li to force hide via CSS (instant)
     const menuItems = document.querySelectorAll('.custom-nav-menu > li');
     menuItems.forEach((li) => {
-      const link = li.querySelector('a[href="#"]');
+      const link = li.querySelector('a');
       const linkText = link?.textContent?.trim();
       if (link && linkText && (
         (dropdownName === 'buy' && linkText === 'Buy') ||
@@ -131,7 +131,7 @@ export default function Navbar() {
     const menuItems = document.querySelectorAll('.custom-nav-menu > li');
     let shouldOpen = true;
     menuItems.forEach((li) => {
-      const link = li.querySelector('a[href="#"]');
+      const link = li.querySelector('a');
       const linkText = link?.textContent?.trim();
       if (link && linkText && (
         (dropdownName === 'buy' && linkText === 'Buy') ||
@@ -163,7 +163,7 @@ export default function Navbar() {
     // Also remove the CSS class and reset inline styles when mouse leaves
     const menuItems = document.querySelectorAll('.custom-nav-menu > li');
     menuItems.forEach((li) => {
-      const link = li.querySelector('a[href="#"]');
+      const link = li.querySelector('a');
       const linkText = link?.textContent?.trim();
       if (link && linkText && (
         (dropdownName === 'buy' && linkText === 'Buy') ||
@@ -252,7 +252,7 @@ export default function Navbar() {
               onMouseLeave={() => handleMouseLeave('more')}
               className={closedByClick.has('more') ? 'dropdown-closed-by-click' : ''}
             >
-              <a href="#">More</a>
+              <a className="nav-item-trigger" style={{ cursor: 'pointer' }}>More</a>
               <div
                 className={`cnm-mega cnm-mega-right cnm-mega-more ${activeDropdown === 'more' ? 'is-active' : ''}`}
                 onClick={(e) => {

@@ -79,8 +79,8 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
                         height: '40px',
                         borderRadius: '50%',
                         border: '1px solid',
-                        borderColor: currentPage === 1 ? 'rgba(255,255,255,0.1)' : 'COLORS.GOLD_ACCENT',
-                        color: currentPage === 1 ? 'rgba(255,255,255,0.2)' : 'COLORS.GOLD_ACCENT',
+                        borderColor: currentPage === 1 ? 'rgba(255,255,255,0.1)' : COLORS.GOLD_ACCENT,
+                        color: currentPage === 1 ? 'rgba(255,255,255,0.2)' : COLORS.GOLD_ACCENT,
                         background: 'transparent',
                         display: 'flex',
                         alignItems: 'center',
@@ -106,7 +106,7 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
                                         height: '40px',
                                         borderRadius: '50%',
                                         border: String(page) === String(currentPage) ? 'none' : '1px solid rgba(255,255,255,0.1)',
-                                        backgroundColor: String(page) === String(currentPage) ? 'COLORS.GOLD_ACCENT' : 'transparent',
+                                        backgroundColor: String(page) === String(currentPage) ? COLORS.GOLD_ACCENT : 'transparent',
                                         color: String(page) === String(currentPage) ? '#fff' : '#aaa',
                                         cursor: 'pointer',
                                         display: 'flex',
@@ -117,8 +117,8 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
                                     }}
                                     onMouseEnter={(e) => {
                                         if (String(page) !== String(currentPage)) {
-                                            e.currentTarget.style.borderColor = 'COLORS.GOLD_ACCENT';
-                                            e.currentTarget.style.color = 'COLORS.GOLD_ACCENT';
+                                            e.currentTarget.style.borderColor = COLORS.GOLD_ACCENT;
+                                            e.currentTarget.style.color = COLORS.GOLD_ACCENT;
                                         }
                                     }}
                                     onMouseLeave={(e) => {
@@ -143,8 +143,8 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
                         height: '40px',
                         borderRadius: '50%',
                         border: '1px solid',
-                        borderColor: currentPage === totalPages ? 'rgba(255,255,255,0.1)' : 'COLORS.GOLD_ACCENT',
-                        color: currentPage === totalPages ? 'rgba(255,255,255,0.2)' : 'COLORS.GOLD_ACCENT',
+                        borderColor: currentPage === totalPages ? 'rgba(255,255,255,0.1)' : COLORS.GOLD_ACCENT,
+                        color: currentPage === totalPages ? 'rgba(255,255,255,0.2)' : COLORS.GOLD_ACCENT,
                         background: 'transparent',
                         display: 'flex',
                         alignItems: 'center',

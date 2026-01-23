@@ -108,38 +108,50 @@ export default function LocationsPage() {
     return (
         <div className="locations-page-wrapper" style={{
             minHeight: '100vh',
-            backgroundImage: `linear-gradient(to bottom, rgba(5,10,16,0.8), rgba(5,10,16,0.95)), url('/img/buy-page-bg.webp')`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            backgroundAttachment: 'fixed',
+            position: 'relative',
             paddingTop: '120px',
             paddingBottom: '80px',
-            position: 'relative',
             overflow: 'hidden',
             color: 'white'
         }}>
-            {/* Animated Background Elements */}
+            {/* Fixed Background Layer */}
             <div style={{
-                position: 'absolute',
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100vh',
+                zIndex: -1,
+                backgroundImage: `linear-gradient(to bottom, rgba(5,10,16,0.8), rgba(5,10,16,0.95)), url('/img/buy-page-bg.webp')`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                pointerEvents: 'none'
+            }}></div>
+
+            {/* Animated Background Elements - Fixed position to avoid scroll jank */}
+            <div style={{
+                position: 'fixed',
                 top: '-20%',
                 left: '-10%',
                 width: '60vw',
                 height: '60vw',
                 background: 'radial-gradient(circle, rgba(222,201,147,0.08) 0%, rgba(0,0,0,0) 70%)',
                 filter: 'blur(60px)',
-                zIndex: 0,
-                pointerEvents: 'none'
+                zIndex: -1,
+                pointerEvents: 'none',
+                transform: 'translateZ(0)' // Force GPU acceleration
             }}></div>
             <div style={{
-                position: 'absolute',
+                position: 'fixed',
                 bottom: '-20%',
                 right: '-10%',
                 width: '70vw',
                 height: '70vw',
                 background: 'radial-gradient(circle, rgba(26,44,66,0.2) 0%, rgba(0,0,0,0) 70%)',
                 filter: 'blur(80px)',
-                zIndex: 0,
-                pointerEvents: 'none'
+                zIndex: -1,
+                pointerEvents: 'none',
+                transform: 'translateZ(0)' // Force GPU acceleration
             }}></div>
 
             <div className="container" style={{ maxWidth: '1400px', margin: '0 auto', padding: '0 24px', position: 'relative', zIndex: 1 }}>

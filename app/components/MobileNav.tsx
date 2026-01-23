@@ -140,7 +140,7 @@ export default function MobileNav({ isOpen, onClose, propertyTypes = [], regions
             </a>
           </li>
           <li className={openSubmenu === 'more' ? 'has-sub open' : 'has-sub'}>
-            <a href="#" onClick={(e) => { e.preventDefault(); setOpenSubmenu(openSubmenu === 'more' ? null : 'more'); }}>
+            <a onClick={(e) => { e.preventDefault(); setOpenSubmenu(openSubmenu === 'more' ? null : 'more'); }} style={{ cursor: 'pointer' }}>
               <i className="ph ph-dots-three-circle"></i>
               <span>More</span>
               <i className="ph ph-caret-down arrow"></i>
