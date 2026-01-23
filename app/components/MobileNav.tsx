@@ -21,21 +21,30 @@ export default function MobileNav({ isOpen, onClose, propertyTypes = [], regions
   // Default Types if fetch fails
   const types = propertyTypes.length > 0 ? propertyTypes : ['APARTMENT', 'VILLA', 'TOWNHOUSE', 'PENTHOUSE', 'HOTEL_APARTMENT', 'DUPLEX', 'COMMERCIAL_BUILDING'];
 
+  const [isVisible, setIsVisible] = useState(false);
+
   useEffect(() => {
+    let timer: NodeJS.Timeout;
     if (isOpen) {
+      setIsVisible(true);
       document.body.style.overflowY = 'hidden';
     } else {
-      document.body.style.overflowY = 'scroll';
+      timer = setTimeout(() => {
+        setIsVisible(false);
+        document.body.style.overflowY = '';
+      }, 400); // 400ms transition
     }
+
     return () => {
-      document.body.style.overflowY = 'scroll';
+      clearTimeout(timer);
+      document.body.style.overflowY = '';
     };
   }, [isOpen]);
 
-  if (!isOpen) return null;
+  if (!isVisible && !isOpen) return null;
 
   return (
-    <div className="mobile-nav-frame" onClick={onClose}>
+    <div className={`mobile-nav-frame ${isOpen ? 'active' : ''}`} onClick={onClose}>
       <div className="mobile-nav-menu" onClick={(e) => e.stopPropagation()}>
         <div className="mnm-header">
           <span className="mnm-close" onClick={onClose}>
@@ -107,7 +116,6 @@ export default function MobileNav({ isOpen, onClose, propertyTypes = [], regions
                     element.scrollIntoView({ behavior: 'smooth' });
                   }
                 } else {
-                  // Navigate to home with hash
                   onClose();
                 }
               }}
@@ -123,7 +131,22 @@ export default function MobileNav({ isOpen, onClose, propertyTypes = [], regions
             </Link>
           </li>
           <li>
-            <a href="#why-choose-us" className="mnm2-close" onClick={onClose}>
+            <a
+              href={isHomePage ? '#why-choose-us' : '/#why-choose-us'}
+              className="mnm2-close"
+              onClick={(e) => {
+                if (isHomePage) {
+                  e.preventDefault();
+                  onClose();
+                  const element = document.querySelector('#why-choose-us');
+                  if (element) {
+                    element.scrollIntoView({ behavior: 'smooth' });
+                  }
+                } else {
+                  onClose();
+                }
+              }}
+            >
               <i className="ph ph-star"></i>
               <span>Why us ?</span>
             </a>
@@ -141,14 +164,68 @@ export default function MobileNav({ isOpen, onClose, propertyTypes = [], regions
               <i className="ph ph-caret-down arrow"></i>
             </a>
             <ul className="sub-links">
-              <li><a href="#about-us-anchor" className="mnm2-close" onClick={onClose}>About Us</a></li>
-              <li><a href="#contact-us-anchor" className="mnm2-close" onClick={onClose}>Contact Us</a></li>
+              <li>
+                <a
+                  href={isHomePage ? '#about-us-anchor' : '/#about-us-anchor'}
+                  className="mnm2-close"
+                  onClick={(e) => {
+                    if (isHomePage) {
+                      e.preventDefault();
+                      onClose();
+                      const element = document.querySelector('#about-us-anchor');
+                      if (element) {
+                        element.scrollIntoView({ behavior: 'smooth' });
+                      }
+                    } else {
+                      onClose();
+                    }
+                  }}
+                >
+                  About Us
+                </a>
+              </li>
+              <li><Link href="/founder" className="mnm2-close" onClick={onClose}>Founder & CEO</Link></li>
+              <li>
+                <a
+                  href={isHomePage ? '#contact-us-anchor' : '/#contact-us-anchor'}
+                  className="mnm2-close"
+                  onClick={(e) => {
+                    if (isHomePage) {
+                      e.preventDefault();
+                      onClose();
+                      const element = document.querySelector('#contact-us-anchor');
+                      if (element) {
+                        element.scrollIntoView({ behavior: 'smooth' });
+                      }
+                    } else {
+                      onClose();
+                    }
+                  }}
+                >
+                  Contact Us
+                </a>
+              </li>
             </ul>
           </li>
         </ul>
 
         <div className="mnm-footer">
-          <a href="#contact-us-anchor" className="mnm-cta-btn" onClick={onClose}>
+          <a
+            href={isHomePage ? '#contact-us-anchor' : '/#contact-us-anchor'}
+            className="mnm-cta-btn"
+            onClick={(e) => {
+              if (isHomePage) {
+                e.preventDefault();
+                onClose();
+                const element = document.querySelector('#contact-us-anchor');
+                if (element) {
+                  element.scrollIntoView({ behavior: 'smooth' });
+                }
+              } else {
+                onClose();
+              }
+            }}
+          >
             Get in Touch
           </a>
         </div>

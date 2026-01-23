@@ -52,22 +52,38 @@ pre {
 	left: 0;
 	bottom: 0;
 	right: 0;
-	background-color: rgba(0, 0, 0, 0.7);
-	backdrop-filter: blur(5px);
+	background-color: rgba(0, 0, 0, 0.6);
+	backdrop-filter: blur(8px);
 	z-index: 10001;
 	display: block;
+	opacity: 0;
+	transition: opacity 0.4s ease;
+	pointer-events: none;
+}
+
+.mobile-nav-frame.active {
+	opacity: 1;
+	pointer-events: auto;
 }
 
 .mobile-nav-frame>.mobile-nav-menu {
 	height: 100%;
 	width: 85%;
-	background-color: #0D1625;
+	max-width: 400px;
+	/* Limit width on larger screens */
+	background: linear-gradient(135deg, #0D1625 0%, #080f1b 100%);
 	float: left;
 	position: relative;
-	box-shadow: 10px 0 30px rgba(0, 0, 0, 0.5);
+	box-shadow: 10px 0 40px rgba(0, 0, 0, 0.6);
 	display: flex;
 	flex-direction: column;
 	overflow-y: auto;
+	transform: translateX(-100%);
+	transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.mobile-nav-frame.active>.mobile-nav-menu {
+	transform: translateX(0);
 }
 
 .mnm-header {

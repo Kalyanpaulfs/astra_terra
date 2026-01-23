@@ -649,30 +649,86 @@
    ============================================ */
 
 
-/* MOBILE NAV MENU */
+/* MOBILE NAV MENU - PREMIUM REDESIGN */
 .mnm2-links {
-    font-family: "Montserrat", sans-serif;
+    font-family: "Playfair Display", serif;
     list-style: none;
-    padding: 0 20px;
+    padding: 20px 30px;
     margin: 0;
     flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
 
 .mnm2-links li {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom: none;
     display: block;
+    opacity: 0;
+    transform: translateX(-10px);
+    animation: slideInItem 0.4s ease forwards;
+}
+
+/* Staggered animation delays for items */
+.mnm2-links li:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.mnm2-links li:nth-child(2) {
+    animation-delay: 0.15s;
+}
+
+.mnm2-links li:nth-child(3) {
+    animation-delay: 0.2s;
+}
+
+.mnm2-links li:nth-child(4) {
+    animation-delay: 0.25s;
+}
+
+.mnm2-links li:nth-child(5) {
+    animation-delay: 0.3s;
+}
+
+.mnm2-links li:nth-child(6) {
+    animation-delay: 0.35s;
+}
+
+.mnm2-links li:nth-child(7) {
+    animation-delay: 0.4s;
+}
+
+.mnm2-links li:nth-child(8) {
+    animation-delay: 0.45s;
+}
+
+.mnm2-links li:nth-child(9) {
+    animation-delay: 0.5s;
+}
+
+@keyframes slideInItem {
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
 }
 
 .mnm2-links li>a {
     display: flex;
     align-items: center;
-    padding: 18px 10px;
-    color: white;
+    padding: 12px 0;
+    color: rgba(255, 255, 255, 0.8);
     text-decoration: none;
-    font-size: 15px;
+    font-size: 20px;
     font-weight: 500;
     transition: all 0.3s ease;
-    gap: 15px;
+    gap: 20px;
+    position: relative;
+}
+
+.mnm2-links li>a:hover {
+    color: #DEC993;
+    padding-left: 10px;
 }
 
 .mnm2-links li>a i:not(.arrow) {
@@ -680,6 +736,12 @@
     color: #DEC993;
     width: 24px;
     text-align: center;
+    transition: 0.3s ease;
+}
+
+.mnm2-links li>a:hover i:not(.arrow) {
+    transform: scale(1.1);
+    text-shadow: 0 0 10px rgba(222, 201, 147, 0.4);
 }
 
 .mnm2-links li>a span {
@@ -699,63 +761,76 @@
 }
 
 .mnm2-links li.open>a {
-    background: rgba(222, 201, 147, 0.05);
     color: #DEC993;
 }
 
 .mnm2-links .sub-links {
     list-style: none;
-    padding: 0 0 10px 50px;
+    padding: 5px 0 15px 44px;
     display: none;
-    background: rgba(0, 0, 0, 0.2);
+    background: transparent;
+    opacity: 0;
+    transition: opacity 0.3s ease;
 }
 
 .mnm2-links li.open>.sub-links {
     display: block;
+    opacity: 1;
 }
 
 .mnm2-links .sub-links li {
     border: none;
+    animation: none;
+    opacity: 1;
+    transform: none;
 }
 
 .mnm2-links .sub-links li a {
     display: block;
-    padding: 10px 0;
-    color: rgba(255, 255, 255, 0.6);
-    font-size: 14px;
+    padding: 8px 0;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 15px;
     text-decoration: none;
-    transition: color 0.2s ease;
+    transition: all 0.2s ease;
+    font-family: "Inter", sans-serif;
+    font-weight: 400;
 }
 
 .mnm2-links .sub-links li a:hover {
     color: #DEC993;
+    transform: translateX(5px);
 }
 
 /* List Your Property - Premium Gold CTA in Mobile Nav */
 .mnm2-links li.list-property-mobile {
-    margin-top: 15px;
+    margin-top: 25px;
     margin-bottom: 5px;
     border-bottom: none;
 }
 
 .mnm2-links li.list-property-mobile .list-property-link {
-    background: linear-gradient(135deg, rgba(222, 201, 147, 0.15) 0%, rgba(148, 119, 75, 0.15) 100%);
-    border: 1px solid #C5A265;
-    border-radius: 10px;
-    padding: 16px 15px;
-    color: #DEC993;
+    background: linear-gradient(135deg, #DEC993 0%, #94774B 100%);
+    border: none;
+    border-radius: 8px;
+    padding: 14px 20px;
+    color: #0D1625;
     font-weight: 600;
     letter-spacing: 0.5px;
     transition: all 0.3s ease;
+    font-family: "Inter", sans-serif;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(148, 119, 75, 0.2);
 }
 
 .mnm2-links li.list-property-mobile .list-property-link:hover {
-    background: linear-gradient(135deg, #DEC993 0%, #94774B 100%);
-    color: #0D1625;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(148, 119, 75, 0.3);
+    padding-left: 20px;
+    /* Reset padding shift from generic hover */
 }
 
 .mnm2-links li.list-property-mobile .list-property-link i {
-    color: #DEC993;
+    color: #0D1625;
     transition: color 0.3s ease;
 }
 
@@ -764,7 +839,7 @@
 }
 
 .mnm-footer {
-    padding: 30px 20px;
+    padding: 30px;
     border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 
@@ -772,22 +847,23 @@
     display: block;
     width: 100%;
     padding: 16px;
-    background: linear-gradient(135deg, #DEC993 0%, #94774B 100%);
-    color: #000;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
     text-align: center;
     text-decoration: none;
-    border-radius: 12px;
-    font-weight: 700;
+    border-radius: 8px;
+    font-weight: 500;
     text-transform: uppercase;
-    letter-spacing: 1px;
-    font-size: 13px;
-    box-shadow: 0 10px 20px rgba(148, 119, 75, 0.2);
+    letter-spacing: 1.5px;
+    font-size: 12px;
     transition: all 0.3s ease;
 }
 
 .mnm-cta-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 15px 30px rgba(148, 119, 75, 0.3);
+    border-color: #DEC993;
+    color: #DEC993;
+    background: rgba(222, 201, 147, 0.05);
 }
 
 

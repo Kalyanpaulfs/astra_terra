@@ -48,7 +48,7 @@ export default function ListYourPropertyPage() {
     const goldAccent = COLORS.GOLD_ACCENT;
     const darkBg = '#0D1625';
     const cardBg = '#111927';
-    const inputBg = '#0A0F1A';
+    const inputBg = 'rgba(255, 255, 255, 0.05)'; // Transparent for glass effect
 
     return (
         <main style={{ backgroundColor: darkBg, minHeight: '100vh', color: 'white' }}>
@@ -141,7 +141,14 @@ export default function ListYourPropertyPage() {
             {/* ══════════════════════════════════════════════════════════════════
                 WHY CHOOSE US SECTION
             ══════════════════════════════════════════════════════════════════ */}
-            <section style={{ ...sectionPadding, backgroundColor: darkBg }}>
+            <section style={{
+                ...sectionPadding,
+                backgroundImage: `linear-gradient(to bottom, rgba(13,22,37,0.95), rgba(13,22,37,0.8)), url('/img/buy-page-bg.webp')`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundAttachment: 'fixed',
+                position: 'relative'
+            }}>
                 <div style={containerMaxWidth}>
                     {/* Section Header */}
                     <div style={{ textAlign: 'center', marginBottom: '64px' }}>
@@ -204,12 +211,15 @@ export default function ListYourPropertyPage() {
                             <div
                                 key={idx}
                                 style={{
-                                    backgroundColor: cardBg,
-                                    borderRadius: '8px',
-                                    padding: '40px 32px',
-                                    border: '1px solid rgba(255,255,255,0.06)',
+                                    backgroundColor: 'rgba(255,255,255,0.05)', // Increased visibility
+                                    backdropFilter: 'blur(10px)',
+                                    borderRadius: '12px',
+                                    padding: '48px 32px',
+                                    border: '1px solid rgba(255,255,255,0.08)',
                                     textAlign: 'center',
-                                    transition: 'all 0.3s ease'
+                                    transition: 'all 0.4s ease',
+                                    position: 'relative',
+                                    overflow: 'hidden'
                                 }}
                                 onMouseEnter={(e) => {
                                     e.currentTarget.style.transform = 'translateY(-6px)';
@@ -267,9 +277,24 @@ export default function ListYourPropertyPage() {
             ══════════════════════════════════════════════════════════════════ */}
             <section id="list-property-form" style={{
                 ...sectionPadding,
-                backgroundColor: '#0A0F1A'
+                background: 'radial-gradient(circle at 50% 0%, rgb(20, 30, 50) 0%, rgb(10, 15, 26) 100%)',
+                position: 'relative',
+                overflow: 'hidden'
             }}>
-                <div style={containerMaxWidth}>
+                {/* Ambient Glow Effect */}
+                <div style={{
+                    position: 'absolute',
+                    top: '-10%',
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    width: '80%',
+                    height: '600px',
+                    background: 'radial-gradient(circle, rgba(197, 162, 101, 0.06) 0%, transparent 60%)',
+                    pointerEvents: 'none',
+                    zIndex: 0
+                }}></div>
+
+                <div style={{ ...containerMaxWidth, position: 'relative', zIndex: 1 }}>
                     {/* Section Header */}
                     <div style={{ textAlign: 'center', marginBottom: '48px' }}>
                         <span style={{
@@ -335,7 +360,8 @@ export default function ListYourPropertyPage() {
 
                     {/* Form Container - Full Width */}
                     <div style={{
-                        backgroundColor: cardBg,
+                        backgroundColor: 'rgba(255,255,255,0.03)',
+                        backdropFilter: 'blur(20px)',
                         borderRadius: '12px',
                         padding: 'clamp(32px, 5vw, 56px)',
                         border: '1px solid rgba(255,255,255,0.06)',
@@ -708,7 +734,8 @@ export default function ListYourPropertyPage() {
                                             letterSpacing: '2px',
                                             cursor: isSubmitting ? 'not-allowed' : 'pointer',
                                             opacity: isSubmitting ? 0.7 : 1,
-                                            transition: 'all 0.3s ease'
+                                            transition: 'all 0.3s ease',
+                                            boxShadow: '0 8px 25px rgba(197, 162, 101, 0.25)'
                                         }}
                                         onMouseEnter={(e) => {
                                             if (!isSubmitting) {

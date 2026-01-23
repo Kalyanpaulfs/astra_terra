@@ -60,7 +60,7 @@ export default function Navbar() {
         if (element) {
           element.scrollIntoView({ behavior: 'smooth' });
         }
-      }, 100);
+      }, 500);
       return () => clearTimeout(timer);
     }
   }, [pathname, isHomePage]);
@@ -319,7 +319,19 @@ export default function Navbar() {
                                 </a>
                               </li>
                               <li><Link href="/blogs" onClick={(e) => { handleLinkClick('more', e); }}>Blogs</Link></li>
-                              <li><a href="#why-choose-us" onClick={(e) => { handleLinkClick('more', e); }}>Why us ?</a></li>
+                              <li>
+                                <a
+                                  href={isHomePage ? '#why-choose-us' : '/#why-choose-us'}
+                                  onClick={(e) => {
+                                    handleLinkClick('more', e);
+                                    if (isHomePage) {
+                                      e.preventDefault();
+                                      const element = document.querySelector('#why-choose-us');
+                                      if (element) element.scrollIntoView({ behavior: 'smooth' });
+                                    }
+                                  }}
+                                >Why us ?</a>
+                              </li>
                             </ul>
                           </div>
                         </div>
@@ -329,9 +341,33 @@ export default function Navbar() {
                           <div className="column">
                             <p className="cnm-mc-title">Contact</p>
                             <ul className="cnm-mc-plist">
-                              <li><a href="#about-us-anchor" onClick={(e) => { handleLinkClick('more', e); }}>About Us</a></li>
+                              <li>
+                                <a
+                                  href={isHomePage ? '#about-us-anchor' : '/#about-us-anchor'}
+                                  onClick={(e) => {
+                                    handleLinkClick('more', e);
+                                    if (isHomePage) {
+                                      e.preventDefault();
+                                      const element = document.querySelector('#about-us-anchor');
+                                      if (element) element.scrollIntoView({ behavior: 'smooth' });
+                                    }
+                                  }}
+                                >About Us</a>
+                              </li>
                               <li><Link href="/founder" onClick={(e) => { handleLinkClick('more', e); }}>Founder & CEO</Link></li>
-                              <li><a href="#contact-us-anchor" onClick={(e) => { handleLinkClick('more', e); }}>Get In Touch</a></li>
+                              <li>
+                                <a
+                                  href={isHomePage ? '#contact-us-anchor' : '/#contact-us-anchor'}
+                                  onClick={(e) => {
+                                    handleLinkClick('more', e);
+                                    if (isHomePage) {
+                                      e.preventDefault();
+                                      const element = document.querySelector('#contact-us-anchor');
+                                      if (element) element.scrollIntoView({ behavior: 'smooth' });
+                                    }
+                                  }}
+                                >Get In Touch</a>
+                              </li>
                             </ul>
                           </div>
                         </div>

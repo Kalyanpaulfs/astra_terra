@@ -167,8 +167,8 @@ function PropertiesSearchContent() {
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.background = 'rgba(222, 201, 147, 0.1)';
-                  e.currentTarget.style.borderColor = 'COLORS.DUBAI_GOLD';
-                  e.currentTarget.style.color = 'COLORS.DUBAI_GOLD';
+                  e.currentTarget.style.borderColor = COLORS.DUBAI_GOLD;
+                  e.currentTarget.style.color = COLORS.DUBAI_GOLD;
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.background = 'rgba(255,255,255,0.05)';
@@ -183,7 +183,7 @@ function PropertiesSearchContent() {
               {searchParams.get('type') ? (
                 <>
                   <h1 className="title is-1 mb-0" style={{
-                    background: 'COLORS.GOLD_GRADIENT', // Premium Gold Gradient
+                    background: COLORS.GOLD_GRADIENT, // Premium Gold Gradient
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
                     fontWeight: 400,
@@ -212,7 +212,7 @@ function PropertiesSearchContent() {
               ) : (
                 <>
                   <h1 className="title is-1 mb-0" style={{
-                    background: 'COLORS.GOLD_GRADIENT', // Premium Gold Gradient
+                    background: COLORS.GOLD_GRADIENT, // Premium Gold Gradient
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
                     fontWeight: 400,
@@ -259,7 +259,7 @@ function PropertiesSearchContent() {
                 border: '1px solid rgba(197, 162, 101, 0.2)',
                 boxShadow: '0 2px 10px rgba(0,0,0,0.03)'
               }}>
-                <span style={{ width: '5px', height: '5px', borderRadius: '50%', backgroundColor: 'COLORS.GOLD_ACCENT' }}></span>
+                <span style={{ width: '5px', height: '5px', borderRadius: '50%', backgroundColor: COLORS.GOLD_ACCENT }}></span>
                 <p style={{
                   color: 'white', // Updated to white
                   fontSize: '0.95rem',
@@ -269,9 +269,9 @@ function PropertiesSearchContent() {
                   textTransform: 'uppercase',
                   fontFamily: '"Montserrat", sans-serif'
                 }}>
-                  {loading ? 'Loading...' : <><span style={{ color: 'COLORS.GOLD_ACCENT', fontWeight: 700 }}>{listings.length}</span> {listings.length === 1 ? 'PROPERTY' : 'PROPERTIES'} FOUND</>}
+                  {loading ? 'Loading...' : <><span style={{ color: COLORS.GOLD_ACCENT, fontWeight: 700 }}>{listings.length}</span> {listings.length === 1 ? 'PROPERTY' : 'PROPERTIES'} FOUND</>}
                 </p>
-                <span style={{ width: '5px', height: '5px', borderRadius: '50%', backgroundColor: 'COLORS.GOLD_ACCENT' }}></span>
+                <span style={{ width: '5px', height: '5px', borderRadius: '50%', backgroundColor: COLORS.GOLD_ACCENT }}></span>
               </div>
             </div>
 
@@ -307,7 +307,7 @@ function PropertiesSearchContent() {
                     justifyContent: 'center',
                     border: '1px solid rgba(197, 162, 101, 0.3)'
                   }}>
-                    <i className="ph ph-house" style={{ fontSize: '28px', color: 'COLORS.GOLD_ACCENT' }}></i>
+                    <i className="ph ph-house" style={{ fontSize: '28px', color: COLORS.GOLD_ACCENT }}></i>
                   </div>
                   <h3 className="title is-4" style={{ color: '#ffffff', fontFamily: '"Playfair Display", serif' }}>
                     No Properties Found
@@ -339,7 +339,7 @@ function PropertiesSearchContent() {
               justifyContent: 'center',
               border: '1px solid rgba(197, 162, 101, 0.3)'
             }}>
-              <i className="ph ph-magnifying-glass" style={{ fontSize: '40px', color: 'COLORS.GOLD_ACCENT' }}></i>
+              <i className="ph ph-magnifying-glass" style={{ fontSize: '40px', color: COLORS.GOLD_ACCENT }}></i>
             </div>
             <h3 className="title is-3" style={{ color: '#ffffff', fontFamily: '"Playfair Display", serif', marginBottom: '1rem' }}>
               No Properties Found
@@ -349,8 +349,8 @@ function PropertiesSearchContent() {
               Try adjusting your filters or exploring other categories.
             </p>
             <a href="/properties-search?city=41&listtype=SELL" className="button is-outlined" style={{
-              borderColor: 'COLORS.GOLD_ACCENT',
-              color: 'COLORS.GOLD_ACCENT',
+              borderColor: COLORS.GOLD_ACCENT,
+              color: COLORS.GOLD_ACCENT,
               background: 'transparent',
               marginTop: '1.5rem',
               borderRadius: '0',
