@@ -273,31 +273,10 @@ export default function Navbar() {
                             <ul className="cnm-mc-plist">
                               <li><Link href="/properties-search?listtype=NEW" onClick={(e) => { handleLinkClick('more', e); }}>New Projects</Link></li>
                               <li><Link href="/developers" onClick={(e) => { handleLinkClick('more', e); }}>Developers</Link></li>
+                              <li><Link href="/locations" onClick={(e) => { handleLinkClick('more', e); }}>Locations</Link></li>
                             </ul>
                           </div>
-                          <div className="column">
-                            <p className="cnm-mc-title">Locations</p>
-                            <ul className="cnm-mc-plist" style={{ maxHeight: '200px', overflowY: 'auto' }}>
-                              {Object.keys(regions).length > 0 ? (
-                                Object.entries(regions).slice(0, 8).map(([id, name]) => (
-                                  <li key={id}>
-                                    <Link
-                                      href={`/properties-search?regionId=${id}`}
-                                      onClick={(e) => { handleLinkClick('more', e); }}
-                                    >
-                                      {name}
-                                    </Link>
-                                  </li>
-                                ))
-                              ) : (
-                                <>
-                                  <li><Link href="/properties-search?regionId=47" onClick={(e) => { handleLinkClick('more', e); }}>Downtown Dubai</Link></li>
-                                  <li><Link href="/properties-search?regionId=50" onClick={(e) => { handleLinkClick('more', e); }}>Dubai Marina</Link></li>
-                                </>
-                              )}
-                              <li><Link href="/properties-search" onClick={(e) => { handleLinkClick('more', e); }}>View All Locations</Link></li>
-                            </ul>
-                          </div>
+
                           <div className="column">
                             <p className="cnm-mc-title">Resources</p>
                             <ul className="cnm-mc-plist">

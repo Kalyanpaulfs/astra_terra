@@ -84,25 +84,7 @@ export default function MobileNav({ isOpen, onClose, propertyTypes = [], regions
               <span>Developers</span>
             </Link>
           </li>
-          <li className={openSubmenu === 'locations' ? 'has-sub open' : 'has-sub'}>
-            <a href="#" onClick={(e) => { e.preventDefault(); setOpenSubmenu(openSubmenu === 'locations' ? null : 'locations'); }}>
-              <i className="ph ph-map-pin"></i>
-              <span>Locations</span>
-              <i className="ph ph-caret-down arrow"></i>
-            </a>
-            <ul className="sub-links" style={{ maxHeight: '300px', overflowY: 'auto' }}>
-              {Object.keys(regions).length > 0 ? (
-                Object.entries(regions).map(([id, name]) => (
-                  <li key={id}><Link href={`/properties-search?regionId=${id}`} onClick={onClose}>{name}</Link></li>
-                ))
-              ) : (
-                <>
-                  <li><Link href="/properties-search?regionId=47" onClick={onClose}>Downtown Dubai</Link></li>
-                  <li><Link href="/properties-search?regionId=50" onClick={onClose}>Dubai Marina</Link></li>
-                </>
-              )}
-            </ul>
-          </li>
+
           <li>
             <a
               href={isHomePage ? '#services-anchor' : '/#services-anchor'}
@@ -185,6 +167,7 @@ export default function MobileNav({ isOpen, onClose, propertyTypes = [], regions
                 </a>
               </li>
               <li><Link href="/founder" className="mnm2-close" onClick={onClose}>Founder & CEO</Link></li>
+              <li><Link href="/locations" className="mnm2-close" onClick={onClose}>Locations</Link></li>
               <li>
                 <a
                   href={isHomePage ? '#contact-us-anchor' : '/#contact-us-anchor'}

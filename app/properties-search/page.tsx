@@ -228,7 +228,8 @@ function PropertiesSearchContent() {
                     {searchParams.get('listtype') === 'RENT' ? 'Properties For Rent' :
                       searchParams.get('listtype') === 'NEW' ? 'New Projects' :
                         searchParams.get('developer') ? `Properties by ${searchParams.get('developer')}` :
-                          'All Properties'}
+                          searchParams.get('regionId') && meta?.regions[Number(searchParams.get('regionId'))] ? meta.regions[Number(searchParams.get('regionId'))] :
+                            'All Properties'}
                   </h1>
 
                   <p style={{
@@ -242,7 +243,9 @@ function PropertiesSearchContent() {
                       ? 'Discover our exclusive selection of luxury rental properties.'
                       : searchParams.get('listtype') === 'NEW'
                         ? 'Explore the latest off-plan developments in Dubai.'
-                        : 'Browse our complete portfolio of premium properties in Dubai.'}
+                        : searchParams.get('regionId') && meta?.regions[Number(searchParams.get('regionId'))]
+                          ? `Explore our exclusive properties in ${meta.regions[Number(searchParams.get('regionId'))]}.`
+                          : 'Browse our complete portfolio of premium properties in Dubai.'}
                   </p>
                 </>
               )}

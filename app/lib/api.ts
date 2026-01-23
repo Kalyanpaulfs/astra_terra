@@ -133,15 +133,18 @@ export async function getListings(filter: ListingsFilter = { size: 12 }) {
     }
 }
 
-export async function getProperty(id: string) {
+export async function getProperty(id: string, debug = false) {
+    const logs: string[] = [];
+    const log = (msg: string) => { console.log(msg); if (debug) logs.push(msg); };
+
     const token = process.env.PIXXI_TOKEN;
-    console.log(`[API] getProperty called for ID: ${id}. Token present: ${!!token}`);
+    log(`[API] getProperty called for ID: ${id}. Token present: ${!!token}`);
     if (!token) {
         throw new Error('PIXXI_TOKEN is not configured');
     }
 
     try {
-        console.log(`[API] Fetching property with ID: ${id}`);
+        log(`[API] Fetching property with ID: ${id}`);
 
         // Strategy 1: Attempt to filter by ID or Reference Number
         // We try to pass both if possible, or intelligently choose.
@@ -154,8 +157,11 @@ export async function getProperty(id: string) {
         // If it's a string ref, pass 'referenceNumber'
         // We add 'id' parameter which many endpoints support.
         if (!isNaN(Number(id))) {
-            payload.id = id;
+            const numericId = parseInt(id);
+            log(`[API DEBUG] Converted ID ${id} to integer ${numericId}`);
+            payload.id = numericId;
         } else {
+            log(`[API DEBUG] ID ${id} is not numeric, using referenceNumber`);
             payload.referenceNumber = id;
         }
 
@@ -175,24 +181,28 @@ export async function getProperty(id: string) {
         let list = data?.data?.list || [];
 
         if (list.length > 0) {
-            const exactMatch = list.find((p: any) => String(p.id) === String(id) || p.referenceNumber === id);
-            if (exactMatch) return exactMatch;
+            const exactMatch = list.find((p: any) => String(p.id) === String(id) || p.referenceNumber === id || String(p.propertyId) === String(id));
+            if (exactMatch) {
+                log(`[API DEBUG] Found exact match in initial fetch: ${exactMatch.title}`);
+                return debug ? { data: exactMatch, logs } : exactMatch;
+            }
+            log(`[API DEBUG] Initial fetch returned ${list.length} items but NO exact match for ID ${id}`);
             // If API returned items but not exact match (weird), fall through to batch
         }
 
-        // Strategy 2: Fetch a larger batch (1000) to find the item
-        console.log(`[API] Filtering failed. Fetching batch of 1000 with cache check.`);
+        // Strategy 2: Fetch a larger batch (2000) to find the item
+        log(`[API] Filtering failed. Fetching batch of 2000 with cache check.`);
 
-        const BATCH_CACHE_KEY = 'BATCH_1000_ACTIVE';
+        const BATCH_CACHE_KEY = 'BATCH_2000_ACTIVE';
         list = []; // Re-initialize list for this strategy
         const cachedBatch = getCached(BATCH_CACHE_KEY);
 
         if (cachedBatch) {
-            console.log(`[API] Using cached batch.`);
+            log(`[API] Using cached batch.`);
             list = cachedBatch;
         } else {
             payload = {
-                size: 1000,
+                size: 2000,
                 status: 'ACTIVE'
             };
 
@@ -216,25 +226,30 @@ export async function getProperty(id: string) {
         }
 
         // Find by ID match
-        const found = list.find((item: any) => String(item.id) === id || item.referenceNumber === id);
+        const found = list.find((item: any) => String(item.id) === id || item.referenceNumber === id || String(item.propertyId) === id);
 
         if (found) {
-            console.log(`[API] Found property in batch: ${found.title}`);
-            return found;
+            log(`[API] Found property in batch: ${found.title}`);
+            return debug ? { data: found, logs } : found;
         }
 
-        console.warn(`[API] Property ${id} not found in top 100 active listings.`);
+        log(`[API] Property ${id} not found in top 100 active listings.`);
 
         // DEBUG: Log the first item to see structure
         if (list.length > 0) {
-            console.log("[API DEBUG] First item keys:", Object.keys(list[0]));
-            console.log("[API DEBUG] First item sample:", JSON.stringify(list[0], null, 2));
+            log(`[API DEBUG] FAILED SEARCH - First item keys: ${Object.keys(list[0]).join(', ')}`);
+            // Log valuable fields to debug ID/Ref mismatch
+            log(`[API DEBUG] FAILED SEARCH - First item ID/Ref/PropId: id=${list[0].id}, ref=${list[0].referenceNumber}, propId=${list[0].propertyId}`);
+
+            // Check if we can find it manually in the list to see if logic is wrong
+            const manualCheck = list.find((p: any) => String(p.id) == String(id) || String(p.propertyId) == String(id));
+            log(`[API DEBUG] Manual string check for ID ${id} in batch result: ${manualCheck ? 'FOUND' : 'NOT FOUND'}`);
         }
 
-        return null;
+        return debug ? { data: null, logs } : null;
 
     } catch (error) {
-        console.error("Error fetching property:", error);
-        return null;
+        log(`Error fetching property: ${error}`);
+        return debug ? { data: null, logs } : null;
     }
 }
