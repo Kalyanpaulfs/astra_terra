@@ -4,6 +4,7 @@ import { useEffect, useState, useMemo } from 'react';
 import DeveloperCard from '../components/DeveloperCard';
 import Pagination from '../components/Pagination';
 import { COLORS } from '../lib/constants';
+import { trackNavigation } from '../lib/navigation-history';
 
 interface Developer {
     name: string;
@@ -23,6 +24,9 @@ export default function DevelopersPage() {
     const itemsPerPage = 12;
 
     useEffect(() => {
+        // Track page view
+        trackNavigation('/developers');
+
         const fetchDevelopers = async () => {
             try {
                 const res = await fetch('/api/properties?action=developers');

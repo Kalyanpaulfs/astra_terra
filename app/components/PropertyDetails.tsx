@@ -9,6 +9,8 @@ import PropertyCard from './PropertyCard';
 import { COLORS } from '@/app/lib/constants';
 
 import { usePathname } from 'next/navigation';
+import { getBackLinkForPropertyDetails } from '@/app/lib/navigation-utils';
+import { trackNavigation, getPreviousPage } from '@/app/lib/navigation-history';
 
 export default function PropertyDetails() {
     const { id } = useParams();
@@ -18,26 +20,37 @@ export default function PropertyDetails() {
     const [loading, setLoading] = useState(true);
     const [selectedImage, setSelectedImage] = useState(0);
 
-    // Determine smart back link based on current path and property data
-    const getBackLink = () => {
-        let base = '/properties-search';
-        const params = new URLSearchParams();
+    // Track this page view in navigation history
+    useEffect(() => {
+        if (pathname) {
+            trackNavigation(pathname);
+        }
+    }, [pathname]);
 
-        if (pathname?.includes('/rent')) {
-            params.set('listtype', 'RENT');
-        } else if (pathname?.includes('/buy')) {
-            params.set('listtype', 'SELL');
+    // Determine smart back link based on navigation history
+    const getSmartBackLink = () => {
+        // First, try to get the previous page from history
+        const previousPage = getPreviousPage(pathname || '');
+
+        if (previousPage) {
+            // If the previous page was properties-search, use it directly
+            if (previousPage.includes('/properties-search')) {
+                return previousPage;
+            }
+            // If the previous page was locations, developers, buy, or rent, use it
+            if (previousPage.includes('/locations') ||
+                previousPage.includes('/developers') ||
+                previousPage === '/buy' ||
+                previousPage === '/rent') {
+                return previousPage;
+            }
         }
 
-        if (property?.propertyType) {
-            params.set('type', property.propertyType);
-        }
-
-        const queryString = params.toString();
-        return queryString ? `${base}?${queryString}` : base;
+        // Fall back to smart link generation based on current context
+        return getBackLinkForPropertyDetails(pathname, property?.propertyType);
     };
 
-    const backLink = getBackLink();
+    const backLink = getSmartBackLink();
 
 
     useEffect(() => {
@@ -86,6 +99,38 @@ export default function PropertyDetails() {
 
     const formatPrice = (price: number) => new Intl.NumberFormat('en-AE').format(price);
     const phone = property.agent?.phone?.replace(/\D/g, '') || '';
+
+    // Extract data from newParam or use fallback values
+    const bedroomDisplay = property.newParam?.bedroomMin && property.newParam?.bedroomMax
+        ? `${property.newParam.bedroomMin}-${property.newParam.bedroomMax}`
+        : (property.bedRooms || '-');
+
+    const sizeDisplay = property.newParam?.minSize && property.newParam?.maxSize
+        ? `${property.newParam.minSize}-${property.newParam.maxSize}`
+        : (property.size || '-');
+
+    const bathrooms = property.rentParam?.bathrooms || '-';
+    const parking = property.newParam?.parking || property.rentParam?.parking || '-';
+
+    // Parse payment plan if available
+    let paymentPlan = null;
+    if (property.newParam?.paymentPlan) {
+        try {
+            paymentPlan = JSON.parse(property.newParam.paymentPlan);
+        } catch (e) {
+            console.error('Failed to parse payment plan:', e);
+        }
+    }
+
+    // Format handover date
+    const handoverDate = property.newParam?.handoverTime ? new Date(property.newParam.handoverTime).toLocaleDateString('en-US', { year: 'numeric', month: 'long' }) : null;
+
+    // Pluralization helper
+    const pluralize = (count: number | string, singular: string, plural: string) => {
+        if (count === '-' || count === '—') return singular;
+        const num = typeof count === 'string' ? parseFloat(count) : count;
+        return num === 1 ? singular : plural;
+    };
 
     return (
         <div style={{ backgroundColor: '#0D1625', minHeight: '100vh', color: '#ffffff', paddingBottom: '80px' }}>
@@ -213,7 +258,7 @@ export default function PropertyDetails() {
                             </h1>
                             <div style={{ color: '#b0b0b0', display: 'flex', alignItems: 'center', gap: '8px' }}>
                                 <i className="ph-fill ph-map-pin" style={{ color: 'COLORS.DUBAI_GOLD' }}></i>
-                                {property.community ? `${property.community}, ${property.city}` : property.region}
+                                {property.community && property.cityName ? `${property.community}, ${property.cityName}` : (property.community || property.region)}
                             </div>
                         </div>
                         <div style={{ textAlign: 'right', width: '100%' }}>
@@ -278,18 +323,27 @@ export default function PropertyDetails() {
                         }}>
                             <div style={{ textAlign: 'center' }}>
                                 <i className="ph ph-bed" style={{ fontSize: '1.5rem', color: 'COLORS.DUBAI_GOLD', marginBottom: '5px', display: 'block' }}></i>
-                                <span style={{ fontWeight: 'bold', fontSize: '1.1rem' }}>{property.bedRooms || '-'}</span> <span style={{ color: '#888', fontSize: '0.9rem' }}>Beds</span>
+                                <span style={{ fontWeight: 'bold', fontSize: '1.1rem' }}>{bedroomDisplay}</span> <span style={{ color: '#888', fontSize: '0.9rem' }}>{pluralize(bedroomDisplay, 'Bed', 'Beds')}</span>
                             </div>
                             <div style={{ width: '1px', background: 'rgba(255,255,255,0.1)' }}></div>
                             <div style={{ textAlign: 'center' }}>
                                 <i className="ph ph-shower" style={{ fontSize: '1.5rem', color: 'COLORS.DUBAI_GOLD', marginBottom: '5px', display: 'block' }}></i>
-                                <span style={{ fontWeight: 'bold', fontSize: '1.1rem' }}>{property.rentParam?.bathrooms || '-'}</span> <span style={{ color: '#888', fontSize: '0.9rem' }}>Baths</span>
+                                <span style={{ fontWeight: 'bold', fontSize: '1.1rem' }}>{bathrooms}</span> <span style={{ color: '#888', fontSize: '0.9rem' }}>{pluralize(bathrooms, 'Bath', 'Baths')}</span>
                             </div>
                             <div style={{ width: '1px', background: 'rgba(255,255,255,0.1)' }}></div>
                             <div style={{ textAlign: 'center' }}>
                                 <i className="ph ph-arrows-out" style={{ fontSize: '1.5rem', color: 'COLORS.DUBAI_GOLD', marginBottom: '5px', display: 'block' }}></i>
-                                <span style={{ fontWeight: 'bold', fontSize: '1.1rem' }}>{property.size || '-'}</span> <span style={{ color: '#888', fontSize: '0.9rem' }}>Sq Ft</span>
+                                <span style={{ fontWeight: 'bold', fontSize: '1.1rem' }}>{sizeDisplay}</span> <span style={{ color: '#888', fontSize: '0.9rem' }}>Sq Ft</span>
                             </div>
+                            {parking !== '-' && (
+                                <>
+                                    <div style={{ width: '1px', background: 'rgba(255,255,255,0.1)' }}></div>
+                                    <div style={{ textAlign: 'center' }}>
+                                        <i className="ph ph-car" style={{ fontSize: '1.5rem', color: 'COLORS.DUBAI_GOLD', marginBottom: '5px', display: 'block' }}></i>
+                                        <span style={{ fontWeight: 'bold', fontSize: '1.1rem' }}>{parking}</span> <span style={{ color: '#888', fontSize: '0.9rem' }}>Parking</span>
+                                    </div>
+                                </>
+                            )}
                         </div>
 
                         {/* Description */}
@@ -304,6 +358,94 @@ export default function PropertyDetails() {
                                 {property.description || "No description available for this property."}
                             </div>
                         </div>
+
+                        {/* Payment Plan & Handover */}
+                        {(paymentPlan || handoverDate) && (
+                            <div style={{ marginBottom: '3rem' }}>
+                                <h3 style={{ fontSize: '1.5rem', color: 'COLORS.DUBAI_GOLD', marginBottom: '1.5rem', fontFamily: 'Playfair Display, serif' }}>Payment Plan & Handover</h3>
+                                <div style={{
+                                    background: 'rgba(255,255,255,0.05)',
+                                    borderRadius: '12px',
+                                    padding: '30px',
+                                    border: '1px solid rgba(255,255,255,0.1)'
+                                }}>
+                                    {handoverDate && (
+                                        <div style={{ marginBottom: paymentPlan ? '25px' : '0', display: 'flex', alignItems: 'center', gap: '15px' }}>
+                                            <div style={{
+                                                width: '50px',
+                                                height: '50px',
+                                                borderRadius: '50%',
+                                                background: 'rgba(222, 201, 147, 0.1)',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center'
+                                            }}>
+                                                <i className="ph ph-calendar" style={{ fontSize: '1.5rem', color: 'COLORS.DUBAI_GOLD' }}></i>
+                                            </div>
+                                            <div>
+                                                <div style={{ fontSize: '0.85rem', color: '#888', marginBottom: '3px' }}>Handover Date</div>
+                                                <div style={{ fontSize: '1.1rem', fontWeight: 'bold', color: '#fff' }}>{handoverDate}</div>
+                                            </div>
+                                        </div>
+                                    )}
+                                    {paymentPlan && (
+                                        <div>
+                                            <div style={{ fontSize: '0.95rem', color: '#ccc', marginBottom: '20px' }}>Flexible Payment Structure</div>
+                                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: '15px' }}>
+                                                {paymentPlan.one && parseInt(paymentPlan.one) > 0 && (
+                                                    <div style={{
+                                                        background: 'rgba(255,255,255,0.03)',
+                                                        padding: '15px',
+                                                        borderRadius: '8px',
+                                                        border: '1px solid rgba(255,255,255,0.05)',
+                                                        textAlign: 'center'
+                                                    }}>
+                                                        <div style={{ fontSize: '1.8rem', fontWeight: 'bold', color: 'COLORS.DUBAI_GOLD' }}>{paymentPlan.one}%</div>
+                                                        <div style={{ fontSize: '0.8rem', color: '#888', marginTop: '5px' }}>Down Payment</div>
+                                                    </div>
+                                                )}
+                                                {paymentPlan.two && parseInt(paymentPlan.two) > 0 && (
+                                                    <div style={{
+                                                        background: 'rgba(255,255,255,0.03)',
+                                                        padding: '15px',
+                                                        borderRadius: '8px',
+                                                        border: '1px solid rgba(255,255,255,0.05)',
+                                                        textAlign: 'center'
+                                                    }}>
+                                                        <div style={{ fontSize: '1.8rem', fontWeight: 'bold', color: 'COLORS.DUBAI_GOLD' }}>{paymentPlan.two}%</div>
+                                                        <div style={{ fontSize: '0.8rem', color: '#888', marginTop: '5px' }}>During Construction</div>
+                                                    </div>
+                                                )}
+                                                {paymentPlan.three && parseInt(paymentPlan.three) > 0 && (
+                                                    <div style={{
+                                                        background: 'rgba(255,255,255,0.03)',
+                                                        padding: '15px',
+                                                        borderRadius: '8px',
+                                                        border: '1px solid rgba(255,255,255,0.05)',
+                                                        textAlign: 'center'
+                                                    }}>
+                                                        <div style={{ fontSize: '1.8rem', fontWeight: 'bold', color: 'COLORS.DUBAI_GOLD' }}>{paymentPlan.three}%</div>
+                                                        <div style={{ fontSize: '0.8rem', color: '#888', marginTop: '5px' }}>On Handover</div>
+                                                    </div>
+                                                )}
+                                                {Number(paymentPlan.four) > 0 && (
+                                                    <div style={{
+                                                        background: 'rgba(255,255,255,0.03)',
+                                                        padding: '15px',
+                                                        borderRadius: '8px',
+                                                        border: '1px solid rgba(255,255,255,0.05)',
+                                                        textAlign: 'center'
+                                                    }}>
+                                                        <div style={{ fontSize: '1.8rem', fontWeight: 'bold', color: 'COLORS.DUBAI_GOLD' }}>{paymentPlan.four}%</div>
+                                                        <div style={{ fontSize: '0.8rem', color: '#888', marginTop: '5px' }}>Post-Handover</div>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        )}
 
                         {/* Amenities */}
                         {property.amenities && property.amenities.length > 0 && (

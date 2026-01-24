@@ -3,7 +3,7 @@ import Image from 'next/image';
 
 export default function Footer() {
   return (
-    <div className="at-footer">
+    <div className="at-footer z-[1]">
       <div className="atf-content">
 
         {/* TOP ROW: Logo/About, Visit Us, Get In Touch */}

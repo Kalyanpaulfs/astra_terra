@@ -3,9 +3,10 @@
 import { useState, useEffect } from 'react';
 import { collection, query, where, getDocs, doc, getDoc, orderBy, limit } from 'firebase/firestore';
 import { db } from '@/app/lib/firebase';
-import { useParams } from 'next/navigation';
+import { useParams, usePathname } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
+import { trackNavigation, getPreviousPage } from '@/app/lib/navigation-history';
 
 interface BlogSection {
     heading: string;
@@ -26,9 +27,30 @@ interface BlogPost {
 
 export default function BlogDetails() {
     const { id } = useParams(); // 'id' here will capture the slug due to file naming, or actual ID
+    const pathname = usePathname();
     const [blog, setBlog] = useState<BlogPost | null>(null);
     const [loading, setLoading] = useState(true);
     const [recentBlogs, setRecentBlogs] = useState<BlogPost[]>([]);
+
+    // Track this page view in navigation history
+    useEffect(() => {
+        if (pathname) {
+            trackNavigation(pathname);
+        }
+    }, [pathname]);
+
+    // Smart back link - check navigation history first
+    const getBackLink = () => {
+        const previousPage = getPreviousPage(pathname || '');
+        // If previous page was blogs listing, return to it
+        if (previousPage && previousPage.includes('/blogs')) {
+            return previousPage;
+        }
+        // Default to blogs listing
+        return '/blogs';
+    };
+
+    const backLink = getBackLink();
 
     useEffect(() => {
         async function fetchData() {
@@ -93,7 +115,7 @@ export default function BlogDetails() {
             <>
                 <div className="ba-container" style={{ textAlign: 'center', paddingTop: '100px' }}>
                     <h1 className="ba-title">Blog Post Not Found</h1>
-                    <Link href="/blogs" style={{ color: 'var(--accent-gold)', textDecoration: 'underline' }}>Back to Blogs</Link>
+                    <Link href={backLink} style={{ color: 'var(--accent-gold)', textDecoration: 'underline' }}>Back to Blogs</Link>
                 </div>
             </>
         );
@@ -103,7 +125,7 @@ export default function BlogDetails() {
         <>
             <div className="ba-container" style={{ paddingTop: '120px' }}>
                 <div style={{ marginBottom: '30px', maxWidth: '1000px', margin: '0 auto 30px auto' }}>
-                    <Link href="/blogs" className="ba-btn ba-btn-outline" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '8px 20px', fontSize: '0.9rem', borderRadius: '30px', textDecoration: 'none' }}>
+                    <Link href={backLink} className="ba-btn ba-btn-outline" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '8px 20px', fontSize: '0.9rem', borderRadius: '30px', textDecoration: 'none' }}>
                         ← Back to Blogs
                     </Link>
                 </div>
@@ -208,7 +230,7 @@ export default function BlogDetails() {
                         </div>
 
                         <div style={{ textAlign: 'center', marginTop: '3rem' }}>
-                            <Link href="/blogs" className="ba-btn ba-btn-outline" style={{ display: 'inline-block', textDecoration: 'none' }}>
+                            <Link href={backLink} className="ba-btn ba-btn-outline" style={{ display: 'inline-block', textDecoration: 'none' }}>
                                 Back to All Blogs
                             </Link>
                         </div>

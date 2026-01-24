@@ -1,11 +1,14 @@
 'use client';
 
 import { useEffect, useState, Suspense } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
+import Link from 'next/link';
 import PropertyCard from '../components/PropertyCard';
 import { PropertiesSearchSkeleton } from '../components/Skeletons';
 import Pagination from '../components/Pagination';
 import { COLORS } from '../lib/constants';
+import { getBackLinkForPropertiesSearch } from '../lib/navigation-utils';
+import { trackNavigation } from '../lib/navigation-history';
 
 interface PropertyMeta {
   cities: Record<number, string>;
@@ -14,13 +17,18 @@ interface PropertyMeta {
 }
 
 function PropertiesSearchContent() {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const [listings, setListings] = useState<any[]>([]);
   const [meta, setMeta] = useState<PropertyMeta | null>(null);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 9;
+
+  // Track page view in navigation history
+  useEffect(() => {
+    const currentPath = `/properties-search${searchParams.toString() ? `?${searchParams.toString()}` : ''}`;
+    trackNavigation(currentPath);
+  }, [searchParams]);
 
   useEffect(() => {
     setCurrentPage(1);
@@ -146,8 +154,8 @@ function PropertiesSearchContent() {
             }}>
 
               {/* Back Button */}
-              <button
-                onClick={() => router.back()}
+              <Link
+                href={getBackLinkForPropertiesSearch(searchParams)}
                 style={{
                   alignSelf: 'flex-start',
                   marginBottom: '1rem',
@@ -163,7 +171,8 @@ function PropertiesSearchContent() {
                   padding: '8px 20px',
                   transition: 'all 0.3s ease',
                   letterSpacing: '1px',
-                  zIndex: 10
+                  zIndex: 10,
+                  textDecoration: 'none'
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.background = 'rgba(222, 201, 147, 0.1)';
@@ -178,7 +187,7 @@ function PropertiesSearchContent() {
               >
                 <i className="ph ph-arrow-left" style={{ fontSize: '1rem' }}></i>
                 BACK
-              </button>
+              </Link>
 
               {searchParams.get('type') ? (
                 <>

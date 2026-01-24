@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
+import { usePropertyNavigation } from '../lib/use-property-navigation';
 
 interface PropertyCardProps {
   listing: {
@@ -21,6 +22,15 @@ interface PropertyCardProps {
       bathrooms?: number;
       parking?: number;
     };
+    newParam?: {
+      bedroomMin?: string;
+      bedroomMax?: string;
+      minSize?: number;
+      maxSize?: number;
+      parking?: number;
+      handoverTime?: string;
+      paymentPlan?: string;
+    };
     agent?: {
       phone?: string;
     };
@@ -30,6 +40,8 @@ interface PropertyCardProps {
 }
 
 export default function PropertyCard({ listing, variant = 'featured', disableWrapper }: PropertyCardProps) {
+  const { storeReferrer } = usePropertyNavigation();
+
   // Simple computation - no need for useMemo for this lightweight operation
   const tagList = listing.amenities?.slice(0, 2) || [];
   if (listing.propertyType?.[0]) {
@@ -50,6 +62,25 @@ export default function PropertyCard({ listing, variant = 'featured', disableWra
 
   const phone = listing.agent?.phone?.replace(/\D/g, '') || '';
 
+  // Extract data from newParam or fallback to regular fields
+  const bedroomDisplay = listing.newParam?.bedroomMin && listing.newParam?.bedroomMax
+    ? `${listing.newParam.bedroomMin}-${listing.newParam.bedroomMax}`
+    : (listing.bedRooms || '—');
+
+  const sizeDisplay = listing.newParam?.minSize && listing.newParam?.maxSize
+    ? `${listing.newParam.minSize}-${listing.newParam.maxSize}`
+    : (listing.size || '—');
+
+  const bathrooms = listing.rentParam?.bathrooms || '—';
+  const parking = listing.newParam?.parking || listing.rentParam?.parking || '—';
+
+  // Pluralization helpers
+  const pluralize = (count: number | string, singular: string, plural: string) => {
+    if (count === '—' || count === '-') return singular;
+    const num = typeof count === 'string' ? parseFloat(count) : count;
+    return num === 1 ? singular : plural;
+  };
+
   // Determine link URL
   const listType = listing.listingType?.toUpperCase();
   const type = (listType === 'SALE' || listType === 'SELL') ? 'buy' : 'rent';
@@ -63,7 +94,7 @@ export default function PropertyCard({ listing, variant = 'featured', disableWra
       <div className="at-property-card-horizontal box mb-5" style={{ width: '100%' }}>
         <div className="columns is-mobile is-variable is-3">
           <div className="column is-3">
-            <Link href={linkUrl} className="image">
+            <Link href={linkUrl} className="image" onClick={storeReferrer}>
               <Image
                 className="at-pch-img"
                 src={listing.photos?.[0] || '/img/prop/default-thumb.webp'}
@@ -86,7 +117,7 @@ export default function PropertyCard({ listing, variant = 'featured', disableWra
                 ))}
               </div>
               <h3 className="title is-6 mb-1">
-                <Link href={linkUrl} className="has-text-grey-darker">
+                <Link href={linkUrl} className="has-text-grey-darker" onClick={storeReferrer}>
                   {listing.title.length > 70 ? `${listing.title.substring(0, 70)}...` : listing.title}
                 </Link>
               </h3>
@@ -98,10 +129,10 @@ export default function PropertyCard({ listing, variant = 'featured', disableWra
                 {listing.community || listing.region}
               </p>
               <ul className="is-flex is-flex-wrap-wrap mt-3 is-size-7">
-                <li className="mr-4"><i className="ph ph-bed"></i> {listing.bedRooms || '—'}</li>
-                <li className="mr-4"><i className="ph ph-shower"></i> {listing.rentParam?.bathrooms || '—'}</li>
-                <li className="mr-4"><i className="ph ph-arrows-out"></i> {listing.size || '—'} sq ft</li>
-                <li><i className="ph ph-car"></i> {listing.rentParam?.parking || '—'}</li>
+                <li className="mr-4"><i className="ph ph-bed"></i> {bedroomDisplay} {pluralize(bedroomDisplay, 'Bed', 'Beds')}</li>
+                <li className="mr-4"><i className="ph ph-shower"></i> {bathrooms} {pluralize(bathrooms, 'Bath', 'Baths')}</li>
+                <li className="mr-4"><i className="ph ph-arrows-out"></i> {sizeDisplay} sqft</li>
+                <li><i className="ph ph-car"></i> {parking} {pluralize(parking, 'Parking', 'Parking')}</li>
               </ul>
             </div>
             <div className="mt-4 is-flex">
@@ -132,7 +163,7 @@ export default function PropertyCard({ listing, variant = 'featured', disableWra
   if (variant === 'grid') {
     return (
       <div className="at-property-card" style={{ height: '100%', minHeight: '480px' }}>
-        <Link href={linkUrl} className="at-pc-head">
+        <Link href={linkUrl} className="at-pc-head" onClick={storeReferrer}>
           <span className="at-pch-highlight">Featured</span>
           <ul className="at-pch-info">
             {tags.map((tag, idx) => (
@@ -154,7 +185,7 @@ export default function PropertyCard({ listing, variant = 'featured', disableWra
             <div className="at-pcbi-price">
               AED {formatPrice(listing.price)}
             </div>
-            <Link href={linkUrl} className="at-pcbi-title">
+            <Link href={linkUrl} className="at-pcbi-title" onClick={storeReferrer}>
               {listing.title.length > 50 ? `${listing.title.substring(0, 50)}...` : listing.title}
             </Link>
             <div className="at-pcbi-loc">
@@ -163,14 +194,14 @@ export default function PropertyCard({ listing, variant = 'featured', disableWra
             </div>
           </div>
           <ul className="at-pcb-specs">
-            <li><i className="ph ph-bed"></i> <span>{listing.bedRooms || '—'} Beds</span></li>
-            <li><i className="ph ph-bathtub"></i> <span>{listing.rentParam?.bathrooms || '—'} Baths</span></li>
-            <li><i className="ph ph-square"></i> <span>{listing.size || '—'} sqft</span></li>
-            <li><i className="ph ph-car"></i> <span>{listing.rentParam?.parking || '—'} Prk</span></li>
+            <li><i className="ph ph-bed"></i> <span>{bedroomDisplay} {pluralize(bedroomDisplay, 'Bed', 'Beds')}</span></li>
+            <li><i className="ph ph-bathtub"></i> <span>{bathrooms} {pluralize(bathrooms, 'Bath', 'Baths')}</span></li>
+            <li><i className="ph ph-square"></i> <span>{sizeDisplay} sqft</span></li>
+            <li><i className="ph ph-car"></i> <span>{parking} {pluralize(parking, 'Parking', 'Parking')}</span></li>
           </ul>
         </div>
         <div className="at-pc-footer">
-          <Link href={linkUrl} className="at-pcf-btn at-pcf-btn-details">
+          <Link href={linkUrl} className="at-pcf-btn at-pcf-btn-details" onClick={storeReferrer}>
             <span>View Property Details</span>
           </Link>
         </div>
@@ -181,7 +212,7 @@ export default function PropertyCard({ listing, variant = 'featured', disableWra
   // Featured card variant (default / carousel)
   const content = (
     <div className="at-property-card">
-      <Link href={linkUrl} className="at-pc-head">
+      <Link href={linkUrl} className="at-pc-head" onClick={storeReferrer}>
         <span className="at-pch-highlight">Featured</span>
         <ul className="at-pch-info">
           {tags.map((tag, idx) => (
@@ -203,7 +234,7 @@ export default function PropertyCard({ listing, variant = 'featured', disableWra
           <div className="at-pcbi-price">
             AED {formatPrice(listing.price)}
           </div>
-          <Link href={linkUrl} className="at-pcbi-title">
+          <Link href={linkUrl} className="at-pcbi-title" onClick={storeReferrer}>
             {listing.title.length > 50 ? `${listing.title.substring(0, 50)}...` : listing.title}
           </Link>
           <div className="at-pcbi-loc">
@@ -212,14 +243,14 @@ export default function PropertyCard({ listing, variant = 'featured', disableWra
           </div>
         </div>
         <ul className="at-pcb-specs">
-          <li><i className="ph ph-bed"></i> <span>{listing.bedRooms || '—'} Beds</span></li>
-          <li><i className="ph ph-bathtub"></i> <span>{listing.rentParam?.bathrooms || '—'} Baths</span></li>
-          <li><i className="ph ph-square"></i> <span>{listing.size || '—'} sqft</span></li>
-          <li><i className="ph ph-car"></i> <span>{listing.rentParam?.parking || '—'} Prk</span></li>
+          <li><i className="ph ph-bed"></i> <span>{bedroomDisplay} {pluralize(bedroomDisplay, 'Bed', 'Beds')}</span></li>
+          <li><i className="ph ph-bathtub"></i> <span>{bathrooms} {pluralize(bathrooms, 'Bath', 'Baths')}</span></li>
+          <li><i className="ph ph-square"></i> <span>{sizeDisplay} sqft</span></li>
+          <li><i className="ph ph-car"></i> <span>{parking} {pluralize(parking, 'Parking', 'Parking')}</span></li>
         </ul>
       </div>
       <div className="at-pc-footer">
-        <Link href={linkUrl} className="at-pcf-btn at-pcf-btn-details">
+        <Link href={linkUrl} className="at-pcf-btn at-pcf-btn-details" onClick={storeReferrer}>
           <span>View Property Details</span>
         </Link>
       </div>

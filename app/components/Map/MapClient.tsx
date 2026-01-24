@@ -94,7 +94,7 @@ const MapClient = ({ properties }: MapClientProps) => {
     }, []);
 
     return (
-        <div className="w-full h-full relative z-0 min-h-[500px]">
+        <div className="w-full h-full relative z-[0] min-h-[500px]">
             <style jsx global>{`
                 .leaflet-container {
                     width: 100%;

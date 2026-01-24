@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { COLORS } from '../lib/constants';
 import Pagination from '../components/Pagination';
+import { trackNavigation } from '../lib/navigation-history';
 
 // Premium generic images to rotate through when specific image missing
 // Premium interior images to rotate through when specific image missing
@@ -41,6 +42,9 @@ export default function LocationsPage() {
 
 
     useEffect(() => {
+        // Track page view
+        trackNavigation('/locations');
+
         const fetchMeta = async () => {
             try {
                 const res = await fetch('/api/properties?action=meta');

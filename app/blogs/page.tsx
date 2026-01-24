@@ -7,6 +7,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import Navbar from '@/app/components/Navbar';
 import Footer from '@/app/components/Footer';
+import { trackNavigation } from '@/app/lib/navigation-history';
 
 interface BlogPost {
     id: string;
@@ -22,6 +23,9 @@ export default function BlogList() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        // Track page view
+        trackNavigation('/blogs');
+
         async function fetchBlogs() {
             try {
                 const q = query(collection(db, 'blogs'), orderBy('createdAt', 'desc'));
