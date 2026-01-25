@@ -109,8 +109,8 @@ export default function PropertyDetails() {
         ? `${property.newParam.minSize}-${property.newParam.maxSize}`
         : (property.size || '-');
 
-    const bathrooms = property.rentParam?.bathrooms || '-';
-    const parking = property.newParam?.parking || property.rentParam?.parking || '-';
+    const bathrooms = property.moreParam?.bathrooms || property.rentParam?.bathrooms || '-';
+    const parking = property.moreParam?.parking || property.newParam?.parking || property.rentParam?.parking || '-';
 
     // Parse payment plan if available
     let paymentPlan = null;

@@ -31,6 +31,10 @@ interface PropertyCardProps {
       handoverTime?: string;
       paymentPlan?: string;
     };
+    moreParam?: {
+      bathrooms?: number;
+      parking?: number;
+    };
     agent?: {
       phone?: string;
     };
@@ -71,8 +75,8 @@ export default function PropertyCard({ listing, variant = 'featured', disableWra
     ? `${listing.newParam.minSize}-${listing.newParam.maxSize}`
     : (listing.size || '—');
 
-  const bathrooms = listing.rentParam?.bathrooms || '—';
-  const parking = listing.newParam?.parking || listing.rentParam?.parking || '—';
+  const bathrooms = listing.moreParam?.bathrooms || listing.rentParam?.bathrooms || '—';
+  const parking = listing.moreParam?.parking || listing.newParam?.parking || listing.rentParam?.parking || '—';
 
   // Pluralization helpers
   const pluralize = (count: number | string, singular: string, plural: string) => {
