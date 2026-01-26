@@ -17,6 +17,7 @@ interface PropertyCardProps {
     community?: string;
     region?: string;
     bedRooms?: number;
+    bathrooms?: number;
     size?: number;
     rentParam?: {
       bathrooms?: number;
