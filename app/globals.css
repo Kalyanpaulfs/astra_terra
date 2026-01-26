@@ -67,3 +67,56 @@
   position: fixed !important;
   /* Enforce fixed positioning to maintain layout AND apply z-index */
 }
+/* ========================================
+   PREMIUM CUSTOM SCROLLBAR
+   ======================================== */
+
+/* Webkit Browsers (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(13, 22, 37, 0.5);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #DEC993 0%, #C5A265 100%);
+  border-radius: 10px;
+  border: 2px solid rgba(13, 22, 37, 0.5);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #F5E6B8 0%, #DEC993 100%);
+  box-shadow: 0 0 10px rgba(222, 201, 147, 0.5);
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #DEC993 rgba(13, 22, 37, 0.5);
+}
+
+/* Property Details Thumbnail Scrollbar (Extra Premium) */
+.pd-thumbs::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.pd-thumbs::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+}
+
+.pd-thumbs::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #DEC993 0%, #C5A265 100%);
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(222, 201, 147, 0.3);
+}
+
+.pd-thumbs::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #F5E6B8 0%, #DEC993 100%);
+  box-shadow: 0 4px 12px rgba(222, 201, 147, 0.5);
+}

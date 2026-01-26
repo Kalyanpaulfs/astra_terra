@@ -255,7 +255,15 @@ export async function GET(request: NextRequest) {
 
     // PHP uses: $response->json('data.list')
     // This means response structure is: { data: { list: [...] } }
-    const listings = data?.data?.list || [];
+    const rawListings = data?.data?.list || [];
+
+    // Transform Pixxi's spaced keys to expected format
+    const listings = rawListings.map((listing: any) => ({
+      ...listing,
+      title: listing['property title'] || listing.title || '',
+      photos: listing['property photos'] || listing.photos || [],
+      agent: listing['agent info'] || listing.agent || {},
+    }));
 
     return NextResponse.json({ listings });
   } catch (error: any) {

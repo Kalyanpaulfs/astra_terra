@@ -3563,9 +3563,8 @@ pre {
 
 /* Detail Page Header */
 .at-ddp-header {
-	text-align: center;
 	margin-bottom: 32px;
-	max-width: 800px;
+	max-width: auto;
 	margin-left: auto;
 	margin-right: auto;
 }
@@ -3590,11 +3589,13 @@ pre {
 	font-size: 2rem;
 	color: #C5A265;
 	margin-bottom: 8px;
+	text-align: center;
 }
 
 .at-ddp-header p {
 	color: #a0a0a0;
 	font-size: 0.95rem;
+	text-align: center;
 }
 
 /* Filter Tabs */

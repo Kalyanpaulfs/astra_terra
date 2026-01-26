@@ -119,7 +119,7 @@ const MapClient = ({ properties }: MapClientProps) => {
                 {filteredProperties.map((property) => {
                     const photo = (property.photos && property.photos.length > 0 && property.photos[0]) ||
                         (property.imgUrl && property.imgUrl.length > 0 && property.imgUrl[0]) ||
-                        '/img/placeholder.jpg';
+                        '/img/prop/1-thumb.webp';
 
                     // Determine property type slug for URL (default to 'property' if missing)
                     // The API response usually includes a propertyType field which might need normalizing

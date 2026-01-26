@@ -5,6 +5,7 @@ import { useParams, useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import PropertyCard from '../../components/PropertyCard';
 import Pagination from '../../components/Pagination';
+import BackButton from '../../components/BackButton';
 import { COLORS } from '@/app/lib/constants';
 
 function DeveloperDetailContent() {
@@ -97,10 +98,8 @@ function DeveloperDetailContent() {
     if (loading) {
         return (
             <div className="at-developer-detail-page">
+                <BackButton href="/developers" label="Back to Developers" />
                 <div className="at-ddp-header">
-                    <a href="/developers" className="at-ddp-back">
-                        <i className="ph ph-arrow-left"></i> Back to Developers
-                    </a>
                     <h1>Properties by {developerName}</h1>
                     <div className="at-ddp-loading-indicator">
                         <div className="at-ddp-spinner"></div>
@@ -135,9 +134,7 @@ function DeveloperDetailContent() {
     return (
         <div className="at-developer-detail-page">
             <div className="at-ddp-header">
-                <Link href="/developers" className="at-ddp-back">
-                    <i className="ph ph-arrow-left"></i> Back to Developers
-                </Link>
+                <BackButton href="/developers" label="Back to Developers" />
                 <h1>Properties by {developerName}</h1>
                 <p>{listings.length} {listings.length === 1 ? 'property' : 'properties'} available from this developer</p>
             </div>

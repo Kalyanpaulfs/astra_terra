@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { fetchProperty, fetchListings } from '@/app/lib/actions';
 import PropertyCard from './PropertyCard';
+import BackButton from './BackButton';
 import { COLORS } from '@/app/lib/constants';
 
 import { usePathname } from 'next/navigation';
@@ -61,6 +62,18 @@ export default function PropertyDetails() {
                 const data = await fetchProperty(id as string);
                 setProperty(data);
 
+                // DEBUG: Log the property data
+                console.log("=== PropertyDetails DEBUG ===");
+                console.log("Property ID:", id);
+                console.log("Property Data:", data);
+                console.log("Property Keys:", data ? Object.keys(data) : "null");
+                console.log("Title:", data?.title);
+                console.log("Photos:", data?.photos);
+                console.log("Photos Length:", data?.photos?.length);
+                console.log("Agent:", data?.agent);
+                console.log("==============================");
+
+
                 if (data) {
                     // Fetch similar properties via Server Action
                     try {
@@ -85,7 +98,7 @@ export default function PropertyDetails() {
     }, [id]);
 
     if (loading) return (
-        <div style={{ minHeight: '80vh', display: 'flex', justifyContent: 'center', alignItems: 'center', background: '#0D1625', color: 'COLORS.DUBAI_GOLD', paddingLeft: '2rem', paddingRight: '2rem' }}>
+        <div style={{ minHeight: '80vh', display: 'flex', justifyContent: 'center', alignItems: 'center', background: '#0D1625', color: COLORS.DUBAI_GOLD, paddingLeft: '2rem', paddingRight: '2rem' }}>
             <div className="ba-spinner"></div>
         </div>
     );
@@ -93,7 +106,7 @@ export default function PropertyDetails() {
     if (!property) return (
         <div style={{ minHeight: '60vh', textAlign: 'center', padding: '100px 20px', background: '#0D1625', color: 'white' }}>
             <h2>Property Not Found</h2>
-            <Link href="/" style={{ color: 'COLORS.DUBAI_GOLD', textDecoration: 'underline', marginTop: '20px', display: 'block' }}>Return Home</Link>
+            <Link href="/" style={{ color: COLORS.DUBAI_GOLD, textDecoration: 'underline', marginTop: '20px', display: 'block' }}>Return Home</Link>
         </div>
     );
 
@@ -101,16 +114,18 @@ export default function PropertyDetails() {
     const phone = property.agent?.phone?.replace(/\D/g, '') || '';
 
     // Extract data from newParam or use fallback values
+    // For NEW properties, prefer newParam bedroom range
     const bedroomDisplay = property.newParam?.bedroomMin && property.newParam?.bedroomMax
         ? `${property.newParam.bedroomMin}-${property.newParam.bedroomMax}`
-        : (property.bedRooms || '-');
+        : (property.bedRooms && property.bedRooms !== -1 ? property.bedRooms : '-');
 
+    // For NEW properties, prefer newParam size range
     const sizeDisplay = property.newParam?.minSize && property.newParam?.maxSize
         ? `${property.newParam.minSize}-${property.newParam.maxSize}`
-        : (property.size || '-');
+        : (property.size && property.size !== 0 ? property.size : '-');
 
-    const bathrooms = property.moreParam?.bathrooms || property.rentParam?.bathrooms || '-';
-    const parking = property.moreParam?.parking || property.newParam?.parking || property.rentParam?.parking || '-';
+    const bathrooms = property.moreParam?.bathrooms || property.sellParam?.bathrooms || property.rentParam?.bathrooms || '-';
+    const parking = property.moreParam?.parking || property.sellParam?.parking || property.newParam?.parking || property.rentParam?.parking || '-';
 
     // Parse payment plan if available
     let paymentPlan = null;
@@ -246,10 +261,8 @@ export default function PropertyDetails() {
                 {/* Header Section */}
                 <div className="pd-header">
                     <div className="pd-header-content">
-                        <div style={{ width: '100%', marginBottom: '10px' }}>
-                            <Link href={backLink} className="button is-small is-ghost pl-0" style={{ color: 'COLORS.DUBAI_GOLD', textDecoration: 'none' }}>
-                                <i className="ph ph-arrow-left" style={{ marginRight: '5px' }}></i> Back to Search
-                            </Link>
+                        <div style={{ width: '100%', marginBottom: '10px', textAlign: 'left' }}>
+                            <BackButton href={backLink} label="BACK TO SEARCH" />
                         </div>
                         <div style={{ flex: 1 }}>
                             {/* Tag removed as requested */}
@@ -257,12 +270,12 @@ export default function PropertyDetails() {
                                 {property.title}
                             </h1>
                             <div style={{ color: '#b0b0b0', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                <i className="ph-fill ph-map-pin" style={{ color: 'COLORS.DUBAI_GOLD' }}></i>
+                                <i className="ph-fill ph-map-pin" style={{ color: COLORS.DUBAI_GOLD }}></i>
                                 {property.community && property.cityName ? `${property.community}, ${property.cityName}` : (property.community || property.region)}
                             </div>
                         </div>
                         <div style={{ textAlign: 'right', width: '100%' }}>
-                            <div style={{ fontSize: '2rem', fontWeight: 'bold', color: 'COLORS.DUBAI_GOLD' }}>
+                            <div style={{ fontSize: '2rem', fontWeight: 'bold', color: COLORS.DUBAI_GOLD }}>
                                 AED {formatPrice(property.price)}
                             </div>
                             <div style={{ color: '#b0b0b0', fontSize: '0.9rem' }}>
@@ -278,7 +291,7 @@ export default function PropertyDetails() {
                 <div className="pd-gallery">
                     <div className="pd-main-img" style={{ position: 'relative', borderRadius: '16px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.1)', height: '100%', minHeight: '300px' }}>
                         <Image
-                            src={property.photos?.[selectedImage] || '/img/prop/default-large.webp'}
+                            src={property.photos?.[selectedImage] || '/img/prop/1.webp'}
                             alt={property.title}
                             fill
                             style={{ objectFit: 'cover' }}
@@ -292,7 +305,7 @@ export default function PropertyDetails() {
                                 onClick={() => setSelectedImage(idx)}
                                 className="pd-thumb-item"
                                 style={{
-                                    border: selectedImage === idx ? '2px solid COLORS.DUBAI_GOLD' : '1px solid rgba(255,255,255,0.1)'
+                                    border: selectedImage === idx ? `2px solid ${COLORS.DUBAI_GOLD}` : '1px solid rgba(255,255,255,0.1)'
                                 }}
                             >
                                 <Image
@@ -322,24 +335,24 @@ export default function PropertyDetails() {
                             border: '1px solid rgba(255,255,255,0.1)'
                         }}>
                             <div style={{ textAlign: 'center' }}>
-                                <i className="ph ph-bed" style={{ fontSize: '1.5rem', color: 'COLORS.DUBAI_GOLD', marginBottom: '5px', display: 'block' }}></i>
+                                <i className="ph ph-bed" style={{ fontSize: '1.5rem', color: COLORS.DUBAI_GOLD, marginBottom: '5px', display: 'block' }}></i>
                                 <span style={{ fontWeight: 'bold', fontSize: '1.1rem' }}>{bedroomDisplay}</span> <span style={{ color: '#888', fontSize: '0.9rem' }}>{pluralize(bedroomDisplay, 'Bed', 'Beds')}</span>
                             </div>
                             <div style={{ width: '1px', background: 'rgba(255,255,255,0.1)' }}></div>
                             <div style={{ textAlign: 'center' }}>
-                                <i className="ph ph-shower" style={{ fontSize: '1.5rem', color: 'COLORS.DUBAI_GOLD', marginBottom: '5px', display: 'block' }}></i>
+                                <i className="ph ph-shower" style={{ fontSize: '1.5rem', color: COLORS.DUBAI_GOLD, marginBottom: '5px', display: 'block' }}></i>
                                 <span style={{ fontWeight: 'bold', fontSize: '1.1rem' }}>{bathrooms}</span> <span style={{ color: '#888', fontSize: '0.9rem' }}>{pluralize(bathrooms, 'Bath', 'Baths')}</span>
                             </div>
                             <div style={{ width: '1px', background: 'rgba(255,255,255,0.1)' }}></div>
                             <div style={{ textAlign: 'center' }}>
-                                <i className="ph ph-arrows-out" style={{ fontSize: '1.5rem', color: 'COLORS.DUBAI_GOLD', marginBottom: '5px', display: 'block' }}></i>
+                                <i className="ph ph-arrows-out" style={{ fontSize: '1.5rem', color: COLORS.DUBAI_GOLD, marginBottom: '5px', display: 'block' }}></i>
                                 <span style={{ fontWeight: 'bold', fontSize: '1.1rem' }}>{sizeDisplay}</span> <span style={{ color: '#888', fontSize: '0.9rem' }}>Sq Ft</span>
                             </div>
                             {parking !== '-' && (
                                 <>
                                     <div style={{ width: '1px', background: 'rgba(255,255,255,0.1)' }}></div>
                                     <div style={{ textAlign: 'center' }}>
-                                        <i className="ph ph-car" style={{ fontSize: '1.5rem', color: 'COLORS.DUBAI_GOLD', marginBottom: '5px', display: 'block' }}></i>
+                                        <i className="ph ph-car" style={{ fontSize: '1.5rem', color: COLORS.DUBAI_GOLD, marginBottom: '5px', display: 'block' }}></i>
                                         <span style={{ fontWeight: 'bold', fontSize: '1.1rem' }}>{parking}</span> <span style={{ color: '#888', fontSize: '0.9rem' }}>Parking</span>
                                     </div>
                                 </>
@@ -348,7 +361,7 @@ export default function PropertyDetails() {
 
                         {/* Description */}
                         <div style={{ marginBottom: '3rem' }}>
-                            <h3 style={{ fontSize: '1.5rem', color: 'COLORS.DUBAI_GOLD', marginBottom: '1.5rem', fontFamily: 'Playfair Display, serif' }}>Description</h3>
+                            <h3 style={{ fontSize: '1.5rem', color: COLORS.DUBAI_GOLD, marginBottom: '1.5rem', fontFamily: 'Playfair Display, serif' }}>Description</h3>
                             <div style={{
                                 lineHeight: '1.8',
                                 color: '#ccc',
@@ -362,7 +375,7 @@ export default function PropertyDetails() {
                         {/* Payment Plan & Handover */}
                         {(paymentPlan || handoverDate) && (
                             <div style={{ marginBottom: '3rem' }}>
-                                <h3 style={{ fontSize: '1.5rem', color: 'COLORS.DUBAI_GOLD', marginBottom: '1.5rem', fontFamily: 'Playfair Display, serif' }}>Payment Plan & Handover</h3>
+                                <h3 style={{ fontSize: '1.5rem', color: COLORS.DUBAI_GOLD, marginBottom: '1.5rem', fontFamily: 'Playfair Display, serif' }}>Payment Plan & Handover</h3>
                                 <div style={{
                                     background: 'rgba(255,255,255,0.05)',
                                     borderRadius: '12px',
@@ -380,7 +393,7 @@ export default function PropertyDetails() {
                                                 alignItems: 'center',
                                                 justifyContent: 'center'
                                             }}>
-                                                <i className="ph ph-calendar" style={{ fontSize: '1.5rem', color: 'COLORS.DUBAI_GOLD' }}></i>
+                                                <i className="ph ph-calendar" style={{ fontSize: '1.5rem', color: COLORS.DUBAI_GOLD }}></i>
                                             </div>
                                             <div>
                                                 <div style={{ fontSize: '0.85rem', color: '#888', marginBottom: '3px' }}>Handover Date</div>
@@ -400,7 +413,7 @@ export default function PropertyDetails() {
                                                         border: '1px solid rgba(255,255,255,0.05)',
                                                         textAlign: 'center'
                                                     }}>
-                                                        <div style={{ fontSize: '1.8rem', fontWeight: 'bold', color: 'COLORS.DUBAI_GOLD' }}>{paymentPlan.one}%</div>
+                                                        <div style={{ fontSize: '1.8rem', fontWeight: 'bold', color: COLORS.DUBAI_GOLD }}>{paymentPlan.one}%</div>
                                                         <div style={{ fontSize: '0.8rem', color: '#888', marginTop: '5px' }}>Down Payment</div>
                                                     </div>
                                                 )}
@@ -412,7 +425,7 @@ export default function PropertyDetails() {
                                                         border: '1px solid rgba(255,255,255,0.05)',
                                                         textAlign: 'center'
                                                     }}>
-                                                        <div style={{ fontSize: '1.8rem', fontWeight: 'bold', color: 'COLORS.DUBAI_GOLD' }}>{paymentPlan.two}%</div>
+                                                        <div style={{ fontSize: '1.8rem', fontWeight: 'bold', color: COLORS.DUBAI_GOLD }}>{paymentPlan.two}%</div>
                                                         <div style={{ fontSize: '0.8rem', color: '#888', marginTop: '5px' }}>During Construction</div>
                                                     </div>
                                                 )}
@@ -424,7 +437,7 @@ export default function PropertyDetails() {
                                                         border: '1px solid rgba(255,255,255,0.05)',
                                                         textAlign: 'center'
                                                     }}>
-                                                        <div style={{ fontSize: '1.8rem', fontWeight: 'bold', color: 'COLORS.DUBAI_GOLD' }}>{paymentPlan.three}%</div>
+                                                        <div style={{ fontSize: '1.8rem', fontWeight: 'bold', color: COLORS.DUBAI_GOLD }}>{paymentPlan.three}%</div>
                                                         <div style={{ fontSize: '0.8rem', color: '#888', marginTop: '5px' }}>On Handover</div>
                                                     </div>
                                                 )}
@@ -436,7 +449,7 @@ export default function PropertyDetails() {
                                                         border: '1px solid rgba(255,255,255,0.05)',
                                                         textAlign: 'center'
                                                     }}>
-                                                        <div style={{ fontSize: '1.8rem', fontWeight: 'bold', color: 'COLORS.DUBAI_GOLD' }}>{paymentPlan.four}%</div>
+                                                        <div style={{ fontSize: '1.8rem', fontWeight: 'bold', color: COLORS.DUBAI_GOLD }}>{paymentPlan.four}%</div>
                                                         <div style={{ fontSize: '0.8rem', color: '#888', marginTop: '5px' }}>Post-Handover</div>
                                                     </div>
                                                 )}
@@ -450,7 +463,7 @@ export default function PropertyDetails() {
                         {/* Amenities */}
                         {property.amenities && property.amenities.length > 0 && (
                             <div style={{ marginBottom: '3rem' }}>
-                                <h3 style={{ fontSize: '1.5rem', color: 'COLORS.DUBAI_GOLD', marginBottom: '1.5rem', fontFamily: 'Playfair Display, serif' }}>Amenities</h3>
+                                <h3 style={{ fontSize: '1.5rem', color: COLORS.DUBAI_GOLD, marginBottom: '1.5rem', fontFamily: 'Playfair Display, serif' }}>Amenities</h3>
                                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
                                     {property.amenities.map((am: string, idx: number) => (
                                         <span key={idx} style={{
@@ -494,7 +507,7 @@ export default function PropertyDetails() {
                                         )}
                                     </div>
                                     <div>
-                                        <div style={{ fontWeight: 'bold', color: 'COLORS.DUBAI_GOLD' }}>{property.agent.name || 'Property Consultant'}</div>
+                                        <div style={{ fontWeight: 'bold', color: COLORS.DUBAI_GOLD }}>{property.agent.name || 'Property Consultant'}</div>
                                         <div style={{ fontSize: '0.8rem', color: '#888' }}>Astra Terra Expert</div>
                                     </div>
                                 </div>
@@ -522,7 +535,7 @@ export default function PropertyDetails() {
                 {/* Similar Properties Section */}
                 {similarProperties.length > 0 && (
                     <div style={{ marginTop: '5rem', paddingTop: '3rem', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
-                        <h3 style={{ fontSize: '1.8rem', color: 'COLORS.DUBAI_GOLD', marginBottom: '2rem', fontFamily: 'Playfair Display, serif' }}>
+                        <h3 style={{ fontSize: '1.8rem', color: COLORS.DUBAI_GOLD, marginBottom: '2rem', fontFamily: 'Playfair Display, serif' }}>
                             Similar Properties
                         </h3>
                         <div className="similar-grid">

@@ -120,8 +120,12 @@ function normalizeProperty(listing: any) {
         }
     }
 
+    // Transform Pixxi's spaced keys to expected format
     return {
         ...listing,
+        title: listing['property title'] || listing.title || '',
+        photos: listing['property photos'] || listing.photos || [],
+        agent: listing['agent info'] || listing.agent || {},
         latitude: lat,
         longitude: lng
     };

@@ -4,6 +4,7 @@ import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import PropertyCard from '../components/PropertyCard';
+import BackButton from '../components/BackButton';
 import { PropertiesSearchSkeleton } from '../components/Skeletons';
 import Pagination from '../components/Pagination';
 import { COLORS } from '../lib/constants';
@@ -75,7 +76,11 @@ function PropertiesSearchContent() {
           throw new Error(errorData.error || 'Failed to fetch listings');
         }
         const listingsData = await listingsResponse.json();
-        setListings(listingsData.listings || []);
+        // Filter out malformed listings to prevent errors
+        const validListings = (listingsData.listings || []).filter((listing: any) =>
+          listing && (listing.id || listing.referenceNumber) && typeof listing.price === 'number'
+        );
+        setListings(validListings);
       } catch (error) {
         console.error('Error fetching data:', error);
         // Set empty arrays on error so UI doesn't break
@@ -154,40 +159,12 @@ function PropertiesSearchContent() {
             }}>
 
               {/* Back Button */}
-              <Link
-                href={getBackLinkForPropertiesSearch(searchParams)}
-                style={{
-                  alignSelf: 'flex-start',
-                  marginBottom: '1rem',
-                  background: 'rgba(255,255,255,0.05)',
-                  border: '1px solid rgba(255,255,255,0.1)',
-                  borderRadius: '30px',
-                  color: 'white',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  cursor: 'pointer',
-                  fontSize: '0.85rem',
-                  padding: '8px 20px',
-                  transition: 'all 0.3s ease',
-                  letterSpacing: '1px',
-                  zIndex: 10,
-                  textDecoration: 'none'
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = 'rgba(222, 201, 147, 0.1)';
-                  e.currentTarget.style.borderColor = COLORS.DUBAI_GOLD;
-                  e.currentTarget.style.color = COLORS.DUBAI_GOLD;
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = 'rgba(255,255,255,0.05)';
-                  e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)';
-                  e.currentTarget.style.color = 'white';
-                }}
-              >
-                <i className="ph ph-arrow-left" style={{ fontSize: '1rem' }}></i>
-                BACK
-              </Link>
+              <BackButton 
+                href={getBackLinkForPropertiesSearch(searchParams)} 
+                label="BACK" 
+                className="" 
+                style={{ alignSelf: "flex-start", marginBottom: "1rem", zIndex: 10 }} 
+              />
 
               {searchParams.get('type') ? (
                 <>

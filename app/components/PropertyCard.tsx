@@ -22,6 +22,10 @@ interface PropertyCardProps {
       bathrooms?: number;
       parking?: number;
     };
+    sellParam?: {
+      bathrooms?: number;
+      parking?: number;
+    };
     newParam?: {
       bedroomMin?: string;
       bedroomMax?: string;
@@ -46,6 +50,9 @@ interface PropertyCardProps {
 export default function PropertyCard({ listing, variant = 'featured', disableWrapper }: PropertyCardProps) {
   const { storeReferrer } = usePropertyNavigation();
 
+  // Safety check: fallback for missing title
+  const title = listing.title || 'Untitled Property';
+
   // Simple computation - no need for useMemo for this lightweight operation
   const tagList = listing.amenities?.slice(0, 2) || [];
   if (listing.propertyType?.[0]) {
@@ -67,16 +74,18 @@ export default function PropertyCard({ listing, variant = 'featured', disableWra
   const phone = listing.agent?.phone?.replace(/\D/g, '') || '';
 
   // Extract data from newParam or fallback to regular fields
+  // For NEW properties, prefer newParam bedroom range
   const bedroomDisplay = listing.newParam?.bedroomMin && listing.newParam?.bedroomMax
     ? `${listing.newParam.bedroomMin}-${listing.newParam.bedroomMax}`
-    : (listing.bedRooms || '—');
+    : (listing.bedRooms && listing.bedRooms !== -1 ? listing.bedRooms : '—');
 
+  // For NEW properties, prefer newParam size range
   const sizeDisplay = listing.newParam?.minSize && listing.newParam?.maxSize
     ? `${listing.newParam.minSize}-${listing.newParam.maxSize}`
-    : (listing.size || '—');
+    : (listing.size && listing.size !== 0 ? listing.size : '—');
 
-  const bathrooms = listing.moreParam?.bathrooms || listing.rentParam?.bathrooms || '—';
-  const parking = listing.moreParam?.parking || listing.newParam?.parking || listing.rentParam?.parking || '—';
+  const bathrooms = listing.moreParam?.bathrooms || listing.sellParam?.bathrooms || listing.rentParam?.bathrooms || '—';
+  const parking = listing.moreParam?.parking || listing.sellParam?.parking || listing.newParam?.parking || listing.rentParam?.parking || '—';
 
   // Pluralization helpers
   const pluralize = (count: number | string, singular: string, plural: string) => {
@@ -101,8 +110,8 @@ export default function PropertyCard({ listing, variant = 'featured', disableWra
             <Link href={linkUrl} className="image" onClick={storeReferrer}>
               <Image
                 className="at-pch-img"
-                src={listing.photos?.[0] || '/img/prop/default-thumb.webp'}
-                alt={listing.title}
+                src={listing.photos?.[0] || '/img/prop/1-thumb.webp'}
+                alt={title}
                 width={140}
                 height={140}
                 style={{ objectFit: 'cover', width: '100%', borderRadius: '8px' }}
@@ -122,7 +131,7 @@ export default function PropertyCard({ listing, variant = 'featured', disableWra
               </div>
               <h3 className="title is-6 mb-1">
                 <Link href={linkUrl} className="has-text-grey-darker" onClick={storeReferrer}>
-                  {listing.title.length > 70 ? `${listing.title.substring(0, 70)}...` : listing.title}
+                  {title.length > 70 ? `${title.substring(0, 70)}...` : title}
                 </Link>
               </h3>
               <p className="has-text-weight-semibold is-size-6 has-text-success">
@@ -176,8 +185,8 @@ export default function PropertyCard({ listing, variant = 'featured', disableWra
           </ul>
           <Image
             className="at-pch-img"
-            src={listing.photos?.[0] || '/img/prop/default-thumb.webp'}
-            alt={listing.title}
+            src={listing.photos?.[0] || '/img/prop/1-thumb.webp'}
+            alt={title}
             width={600}
             height={400}
             style={{ objectFit: 'cover' }}
@@ -190,7 +199,7 @@ export default function PropertyCard({ listing, variant = 'featured', disableWra
               AED {formatPrice(listing.price)}
             </div>
             <Link href={linkUrl} className="at-pcbi-title" onClick={storeReferrer}>
-              {listing.title.length > 50 ? `${listing.title.substring(0, 50)}...` : listing.title}
+              {title.length > 50 ? `${title.substring(0, 50)}...` : title}
             </Link>
             <div className="at-pcbi-loc">
               <i className="ph-fill ph-map-pin"></i>
@@ -225,8 +234,8 @@ export default function PropertyCard({ listing, variant = 'featured', disableWra
         </ul>
         <Image
           className="at-pch-img"
-          src={listing.photos?.[0] || '/img/prop/default-thumb.webp'}
-          alt={listing.title}
+          src={listing.photos?.[0] || '/img/prop/1-thumb.webp'}
+          alt={title}
           width={600}
           height={400}
           style={{ objectFit: 'cover' }}
@@ -239,7 +248,7 @@ export default function PropertyCard({ listing, variant = 'featured', disableWra
             AED {formatPrice(listing.price)}
           </div>
           <Link href={linkUrl} className="at-pcbi-title" onClick={storeReferrer}>
-            {listing.title.length > 50 ? `${listing.title.substring(0, 50)}...` : listing.title}
+            {title.length > 50 ? `${title.substring(0, 50)}...` : title}
           </Link>
           <div className="at-pcbi-loc">
             <i className="ph-fill ph-map-pin"></i>
