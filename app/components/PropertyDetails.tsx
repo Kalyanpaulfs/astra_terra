@@ -132,17 +132,50 @@ export default function PropertyDetails() {
 
     // Extract data from newParam or use fallback values
     // For NEW properties, prefer newParam bedroom range
+    // Helper to format range
+    const formatBedroomRange = (min: string | number, max: string | number) => {
+        if (min == max) {
+            return min == '0' ? 'Studio' : min;
+        }
+        const start = min == '0' ? 'Studio' : min;
+        return `${start}-${max}`;
+    };
+
+    // For NEW properties, prefer newParam bedroom range
     const bedroomDisplay = property.newParam?.bedroomMin && property.newParam?.bedroomMax
-        ? `${property.newParam.bedroomMin}-${property.newParam.bedroomMax}`
-        : (property.bedRooms && property.bedRooms !== -1 ? property.bedRooms : '-');
+        ? formatBedroomRange(property.newParam.bedroomMin, property.newParam.bedroomMax)
+        : (property.bedRooms !== undefined && property.bedRooms !== -1
+            ? (property.bedRooms === 0 ? 'Studio' : property.bedRooms)
+            : '-');
 
     // For NEW properties, prefer newParam size range
     const sizeDisplay = property.newParam?.minSize && property.newParam?.maxSize
         ? `${property.newParam.minSize}-${property.newParam.maxSize}`
         : (property.size && property.size !== 0 ? property.size : '-');
 
-    const bathrooms = property.moreParam?.bathrooms || property.sellParam?.bathrooms || property.rentParam?.bathrooms || '-';
-    const parking = property.moreParam?.parking || property.sellParam?.parking || property.newParam?.parking || property.rentParam?.parking || '-';
+    // Attempt to find bathroom count from various params + top level fallback
+    const bathrooms = property.moreParam?.bathrooms ||
+        property.sellParam?.bathrooms ||
+        property.rentParam?.bathrooms ||
+        property.bathrooms || // fallback to top level if exists
+        '-';
+
+    // Attempt to find parking count.
+    // Fallback: Check amenities for "Parking" or "Covered Parking" if count is missing.
+    let parking: string | number = property.moreParam?.parking ||
+        property.sellParam?.parking ||
+        property.newParam?.parking ||
+        property.rentParam?.parking ||
+        '-';
+
+    if (parking === '-' || parking === 0 || parking === null) {
+        const hasParkingAmenity = property.amenities?.some((a: string) =>
+            a.toLowerCase().includes('parking')
+        );
+        if (hasParkingAmenity) {
+            parking = 1;
+        }
+    }
 
     // Parse payment plan if available
     let paymentPlan = null;
@@ -159,6 +192,7 @@ export default function PropertyDetails() {
 
     // Pluralization helper
     const pluralize = (count: number | string, singular: string, plural: string) => {
+        if (count === 'Studio') return '';
         if (count === '-' || count === '—') return singular;
         const num = typeof count === 'string' ? parseFloat(count) : count;
         return num === 1 ? singular : plural;

@@ -75,9 +75,20 @@ export default function PropertyCard({ listing, variant = 'featured', disableWra
 
   // Extract data from newParam or fallback to regular fields
   // For NEW properties, prefer newParam bedroom range
+  // Helper to format range
+  const formatBedroomRange = (min: string | number, max: string | number) => {
+    if (min == max) { // loose equality for string/number mix
+      return min == '0' ? 'Studio' : min;
+    }
+    const start = min == '0' ? 'Studio' : min;
+    return `${start}-${max}`;
+  };
+
   const bedroomDisplay = listing.newParam?.bedroomMin && listing.newParam?.bedroomMax
-    ? `${listing.newParam.bedroomMin}-${listing.newParam.bedroomMax}`
-    : (listing.bedRooms && listing.bedRooms !== -1 ? listing.bedRooms : '—');
+    ? formatBedroomRange(listing.newParam.bedroomMin, listing.newParam.bedroomMax)
+    : (listing.bedRooms !== undefined && listing.bedRooms !== -1
+      ? (listing.bedRooms === 0 ? 'Studio' : listing.bedRooms)
+      : '—');
 
   // For NEW properties, prefer newParam size range
   const sizeDisplay = listing.newParam?.minSize && listing.newParam?.maxSize
@@ -88,6 +99,7 @@ export default function PropertyCard({ listing, variant = 'featured', disableWra
   const bathrooms = listing.moreParam?.bathrooms ||
     listing.sellParam?.bathrooms ||
     listing.rentParam?.bathrooms ||
+    listing.bathrooms || // fallback to top level if exists
     // Fallback: If it's a NEW listing, we might interpret missing baths differently, 
     // but for now, we'll stick to explicit values. 
     // Can potentially add listing.newParam?.bathrooms if API updates.
@@ -112,6 +124,7 @@ export default function PropertyCard({ listing, variant = 'featured', disableWra
 
   // Pluralization helpers
   const pluralize = (count: number | string, singular: string, plural: string) => {
+    if (count === 'Studio') return '';
     if (count === '—' || count === '-') return singular;
     const num = typeof count === 'string' ? parseFloat(count) : count;
     return num === 1 ? singular : plural;

@@ -159,11 +159,11 @@ function PropertiesSearchContent() {
             }}>
 
               {/* Back Button */}
-              <BackButton 
-                href={getBackLinkForPropertiesSearch(searchParams)} 
-                label="BACK" 
-                className="" 
-                style={{ alignSelf: "flex-start", marginBottom: "1rem", zIndex: 10 }} 
+              <BackButton
+                href={getBackLinkForPropertiesSearch(searchParams)}
+                label="BACK"
+                className=""
+                style={{ alignSelf: "flex-start", marginBottom: "1rem", zIndex: 10 }}
               />
 
               {searchParams.get('type') ? (
