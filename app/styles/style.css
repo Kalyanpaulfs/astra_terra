@@ -290,11 +290,23 @@ pre {
 	padding: 12px 40px;
 }
 
+/* Logo link wrapper - ensure it's always clickable */
+.navbar-logo-link {
+	position: relative;
+	z-index: 1001;
+	pointer-events: auto;
+	display: flex;
+	align-items: center;
+	cursor: pointer;
+}
+
 .custom-navbar-brand {
 	width: 100%;
 	margin-top: 4px;
 	max-height: 38px;
 	transition: all 0.3s ease;
+	pointer-events: none;
+	/* Let the link handle the click */
 }
 
 .custom-navbar.navbar-scrolled .custom-navbar-brand {

@@ -4,7 +4,7 @@ import dynamic from 'next/dynamic';
 
 const MapClient = dynamic(() => import('./MapClient'), {
     ssr: false,
-    loading: () => <div className="w-full bg-gray-100 animate-pulse rounded-lg" style={{ height: '70vh', minHeight: '500px' }} />
+    loading: () => <div className="w-full bg-gray-100 animate-pulse rounded-lg" style={{ height: '100vh', minHeight: '1100px' }} />
 });
 
 export default async function MapSection() {
@@ -29,7 +29,7 @@ export default async function MapSection() {
                     </p>
                 </div>
 
-                <div className="w-full rounded-xl overflow-hidden shadow-2xl border border-gray-800" style={{ height: '70vh', minHeight: '500px' }}>
+                <div className="w-full rounded-xl overflow-hidden shadow-2xl border border-gray-800" style={{ height: '80vh', minHeight: '1100px' }}>
                     <MapClient properties={properties} />
                 </div>
             </div>

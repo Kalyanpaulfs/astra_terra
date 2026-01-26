@@ -219,7 +219,7 @@ export default function Navbar() {
       />
       <div className={`custom-navbar ${isHomePage ? 'navbar-home' : 'navbar-other'}${isScrolled ? ' navbar-scrolled' : ''}`}>
         <div className="custom-navbar-nav">
-          <Link href="/">
+          <Link href="/" className="navbar-logo-link">
             <Image
               className="custom-navbar-brand"
               src="/img/brand.webp"
@@ -227,6 +227,7 @@ export default function Navbar() {
               width={120}
               height={32}
               draggable={false}
+              priority
             />
           </Link>
           <ul className="custom-nav-menu">

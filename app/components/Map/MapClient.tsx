@@ -1,7 +1,9 @@
 
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
+import { useAppDispatch, useAppSelector } from '@/app/lib/store/hooks';
+import { setProperties, setFilter } from '@/app/lib/store/features/mapSlice';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
@@ -39,44 +41,58 @@ interface MapClientProps {
 }
 
 const MapClient = ({ properties }: MapClientProps) => {
+    // Redux Hooks
+    const dispatch = useAppDispatch();
+    const activeFilter = useAppSelector((state) => state.map.activeFilter);
+    // Use properties from props or store? 
+    // The request said "use redux to maintain the state". 
+    // We should initialize the store with props, but for the map display we can use the props directly
+    // OR we can use the store. Let's use the store for consistency with the request.
+    // However, syncing props to store on every render can be tricky.
+    // Let's rely on props for data source but use Redux for filter state as requested.
+    // To strictly follow "use redux to maintain state", we should dispatch properties to store.
+
+    // Dispatch properties to store on mount (or when properties change)
+    useEffect(() => {
+        dispatch(setProperties(properties));
+    }, [properties, dispatch]);
+
     // Default center (Dubai)
     const [center, setCenter] = useState<[number, number]>([25.2048, 55.2708]);
-    const [activeFilter, setActiveFilter] = useState<'ALL' | 'SELL' | 'RENT' | 'NEW'>('ALL');
+    // const [activeFilter, setActiveFilter] = useState<'ALL' | 'SELL' | 'RENT' | 'NEW'>('ALL'); // Moved to Redux
 
-    // Filter properties
-    const validProperties = properties.filter(p => p.latitude && p.longitude);
+    // Memoize validProperties to prevent re-creation on every render
+    const validProperties = useMemo(() => {
+        return properties.filter(p => p.latitude && p.longitude);
+    }, [properties]);
 
-    const filteredProperties = validProperties.filter(property => {
-        if (activeFilter === 'ALL') return true;
+    const filteredProperties = useMemo(() => {
+        return validProperties.filter(property => {
+            if (activeFilter === 'ALL') return true;
 
-        // Normalize checking
-        const type = property.listingType || '';
-        const status = property.completionStatus || '';
+            // Normalize checking
+            const type = property.listingType || '';
+            const status = property.completionStatus || '';
 
-        if (activeFilter === 'SELL') {
-            return type === 'SELL' || property.sellParam;
-        }
-        if (activeFilter === 'RENT') {
-            return type === 'RENT' || property.rentParam;
-        }
-        if (activeFilter === 'NEW') {
-            // Check for various "New Project" indicators
-            return type === 'NEW' ||
-                status === 'OFF_PLAN' ||
-                status === 'concept' ||
-                status === 'under_construction' ||
-                (property.propertyType && property.propertyType.includes('PROJECT'));
-        }
-        return true;
-    });
+            if (activeFilter === 'SELL') {
+                return type === 'SELL' || property.sellParam;
+            }
+            if (activeFilter === 'RENT') {
+                return type === 'RENT' || property.rentParam;
+            }
+            if (activeFilter === 'NEW') {
+                // Check for various "New Project" indicators
+                return type === 'NEW' ||
+                    status === 'OFF_PLAN' ||
+                    status === 'concept' ||
+                    status === 'under_construction' ||
+                    (property.propertyType && property.propertyType.includes('PROJECT'));
+            }
+            return true;
+        });
+    }, [validProperties, activeFilter]);
 
-    console.log(`[MapClient] Filter: ${activeFilter}, Count: ${filteredProperties.length}`);
-
-    console.log('[MapClient] Rendering with valid properties:', validProperties.length);
-    if (validProperties.length > 0) {
-        console.log('[MapClient] First 3 property coords:', validProperties.slice(0, 3).map(p => ({ id: p.id, lat: p.latitude, lng: p.longitude, title: p.title })));
-    }
-
+    // console.log(`[MapClient] Filter: ${activeFilter}, Count: ${filteredProperties.length}`);
 
     useEffect(() => {
         if (validProperties.length > 0) {
@@ -84,7 +100,7 @@ const MapClient = ({ properties }: MapClientProps) => {
             const avgLng = validProperties.reduce((sum, p) => sum + (p.longitude || 0), 0) / validProperties.length;
             setCenter([avgLat, avgLng]);
         }
-    }, [validProperties]);
+    }, [validProperties]); // validProperties is now stable due to useMemo
 
     // Resize fix for Leaflet
     useEffect(() => {
@@ -94,7 +110,7 @@ const MapClient = ({ properties }: MapClientProps) => {
     }, []);
 
     return (
-        <div className="w-full h-full relative z-[0] min-h-[500px]">
+        <div className="w-full h-full relative z-[0] min-h-[1100px]">
             <style jsx global>{`
                 .leaflet-container {
                     width: 100%;
@@ -109,7 +125,7 @@ const MapClient = ({ properties }: MapClientProps) => {
                 zoom={10}
                 scrollWheelZoom={false}
                 className="w-full h-full rounded-lg shadow-lg"
-                style={{ height: '100%', width: '100%', minHeight: '500px' }}
+                style={{ height: '100%', width: '100%', minHeight: '1100px' }}
             >
                 <TileLayer
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -199,7 +215,7 @@ const MapClient = ({ properties }: MapClientProps) => {
                             return (
                                 <button
                                     key={filter.id}
-                                    onClick={() => setActiveFilter(filter.id as any)}
+                                    onClick={() => dispatch(setFilter(filter.id as any))}
                                     style={{
                                         padding: '10px 16px',
                                         fontSize: '11px',

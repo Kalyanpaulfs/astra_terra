@@ -5,6 +5,7 @@ import '@phosphor-icons/web/bold';
 import '@phosphor-icons/web/fill';
 import Script from 'next/script';
 import Layout from './components/Layout';
+import StoreProvider from './StoreProvider';
 
 export const metadata: Metadata = {
   title: 'Premium Dubai Properties | Astra Terra Real Estate',
@@ -62,7 +63,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           src="//code.tidio.co/n1y5czjcktskr6kxkexm7siub2mvpjqg.js"
           strategy="lazyOnload"
         />
-        <Layout>{children}</Layout>
+        <StoreProvider>
+          <Layout>{children}</Layout>
+        </StoreProvider>
       </body>
     </html>
   );
