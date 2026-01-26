@@ -84,8 +84,31 @@ export default function PropertyCard({ listing, variant = 'featured', disableWra
     ? `${listing.newParam.minSize}-${listing.newParam.maxSize}`
     : (listing.size && listing.size !== 0 ? listing.size : '—');
 
-  const bathrooms = listing.moreParam?.bathrooms || listing.sellParam?.bathrooms || listing.rentParam?.bathrooms || '—';
-  const parking = listing.moreParam?.parking || listing.sellParam?.parking || listing.newParam?.parking || listing.rentParam?.parking || '—';
+  // Attempt to find bathroom count from various params
+  const bathrooms = listing.moreParam?.bathrooms ||
+    listing.sellParam?.bathrooms ||
+    listing.rentParam?.bathrooms ||
+    // Fallback: If it's a NEW listing, we might interpret missing baths differently, 
+    // but for now, we'll stick to explicit values. 
+    // Can potentially add listing.newParam?.bathrooms if API updates.
+    '—';
+
+  // Attempt to find parking count.
+  // Fallback: Check amenities for "Parking" or "Covered Parking" if count is missing.
+  let parking: string | number = listing.moreParam?.parking ||
+    listing.sellParam?.parking ||
+    listing.newParam?.parking ||
+    listing.rentParam?.parking ||
+    '—';
+
+  if (parking === '—' || parking === 0 || parking === null) {
+    const hasParkingAmenity = listing.amenities?.some(a =>
+      a.toLowerCase().includes('parking')
+    );
+    if (hasParkingAmenity) {
+      parking = 1;
+    }
+  }
 
   // Pluralization helpers
   const pluralize = (count: number | string, singular: string, plural: string) => {
