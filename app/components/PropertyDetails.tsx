@@ -30,7 +30,20 @@ export default function PropertyDetails() {
 
     // Determine smart back link based on navigation history
     const getSmartBackLink = () => {
-        // First, try to get the previous page from history
+        // First, check sessionStorage for the referrer stored by PropertyCard
+        if (typeof window !== 'undefined') {
+            const storedReferrer = sessionStorage.getItem('propertyReferrer');
+            if (storedReferrer) {
+                // If the stored referrer is the home page, return it
+                if (storedReferrer === '/' || storedReferrer.startsWith('/?')) {
+                    return '/';
+                }
+                // If it's any other valid path, use it
+                return storedReferrer;
+            }
+        }
+
+        // Second, try to get the previous page from history
         const previousPage = getPreviousPage(pathname || '');
 
         if (previousPage) {
@@ -44,6 +57,10 @@ export default function PropertyDetails() {
                 previousPage === '/buy' ||
                 previousPage === '/rent') {
                 return previousPage;
+            }
+            // If the previous page is home, return it
+            if (previousPage === '/') {
+                return '/';
             }
         }
 
