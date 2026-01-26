@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, Suspense } from 'react';
+import { useEffect, useState, Suspense, useMemo } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import PropertyCard from '../components/PropertyCard';
@@ -23,6 +23,7 @@ function PropertiesSearchContent() {
   const [meta, setMeta] = useState<PropertyMeta | null>(null);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchQuery, setSearchQuery] = useState('');
   const itemsPerPage = 9;
 
   // Track page view in navigation history
@@ -33,6 +34,7 @@ function PropertiesSearchContent() {
 
   useEffect(() => {
     setCurrentPage(1);
+    setSearchQuery(''); // Reset search when URL params change
   }, [searchParams]);
 
   useEffect(() => {
@@ -93,6 +95,31 @@ function PropertiesSearchContent() {
 
     fetchData();
   }, [searchParams]);
+
+  // Client-side filtering
+  const filteredListings = useMemo(() => {
+    if (!searchQuery.trim()) return listings;
+    const query = searchQuery.toLowerCase().trim();
+
+    return listings.filter(item => {
+      const title = item.title?.toLowerCase() || '';
+      const community = item.community?.toLowerCase() || '';
+      const region = item.region?.toLowerCase() || '';
+      const developer = item.developer?.toLowerCase() || '';
+      const agent = item.agent?.name?.toLowerCase() || '';
+
+      return title.includes(query) ||
+        community.includes(query) ||
+        region.includes(query) ||
+        developer.includes(query) ||
+        agent.includes(query);
+    });
+  }, [listings, searchQuery]);
+
+  // Reset pagination when search changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery]);
 
   if (!meta && loading) {
     return (
@@ -160,7 +187,7 @@ function PropertiesSearchContent() {
 
               {/* Back Button */}
               <BackButton
-                href={getBackLinkForPropertiesSearch(searchParams)}
+                href="/"
                 label="BACK"
                 className=""
                 style={{ alignSelf: "flex-start", marginBottom: "1rem", zIndex: 10 }}
@@ -237,6 +264,29 @@ function PropertiesSearchContent() {
               )}
             </div>
 
+            {/* Search Box */}
+            <div className="at-dp-search" style={{ marginBottom: '20px' }}>
+              <div className="at-dp-search-wrapper" style={{ maxWidth: '600px', margin: '0 auto' }}>
+                <i className="ph ph-magnifying-glass"></i>
+                <input
+                  type="text"
+                  placeholder="Search developers, projects..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="at-dp-search-input"
+                />
+                {searchQuery && (
+                  <button
+                    className="at-dp-search-clear"
+                    onClick={() => setSearchQuery('')}
+                    aria-label="Clear search"
+                  >
+                    <i className="ph ph-x"></i>
+                  </button>
+                )}
+              </div>
+            </div>
+
             <div className="is-flex is-justify-content-center is-align-items-center mt-4 mb-5">
               <div style={{
                 display: 'inline-flex',
@@ -258,14 +308,14 @@ function PropertiesSearchContent() {
                   textTransform: 'uppercase',
                   fontFamily: '"Montserrat", sans-serif'
                 }}>
-                  {loading ? 'Loading...' : <><span style={{ color: COLORS.GOLD_ACCENT, fontWeight: 700 }}>{listings.length}</span> {listings.length === 1 ? 'PROPERTY' : 'PROPERTIES'} FOUND</>}
+                  {loading ? 'Loading...' : <><span style={{ color: COLORS.GOLD_ACCENT, fontWeight: 700 }}>{filteredListings.length}</span> {filteredListings.length === 1 ? 'PROPERTY' : 'PROPERTIES'} FOUND</>}
                 </p>
                 <span style={{ width: '5px', height: '5px', borderRadius: '50%', backgroundColor: COLORS.GOLD_ACCENT }}></span>
               </div>
             </div>
 
             <div className="at-properties-grid">
-              {listings.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map((listing, idx) => (
+              {filteredListings.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map((listing, idx) => (
                 <div key={idx}>
                   <PropertyCard listing={listing} variant="grid" />
                 </div>
@@ -275,14 +325,14 @@ function PropertiesSearchContent() {
             <div className="container mt-6">
               <Pagination
                 currentPage={currentPage}
-                totalPages={Math.ceil(listings.length / itemsPerPage)}
+                totalPages={Math.ceil(filteredListings.length / itemsPerPage)}
                 onPageChange={(page) => {
                   setCurrentPage(page);
                   window.scrollTo({ top: 0, behavior: 'smooth' });
                 }}
               />
             </div>
-            {listings.length === 0 && (
+            {filteredListings.length === 0 && (
               <div className="at-properties-grid">
                 <div style={{ gridColumn: '1 / -1', padding: '60px 0', textAlign: 'center' }}>
                   <div style={{
@@ -299,9 +349,23 @@ function PropertiesSearchContent() {
                     <i className="ph ph-house" style={{ fontSize: '28px', color: COLORS.GOLD_ACCENT }}></i>
                   </div>
                   <h3 className="title is-4" style={{ color: '#ffffff', fontFamily: '"Playfair Display", serif' }}>
-                    No Properties Found
+                    No Projects Found
                   </h3>
-                  <p style={{ color: '#a0a0a0' }}>Try exploring other categories.</p>
+                  <p style={{ color: '#a0a0a0' }}>Try adjusting your search query.</p>
+                  <button
+                    onClick={() => setSearchQuery('')}
+                    style={{
+                      background: 'transparent',
+                      border: '1px solid rgba(197, 162, 101, 0.5)',
+                      color: COLORS.GOLD_ACCENT,
+                      padding: '8px 20px',
+                      borderRadius: '30px',
+                      marginTop: '15px',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    Clear Search
+                  </button>
                 </div>
               </div>
             )}

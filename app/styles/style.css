@@ -3357,11 +3357,10 @@ pre {
 }
 
 .at-dp-search-clear {
-	background: rgba(255, 255, 255, 0.1);
+	background: transparent;
 	border: none;
-	width: 28px;
-	height: 28px;
-	border-radius: 50%;
+	padding: 8px;
+	/* Add padding for easier clicking */
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -3371,7 +3370,7 @@ pre {
 }
 
 .at-dp-search-clear:hover {
-	background: rgba(197, 162, 101, 0.3);
+	background: transparent;
 	color: #C5A265;
 }
 
