@@ -190,7 +190,7 @@ const MapClient = ({ properties }: MapClientProps) => {
 
             {/* Filter UI - Sticky Bottom */}
             <div style={{
-                position: 'sticky',
+                position: 'absolute',
                 bottom: '30px',
                 marginLeft: '20px',
                 marginBottom: '30px',

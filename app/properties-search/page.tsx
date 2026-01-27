@@ -255,10 +255,10 @@ function PropertiesSearchContent() {
                     {searchParams.get('listtype') === 'RENT'
                       ? 'Discover our exclusive selection of luxury rental properties.'
                       : searchParams.get('listtype') === 'NEW'
-                        ? 'Explore the latest off-plan developments in Dubai.'
+                        ? 'Explore the latest off-plan developments in UAE.'
                         : searchParams.get('regionId') && meta?.regions[Number(searchParams.get('regionId'))]
                           ? `Explore our exclusive properties in ${meta.regions[Number(searchParams.get('regionId'))]}.`
-                          : 'Browse our complete portfolio of premium properties in Dubai.'}
+                          : 'Browse our complete portfolio of premium properties in UAE.'}
                   </p>
                 </>
               )}

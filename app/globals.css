@@ -67,6 +67,7 @@
   position: fixed !important;
   /* Enforce fixed positioning to maintain layout AND apply z-index */
 }
+
 /* ========================================
    PREMIUM CUSTOM SCROLLBAR
    ======================================== */
@@ -119,4 +120,16 @@
 .pd-thumbs::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(135deg, #F5E6B8 0%, #DEC993 100%);
   box-shadow: 0 4px 12px rgba(222, 201, 147, 0.5);
+}
+
+/* ========================================
+   TEXT GRADIENT GOLD - Premium Styling
+   ======================================== */
+.text-gradient-gold {
+  background: linear-gradient(135deg, #F5E6B8 0%, #DEC993 50%, #C5A265 100%) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+  text-fill-color: transparent !important;
+  font-weight: 700 !important;
 }
