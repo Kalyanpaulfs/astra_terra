@@ -187,7 +187,7 @@ function PropertiesSearchContent() {
 
               {/* Back Button */}
               <BackButton
-                href="/"
+                href={getBackLinkForPropertiesSearch(new URLSearchParams(searchParams.toString()))}
                 label="BACK"
                 className=""
                 style={{ alignSelf: "flex-start", marginBottom: "1rem", zIndex: 10 }}
