@@ -11,8 +11,13 @@ const nextConfig = {
         protocol: 'http',
         hostname: '**',
       },
+      {
+        protocol: 'https',
+        hostname: 'pixxicrm.ae',
+        pathname: '/api/profile/upload/**',
+      },
     ],
-    unoptimized: false,
+    unoptimized: true,
   },
 }
 

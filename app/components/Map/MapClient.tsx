@@ -4,6 +4,7 @@
 import { useEffect, useState, useMemo } from 'react';
 import { useAppDispatch, useAppSelector } from '@/app/lib/store/hooks';
 import { setProperties, setFilter } from '@/app/lib/store/features/mapSlice';
+import { usePropertyNavigation } from '@/app/lib/use-property-navigation';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
@@ -44,6 +45,7 @@ const MapClient = ({ properties }: MapClientProps) => {
     // Redux Hooks
     const dispatch = useAppDispatch();
     const activeFilter = useAppSelector((state) => state.map.activeFilter);
+    const { storeReferrer } = usePropertyNavigation();
     // Use properties from props or store? 
     // The request said "use redux to maintain the state". 
     // We should initialize the store with props, but for the map display we can use the props directly
@@ -110,7 +112,7 @@ const MapClient = ({ properties }: MapClientProps) => {
     }, []);
 
     return (
-        <div className="w-full h-full relative z-[0] min-h-[1100px]">
+        <div className="w-full h-full relative z-[0] min-h-[1100px] flex flex-col justify-end items-start pointer-events-none">
             <style jsx global>{`
                 .leaflet-container {
                     width: 100%;
@@ -120,78 +122,89 @@ const MapClient = ({ properties }: MapClientProps) => {
                 }
             `}</style>
 
-            <MapContainer
-                center={center}
-                zoom={10}
-                scrollWheelZoom={false}
-                className="w-full h-full rounded-lg shadow-lg"
-                style={{ height: '100%', width: '100%', minHeight: '1100px' }}
-            >
-                <TileLayer
-                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                    url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
-                />
+            <div className="absolute inset-0 z-0 pointer-events-auto">
+                <MapContainer
+                    center={center}
+                    zoom={10}
+                    scrollWheelZoom={false}
+                    className="w-full h-full rounded-lg shadow-lg"
+                    style={{ height: '100%', width: '100%', minHeight: '1100px' }}
+                >
+                    <TileLayer
+                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                        url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
+                    />
 
-                {filteredProperties.map((property) => {
-                    const photo = (property.photos && property.photos.length > 0 && property.photos[0]) ||
-                        (property.imgUrl && property.imgUrl.length > 0 && property.imgUrl[0]) ||
-                        '/img/prop/1-thumb.webp';
+                    {filteredProperties.map((property) => {
+                        const photo = (property.photos && property.photos.length > 0 && property.photos[0]) ||
+                            (property.imgUrl && property.imgUrl.length > 0 && property.imgUrl[0]) ||
+                            '/img/prop/1-thumb.webp';
 
-                    // Determine property type slug for URL (default to 'property' if missing)
-                    // The API response usually includes a propertyType field which might need normalizing
-                    // e.g., "APARTMENT" -> "apartment"
-                    const typeSlug = property.propertyType && property.propertyType.length > 0
-                        ? property.propertyType[0].toLowerCase().replace(/_/g, '-')
-                        : 'property';
+                        // Determine property type slug for URL (default to 'property' if missing)
+                        // The API response usually includes a propertyType field which might need normalizing
+                        // e.g., "APARTMENT" -> "apartment"
+                        const typeSlug = property.propertyType && property.propertyType.length > 0
+                            ? property.propertyType[0].toLowerCase().replace(/_/g, '-')
+                            : 'property';
 
-                    return (
-                        <Marker
-                            key={property.id}
-                            position={[property.latitude!, property.longitude!]}
-                            icon={defaultIcon}
-                        >
-                            <Popup className="premium-popup">
-                                <div className="min-w-[200px]">
-                                    <a href={`/buy/${typeSlug}/${property.id}`} className="block relative h-32 w-full mb-2 overflow-hidden rounded-md hover:opacity-90 transition">
-                                        <Image
-                                            src={photo}
-                                            alt={property.title}
-                                            fill
-                                            className="object-cover"
-                                        />
-                                    </a>
-                                    <h3 className="font-bold text-sm text-gray-800 line-clamp-1">{property.title}</h3>
-                                    <p className="text-emerald-600 font-semibold text-sm">
-                                        {typeof property.price === 'number'
-                                            ? `AED ${property.price.toLocaleString()}`
-                                            : property.price}
-                                    </p>
-                                    <a
-                                        href={`/buy/${typeSlug}/${property.id}`}
-                                        className="block mt-2 text-center bg-gray-900 text-white text-xs py-1.5 rounded hover:bg-gray-800 transition"
-                                    >
-                                        View Details
-                                    </a>
-                                </div>
-                            </Popup>
-                        </Marker>
-                    );
-                })}
-            </MapContainer>
+                        return (
+                            <Marker
+                                key={property.id}
+                                position={[property.latitude!, property.longitude!]}
+                                icon={defaultIcon}
+                            >
+                                <Popup className="premium-popup">
+                                    <div className="min-w-[200px]">
+                                        <Link
+                                            href={`/buy/${typeSlug}/${property.id}`}
+                                            className="block relative h-32 w-full mb-2 overflow-hidden rounded-md hover:opacity-90 transition"
+                                            onClick={storeReferrer}
+                                        >
+                                            <Image
+                                                src={photo}
+                                                alt={property.title}
+                                                fill
+                                                className="object-cover"
+                                            />
+                                        </Link>
+                                        <h3 className="font-bold text-sm text-gray-800 line-clamp-1">{property.title}</h3>
+                                        <p className="text-emerald-600 font-semibold text-sm">
+                                            {typeof property.price === 'number'
+                                                ? `AED ${property.price.toLocaleString()}`
+                                                : property.price}
+                                        </p>
+                                        <Link
+                                            href={`/buy/${typeSlug}/${property.id}`}
+                                            className="block mt-2 text-center bg-gray-900 text-white text-xs py-1.5 rounded hover:bg-gray-800 transition"
+                                            onClick={storeReferrer}
+                                        >
+                                            View Details
+                                        </Link>
+                                    </div>
+                                </Popup>
+                            </Marker>
+                        );
+                    })}
+                </MapContainer>
+            </div>
 
-            {/* Filter UI - Absolute Overlay with Premium Styling - Using Inline Styles for reliability */}
+            {/* Filter UI - Sticky Bottom */}
             <div style={{
-                position: 'absolute',
-                top: '120px', // Adjusted to clear the fixed Navbar
-                left: '20px',
+                position: 'sticky',
+                bottom: '30px',
+                marginLeft: '20px',
+                marginBottom: '30px',
                 zIndex: 500,
+                pointerEvents: 'auto',
                 backgroundColor: 'rgba(13, 22, 37, 0.95)', // Dark Navy
                 backdropFilter: 'blur(10px)',
                 padding: '16px',
                 borderRadius: '16px',
                 boxShadow: '0 10px 30px rgba(0,0,0,0.3)',
                 border: '1px solid rgba(222, 201, 147, 0.2)', // Gold border
-                transition: 'all 0.3s ease'
+                transition: 'all 0.3s ease',
+                width: 'fit-content',
+                maxWidth: '90%'
             }}>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                     <span style={{

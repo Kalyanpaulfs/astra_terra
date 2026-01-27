@@ -55,7 +55,8 @@ export default function PropertyDetails() {
             if (previousPage.includes('/locations') ||
                 previousPage.includes('/developers') ||
                 previousPage === '/buy' ||
-                previousPage === '/rent') {
+                previousPage === '/rent' ||
+                previousPage === '/map') {
                 return previousPage;
             }
             // If the previous page is home, return it
